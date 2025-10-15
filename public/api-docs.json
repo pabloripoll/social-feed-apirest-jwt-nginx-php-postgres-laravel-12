@@ -1,0 +1,34 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "OpenApi Documentation",
+        "description": "OpenApi description",
+        "contact": {
+            "email": "support@mysite.com"
+        },
+        "license": {
+            "name": "Proprietary",
+            "url": ""
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:7501/",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/api/v1/auth/whoami": {
+            "get": {
+                "summary": "Get authenticated user info",
+                "operationId": "ed1772df8d000912d8aff80eb813eb4f",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    }
+}
