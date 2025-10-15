@@ -1,5 +1,5 @@
 <div id="top-header" style="with:100%;height:auto;text-align:right;">
-    <img src="./storage/app/public/files/pr-banner-long.png">
+    <img src="./public/files/pr-banner-long.png">
 </div>
 
 # SOCIAL FEED - LARAVEL 12
@@ -271,5 +271,5 @@ This project is open-sourced under the [MIT license](LICENSE).
 - [GO TOP ⮙](#top-header)
 
 <div style="with:100%;height:auto;text-align:right;">
-    <img src="./storage/app/public/files/pr-banner-long.png">
+    <img src="./public/files/pr-banner-long.png">
 </div>
