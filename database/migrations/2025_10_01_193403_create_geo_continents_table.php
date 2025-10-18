@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('geo_continents', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 64);
+            $table->string('name', 64)->unique();
             $table->timestamps();
         });
     }
