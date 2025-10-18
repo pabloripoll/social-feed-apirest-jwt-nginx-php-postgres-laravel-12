@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('key', 64)->unique();
             $table->string('title', 64);
             $table->string('description', 256);
-            $table->tinyInteger('position')->default('0');
+            $table->smallInteger('position')->default('0');
             $table->timestamps();
         });
     }
