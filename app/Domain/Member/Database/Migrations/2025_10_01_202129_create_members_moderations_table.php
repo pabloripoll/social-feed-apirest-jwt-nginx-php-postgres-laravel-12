@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('admin_user_id')->constrained((new User)->getTable());
             $table->foreignId('type_id')->constrained((new MemberNotificationType)->getTable());
             $table->boolean('is_applied')->default(false);
-            $table->timestamp('applied_until')->nullable()->index();
+            $table->timestamp('expires_at')->nullable()->index();
             $table->boolean('is_on_member')->default(false);
             $table->boolean('is_on_post')->default(false);
             $table->foreignId('member_user_id')->constrained((new User)->getTable());
