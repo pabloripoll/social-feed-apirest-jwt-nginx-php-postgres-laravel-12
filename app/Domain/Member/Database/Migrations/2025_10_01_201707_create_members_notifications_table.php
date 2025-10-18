@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
             $table->index('created_at');
             $table->string('message', 512);
-            $table->foreignId('last_member_id')->nullable()->constrained((new User)->getTable());
+            $table->foreignId('last_member_user_id')->nullable()->constrained((new User)->getTable());
             $table->string('last_member_nickname', 16)->nullable();
             $table->text('last_member_avatar')->nullable();
         });
