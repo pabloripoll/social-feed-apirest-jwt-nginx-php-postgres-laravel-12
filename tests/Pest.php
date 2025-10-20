@@ -1,7 +1,7 @@
 <?php
 
 use Tests\TestCase;
-use App\Models\User;
+use App\Domain\User\Models\User;
 use App\Models\LicenseSeat;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Artisan;

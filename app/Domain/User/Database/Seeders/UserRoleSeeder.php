@@ -1,12 +1,12 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Domain\User\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Role;
-use App\Models\UserRole;
+use App\Domain\User\Models\Role;
+use App\Domain\User\Models\UserRole;
 
-class RoleSeeder extends Seeder
+class UserRoleSeeder extends Seeder
 {
     /**
      * $ php artisan db:seed --class=RoleSeeder

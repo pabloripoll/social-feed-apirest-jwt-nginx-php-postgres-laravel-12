@@ -2,8 +2,8 @@
 
 namespace App\Domain\Member\Database\Factories;
 
-use App\Models\User;
-use App\Models\GeoRegion;
+use App\Domain\User\Models\User;
+use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Models\Member;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Domain\Member\Models\MemberProfile;

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Domain\User\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -21,8 +21,8 @@ class DatabaseSeeder extends Seeder
         ]); */
 
         $this->call([
-            GeoSeeder::class,
-            RoleSeeder::class,
+            \App\Domain\Geo\Database\Seeders\GeoSeeder::class,
+            \App\Domain\User\Database\Seeders\UserRoleSeeder::class,
             \App\Domain\Admin\Database\Seeders\AdminSeeder::class,
             \App\Domain\Member\Database\Seeders\MemberSeeder::class,
             \App\Domain\Member\Database\Seeders\MemberModerationTypeSeeder::class,

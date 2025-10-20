@@ -1,6 +1,7 @@
 <?php
 
 use App\Domain\Member\Models\Member;
+use App\Support\Debug;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;

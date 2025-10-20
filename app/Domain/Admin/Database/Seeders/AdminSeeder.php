@@ -4,9 +4,9 @@ namespace App\Domain\Admin\Database\Seeders;
 
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Admin\Models\AdminProfile;
-use App\Models\GeoRegion;
-use App\Models\Role;
-use App\Models\User;
+use App\Domain\Geo\Models\GeoRegion;
+use App\Domain\User\Models\Role;
+use App\Domain\User\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 

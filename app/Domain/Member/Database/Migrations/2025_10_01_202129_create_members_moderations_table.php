@@ -2,7 +2,7 @@
 
 use App\Domain\Member\Models\MemberNotificationType;
 use App\Domain\Post\Models\Post;
-use App\Models\User;
+use App\Domain\User\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

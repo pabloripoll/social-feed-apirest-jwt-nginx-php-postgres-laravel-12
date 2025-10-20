@@ -2,7 +2,7 @@
 
 namespace App\Domain\Member\Models;
 
-use App\Models\User;
+use App\Domain\User\Models\User;
 use App\Domain\Member\Database\Factories\MemberAccessLogFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

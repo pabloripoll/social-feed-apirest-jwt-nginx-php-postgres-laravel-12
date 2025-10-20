@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Domain\User\Models;
 
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Admin\Models\AdminProfile;
@@ -18,7 +18,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<\Database\Factories\Domain\User\Models\UserFactory> */
     use HasFactory, Notifiable;
 
     /**

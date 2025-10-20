@@ -5,9 +5,9 @@ namespace App\Domain\Member\Database\Seeders;
 use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberActivationCode;
 use App\Domain\Member\Models\MemberProfile;
-use App\Models\GeoRegion;
-use App\Models\Role;
-use App\Models\User;
+use App\Domain\Geo\Models\GeoRegion;
+use App\Domain\User\Models\Role;
+use App\Domain\User\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 

@@ -2,7 +2,7 @@
 
 namespace App\Domain\Member\Models;
 
-use App\Models\User;
+use App\Domain\User\Models\User;
 use App\Domain\Member\Database\Factories\MemberFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -96,7 +96,7 @@ class Member extends Model
     {
         return $this->hasManyThrough(
             \App\Domain\Member\Models\MemberAccessLog::class,
-            \App\Models\User::class,
+            \App\Domain\User\Models\User::class,
             'id',        // Foreign key on users table...
             'user_id',   // Foreign key on member_access_logs table...
             'user_id',   // Local key on members table...

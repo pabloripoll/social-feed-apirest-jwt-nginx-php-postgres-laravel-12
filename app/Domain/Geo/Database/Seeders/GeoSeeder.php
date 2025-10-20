@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Domain\Geo\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\GeoContinent;
-use App\Models\GeoRegion;
+use App\Domain\Geo\Models\GeoContinent;
+use App\Domain\Geo\Models\GeoRegion;
 
 class GeoSeeder extends Seeder
 {

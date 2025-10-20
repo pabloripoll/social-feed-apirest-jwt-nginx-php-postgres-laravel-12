@@ -2,7 +2,7 @@
 
 namespace App\Domain\Member\Models;
 
-use App\Models\User;
+use App\Domain\User\Models\User;
 use Illuminate\Support\Str;
 use App\Domain\Member\Database\Factories\MemberActivationCodeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
