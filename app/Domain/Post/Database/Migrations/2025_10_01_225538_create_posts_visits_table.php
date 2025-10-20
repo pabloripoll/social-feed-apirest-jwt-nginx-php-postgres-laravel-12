@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained((new User)->getTable());
             $table->foreignId('post_id')->constrained((new Post)->getTable());
-            $table->foreignId('visit_by_user_id')->nullable()->constrained((new User)->getTable());
+            $table->foreignId('visitor_user_id')->nullable()->constrained((new User)->getTable());
             $table->timestamps();
         });
     }
