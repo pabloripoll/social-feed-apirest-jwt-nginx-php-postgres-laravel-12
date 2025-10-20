@@ -5,7 +5,10 @@
 # SOCIAL FEED - LARAVEL 12
 
 This repository contains a basic example of a RESTful API service built with **Laravel 12**, intended for research purposes and as a demonstration of my developer profile. It implements the core features of a minimal, custom social feed application and serves as a reference project for learning, experimentation, or as a back-end development code sample.
-<br><br>
+
+> ⚠️ **Project Status: In Development**
+>
+> This repository is currently under active development and not yet ready for use. Features and APIs may change, and breaking changes can occur. Please, be aware that the codebase is actively evolving.
 
 ## Project Overview
 
@@ -203,7 +206,7 @@ There are several approaches to structuring a DDD project. In this project, each
 ### Key Characteristics of this DDD Approach
 
 - **Domains as Modules:**
-  Each business domain (such as "Admin", "Member", or "Post") is contained within its own directory under `app/Domain/config`, following a modular structure. This means each domain encapsulates its own controllers, models, requests, routes, services, and tests.
+  Each business domain (such as "Admin", "Member", or "Post") is contained within its own directory under `app/Domain`, following a modular structure. This means each domain encapsulates its own controllers, models, requests, routes, services, and tests.
 
 - **Service Providers:**
   Each domain registers a Laravel Service Provider (e.g., `MemberServiceProvider.php`), which is responsible for bootstrapping domain-specific bindings, event listeners, and routes. This makes domain logic easy to plug in or remove from the application.
@@ -221,28 +224,26 @@ There are several approaches to structuring a DDD project. In this project, each
 ├── apirest (Laravel)
 │   ├── app
 │   │   ├── Domain
-│   │   │   ├── config
-│   │   │   │   ├── Admin
-│   │   │   │   ├── Member
-│   │   │   │   │   ├── Controller
-│   │   │   │   │   ├── Database
-│   │   │   │   │   ├── Models
-│   │   │   │   │   ├── Requests
-│   │   │   │   │   ├── Routes
-│   │   │   │   │   ├── Service
-│   │   │   │   │   ├── Tests
-│   │   │   │   │   └── MemberServiceProvider.php
-│   │   │   │   ├── Post
-│   │   │   │   └── Shared
-│   │   │   ├── Http
-│   │   │   ├── Models
-│   │   │   └── Providers
-│   │   │
-│   │   └── Makefile
+│   │   │   ├── Admin
+│   │   │   ├── Member
+│   │   │   │   ├── Controller
+│   │   │   │   ├── Database
+│   │   │   │   ├── Models
+│   │   │   │   ├── Requests
+│   │   │   │   ├── Routes
+│   │   │   │   ├── Service
+│   │   │   │   ├── Tests
+│   │   │   │   └── MemberServiceProvider.php
+│   │   │   ├── Post
+│   │   │   └── Shared
+│   │   ├── Http
+│   │   ├── Models
+│   │   └── Providers
 │   ├── bootstrap
 │   ├── config
 │   ├── database
 │   ├── public
+│   ├── Makefile
 ```
 <br>
 
