@@ -3,6 +3,7 @@
 namespace App\Domain\Member\Models;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use App\Domain\Member\Database\Factories\MemberActivationCodeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -58,7 +59,8 @@ class MemberActivationCode extends Model
         static::creating(function ($model) {
             // Generate a unique 9-digit integer code
             do {
-                $code = random_int(100000000, 999999999); // 9 digits
+                //$code = random_int(100000000, 999999999); // 9 digits
+                $code = Str::random(9); // 9 alphanumeric
             } while (self::where('code', $code)->exists());
 
             $model->code = $code;

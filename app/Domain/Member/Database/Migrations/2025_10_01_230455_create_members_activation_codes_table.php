@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('members_activation_codes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('code')->unique();
+            $table->string('code', 32)->unique();
             $table->foreignId('user_id')->nullable()->constrained((new User)->getTable());
             $table->boolean('is_active')->default(false);
             $table->timestamps();
