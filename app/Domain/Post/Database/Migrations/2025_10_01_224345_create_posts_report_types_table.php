@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title', 64);
             $table->string('description', 256)->nullable();
             $table->smallInteger('level')->default('0');
-            $table->smalInteger('position')->default('0');
+            $table->smallInteger('position')->default('0');
             $table->timestamps();
         });
     }
