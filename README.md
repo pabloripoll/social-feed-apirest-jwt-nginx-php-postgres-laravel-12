@@ -23,6 +23,7 @@ The API supports a registry of platform "members," enabling users to create post
 - [Swagger API Documentation](#apirest-swagger)
 - [Domain Driven Design](#apirest-ddd)
 - [Use this Platform Repository for REST API project](#platform-usage)
+- [API Testing](#apirest-testing)
 <br><br>
 
 ## <a id="apirest-features"></a>REST API Features
@@ -244,6 +245,23 @@ There are several approaches to structuring a DDD project. In this project, each
 │   ├── database
 │   ├── public
 │   ├── Makefile
+```
+<br>
+
+## <a id="apirest-testing"></a>REST API testing
+
+There are some tests on each Domain. There are some unit and integration tests. To run the tests, first you need to create the testing database. There is a GNU Make recipe to do so. The name of the testing database will be created automatically adding to the database name set on the [Platform Repository Environment file](https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-17.5/blob/main/.env.example): *[DATABASE_NAME]_testing*
+
+Remember to have set the [./.env.testing](./.env.testing). The name
+```bash
+$ make postgres-test-up
+```
+
+Once created, access to container terminal an run the tests
+```bash
+$ make apirest-ssh
+
+/var/www $ php artisan test
 ```
 <br>
 
