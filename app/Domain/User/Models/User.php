@@ -18,7 +18,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    /** @use HasFactory<\Database\Factories\Domain\User\Models\UserFactory> */
+    /** @use HasFactory<\App\Domain\User\Models\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -71,6 +71,14 @@ class User extends Authenticatable implements JWTSubject
         return [
             'role' => $this->role,
         ];
+    }
+
+    /**
+     * Factory
+     */
+    public static function newFactory()
+    {
+        return \App\Domain\User\Database\Factories\UserFactory::new();
     }
 
     /**
