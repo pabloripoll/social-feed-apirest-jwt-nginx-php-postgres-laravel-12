@@ -19,6 +19,260 @@
         }
     ],
     "paths": {
+        "/api/v1/admin/auth/register": {
+            "post": {
+                "tags": [
+                    "Admin Authentication"
+                ],
+                "summary": "Register a new member",
+                "description": "Registers a new member account and returns basic profile info and the activation code.",
+                "operationId": "64109841bda12658a81683b338dc236d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "nickname"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "yourPassword123"
+                                    },
+                                    "nickname": {
+                                        "type": "string",
+                                        "example": "JohnDoe"
+                                    },
+                                    "region_id": {
+                                        "type": "integer",
+                                        "example": 1,
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "email": {
+                                            "type": "string",
+                                            "example": "john@example.com"
+                                        },
+                                        "nickname": {
+                                            "type": "string",
+                                            "example": "johndoe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/auth/login": {
+            "post": {
+                "tags": [
+                    "Admin Authentication"
+                ],
+                "summary": "Admin login",
+                "description": "Authenticates a member and returns a JWT token.",
+                "operationId": "bc4a5f531567c3db3ccc38586f83775b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "yourPassword123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGci..."
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "example": 3600
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Invalid credentials"
+                    },
+                    "500": {
+                        "description": "Could not create token"
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Admin Authentication"
+                ],
+                "summary": "Refresh JWT token",
+                "description": "Refreshes the JWT token for the authenticated user.",
+                "operationId": "19ed2378b38bcafd914c9f01cd3450b3",
+                "responses": {
+                    "202": {
+                        "description": "Token refreshed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGci..."
+                                        },
+                                        "token_expired": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGci..."
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "example": 3600
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized refresh due to invalid token"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/auth/logout": {
+            "post": {
+                "tags": [
+                    "Admin Authentication"
+                ],
+                "summary": "Logout member",
+                "description": "Terminates the current JWT token and logs out the member.",
+                "operationId": "33d435ffd77f6243415705a8a3d23a15",
+                "responses": {
+                    "202": {
+                        "description": "Token terminated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token_expired": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGci..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to invalid token"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/admin/auth/whoami": {
+            "get": {
+                "tags": [
+                    "Admin Authentication"
+                ],
+                "summary": "Get authenticated user info",
+                "description": "Returns information about the authenticated user.",
+                "operationId": "5f28c60937ab1fb1e50240b1647509de",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "email": {
+                                            "type": "string",
+                                            "example": "john@example.com"
+                                        },
+                                        "nickname": {
+                                            "type": "string",
+                                            "example": "JohnDoe"
+                                        },
+                                        "avatar": {
+                                            "type": "string",
+                                            "example": "http://..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access due to invalid token"
+                    }
+                }
+            }
+        },
         "/api/v1/auth/register": {
             "post": {
                 "tags": [
@@ -54,7 +308,8 @@
                                     },
                                     "region_id": {
                                         "type": "integer",
-                                        "example": 1
+                                        "example": 1,
+                                        "nullable": true
                                     }
                                 },
                                 "type": "object"
@@ -79,7 +334,7 @@
                                         },
                                         "nickname": {
                                             "type": "string",
-                                            "example": "JohnDoe"
+                                            "example": "johndoe"
                                         },
                                         "activation_code": {
                                             "type": "string",
@@ -212,8 +467,11 @@
                             }
                         }
                     },
-                    "401": {
+                    "406": {
                         "description": "Invalid credentials"
+                    },
+                    "401": {
+                        "description": "Unauthorized due to account validation required"
                     },
                     "500": {
                         "description": "Could not create token"
@@ -254,11 +512,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Token not registered"
-                    },
-                    "422": {
-                        "description": "Token cannot be refreshed"
+                    "401": {
+                        "description": "Unauthorized refresh due to invalid token"
                     }
                 },
                 "security": [
@@ -293,11 +548,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Token not registered"
-                    },
-                    "304": {
-                        "description": "Token is already terminated"
+                    "401": {
+                        "description": "Unauthorized access due to invalid token"
                     }
                 },
                 "security": [
@@ -345,7 +597,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Unauthorized access due to invalid token"
                     }
                 }
             }
@@ -361,6 +613,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Admin Authentication",
+            "description": "Endpoints about the authenticated user"
+        },
         {
             "name": "Member Authentication",
             "description": "Endpoints about the authenticated user"

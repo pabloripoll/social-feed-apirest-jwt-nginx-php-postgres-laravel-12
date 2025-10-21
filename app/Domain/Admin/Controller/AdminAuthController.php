@@ -33,7 +33,7 @@ class AdminAuthController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/auth/register",
+     *     path="/api/v1/admin/auth/register",
      *     summary="Register a new member",
      *     tags={"Admin Authentication"},
      *     description="Registers a new member account and returns basic profile info and the activation code.",
@@ -104,7 +104,7 @@ class AdminAuthController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/auth/login",
+     *     path="/api/v1/admin/auth/login",
      *     summary="Admin login",
      *     tags={"Admin Authentication"},
      *     description="Authenticates a member and returns a JWT token.",
@@ -174,7 +174,7 @@ class AdminAuthController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/auth/refresh",
+     *     path="/api/v1/admin/auth/refresh",
      *     summary="Refresh JWT token",
      *     tags={"Admin Authentication"},
      *     description="Refreshes the JWT token for the authenticated user.",
@@ -225,7 +225,7 @@ class AdminAuthController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/auth/logout",
+     *     path="/api/v1/admin/auth/logout",
      *     summary="Logout member",
      *     tags={"Admin Authentication"},
      *     description="Terminates the current JWT token and logs out the member.",
@@ -260,7 +260,7 @@ class AdminAuthController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/v1/auth/whoami",
+     *     path="/api/v1/admin/auth/whoami",
      *     summary="Get authenticated user info",
      *     tags={"Admin Authentication"},
      *     description="Returns information about the authenticated user.",
