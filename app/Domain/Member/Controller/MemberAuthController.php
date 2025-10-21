@@ -11,6 +11,7 @@ use App\Domain\Member\Requests\MemberAuthRegisterRequest;
 use App\Http\Controllers\Controller;
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
+use App\Domain\User\Service\UserAuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -31,26 +32,6 @@ class MemberAuthController extends Controller
      * JWT access expiration, smaller than JWT TTL config
      */
     protected $jwtTime = 60;
-
-    /**
-     * Object protected method to check JWT
-     */
-    protected function checkToken()
-    {
-        $token = JWTAuth::getToken();
-        if (! $token) {
-            return response()->json(['message' => 'Token not provided.', 'error' => 'token_not_provided'], JsonResponse::HTTP_UNAUTHORIZED);
-        }
-
-        try {
-            JWTAuth::decode($token);
-
-            return (string) $token;
-
-        } catch (JWTException $e) {
-            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
-        }
-    }
 
     /**
      * @OA\Post(
@@ -214,8 +195,12 @@ class MemberAuthController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=401,
+     *         response=406,
      *         description="Invalid credentials"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized due to account validation required"
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -232,7 +217,7 @@ class MemberAuthController extends Controller
 
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['message' => 'Invalid credentials.'], JsonResponse::HTTP_UNAUTHORIZED);
+                return response()->json(['message' => 'Invalid credentials.'], JsonResponse::HTTP_NOT_ACCEPTABLE);
             }
 
         } catch (JWTException $e) {
@@ -287,42 +272,34 @@ class MemberAuthController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=404,
-     *         description="Token not registered"
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Token cannot be refreshed"
+     *         response=401,
+     *         description="Unauthorized refresh due to invalid token"
      *     )
      * )
      */
     public function refresh(): JsonResponse
     {
-        $jwtString = $this->checkToken();
+        $access = (new UserAuthService)->checkToken();
+        if (! $access) {
+            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
+        $legacyToken = $access->token;
 
         /** @var Illuminate\Auth\AuthManager */
         $auth = auth('api');
 
-        $accessToken = MemberAccessLog::where('token', $jwtString)->first();
-        if (! $accessToken) {
-            return response()->json(['message' => 'Token not registered.', 'error' => 'token_not_found'], JsonResponse::HTTP_NOT_FOUND);
-        }
-
-        if ($accessToken->is_terminated) {
-            return response()->json(['message' => 'Token cannot be refreshed.', 'error' => 'token_terminated'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         $refreshedToken = JWTAuth::refresh(JWTAuth::getToken());
 
-        $accessToken->expires_at = now()->addMinutes($this->jwtTime);
-        $accessToken->refresh_count = $accessToken->refresh_count + 1;
-        $accessToken->token = (string) $refreshedToken;
-        $accessToken->save();
+        $access->expires_at = now()->addMinutes($this->jwtTime);
+        $access->refresh_count = $access->refresh_count + 1;
+        $access->token = (string) $refreshedToken;
+        $access->save();
 
         return response()->json(
             [
-                'token' => $accessToken->token,
-                'token_expired' => $jwtString,
+                'token' => $access->token,
+                'token_expired' => $legacyToken,
                 'expires_in' => $auth->factory()->getTTL() * $this->jwtTime,
             ],
             JsonResponse::HTTP_ACCEPTED
@@ -344,34 +321,24 @@ class MemberAuthController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=404,
-     *         description="Token not registered"
-     *     ),
-     *     @OA\Response(
-     *         response=304,
-     *         description="Token is already terminated"
+     *         response=401,
+     *         description="Unauthorized access due to invalid token"
      *     )
      * )
      */
     public function logout(): JsonResponse
     {
-        $jwtString = $this->checkToken();
-
-        $accessToken = MemberAccessLog::where('token', $jwtString)->first();
-        if (! $accessToken) {
-            return response()->json(['message' => 'Token not registered.', 'error' => 'token_not_found'], JsonResponse::HTTP_NOT_FOUND);
+        $access = (new UserAuthService)->checkToken();
+        if (! $access) {
+            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        if ($accessToken->is_terminated) {
-            return response()->json(['message' => 'Token is already terminated.', 'error' => 'token_terminated'], JsonResponse::HTTP_NOT_MODIFIED);
-        }
-
-        $accessToken->is_terminated = true;
-        $accessToken->save();
+        $access->is_terminated = true;
+        $access->save();
 
         JWTAuth::invalidate(JWTAuth::getToken());
 
-        return response()->json(['token_expired' => $jwtString], JsonResponse::HTTP_ACCEPTED);
+        return response()->json(['token_expired' => $access->token], JsonResponse::HTTP_ACCEPTED);
     }
 
     /**
@@ -393,7 +360,7 @@ class MemberAuthController extends Controller
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="Unauthenticated"
+     *         description="Unauthorized access due to invalid token"
      *     )
      * )
      */
@@ -403,12 +370,18 @@ class MemberAuthController extends Controller
         $user = Auth::user();
         $user->load(['member', 'memberProfile']);
 
+        $access = (new UserAuthService)->checkToken();
+        if (! $access) {
+            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
         return response()->json(
             [
                 'email' => $user->email,
                 'uid' => $user->member->uid,
                 'nickname' => $user->memberProfile->nickname,
                 'avatar' => $user->memberProfile->avatar,
+                'token' => $access->token,
             ],
             JsonResponse::HTTP_OK
         );
