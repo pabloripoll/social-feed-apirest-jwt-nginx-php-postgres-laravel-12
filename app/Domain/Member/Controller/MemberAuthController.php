@@ -65,7 +65,7 @@ class MemberAuthController extends Controller
      *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
      *             @OA\Property(property="password", type="string", format="password", example="yourPassword123"),
      *             @OA\Property(property="nickname", type="string", example="JohnDoe"),
-     *             @OA\Property(property="region_id", type="integer", example=1)
+     *             @OA\Property(property="region_id", type="integer", example=1, nullable=true)
      *         )
      *     ),
      *     @OA\Response(
@@ -74,7 +74,7 @@ class MemberAuthController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="uid", type="integer", example=156490),
      *             @OA\Property(property="email", type="string", example="john@example.com"),
-     *             @OA\Property(property="nickname", type="string", example="JohnDoe"),
+     *             @OA\Property(property="nickname", type="string", example="johndoe"),
      *             @OA\Property(property="activation_code", type="string", example="A1B2C3"),
      *         )
      *     ),
