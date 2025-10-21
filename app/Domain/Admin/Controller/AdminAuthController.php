@@ -9,6 +9,7 @@ use App\Domain\Admin\Requests\AdminAuthRegisterRequest;
 use App\Http\Controllers\Controller;
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
+use App\Domain\User\Service\UserAuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +18,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+/**
+ * @OA\Tag(
+ *     name="Admin Authentication",
+ *     description="Endpoints about the authenticated user"
+ * )
+ */
 class AdminAuthController extends Controller
 {
     /**
@@ -25,27 +32,34 @@ class AdminAuthController extends Controller
     protected $jwtTime = 60;
 
     /**
-     * Object protected method to check JWT
-     */
-    protected function checkToken()
-    {
-        $token = JWTAuth::getToken();
-        if (! $token) {
-            return response()->json(['message' => 'Token not provided.', 'error' => 'token_not_provided'], JsonResponse::HTTP_UNAUTHORIZED);
-        }
-
-        try {
-            JWTAuth::decode($token);
-
-            return (string) $token;
-
-        } catch (JWTException $e) {
-            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
-        }
-    }
-
-    /**
-     * POST /api/v1/admin/auth/register
+     * @OA\Post(
+     *     path="/api/v1/auth/register",
+     *     summary="Register a new member",
+     *     tags={"Admin Authentication"},
+     *     description="Registers a new member account and returns basic profile info and the activation code.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email","password","nickname"},
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="yourPassword123"),
+     *             @OA\Property(property="nickname", type="string", example="JohnDoe"),
+     *             @OA\Property(property="region_id", type="integer", example=1, nullable=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Created",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string", example="john@example.com"),
+     *             @OA\Property(property="nickname", type="string", example="johndoe"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=406,
+     *         description="Validation error"
+     *     )
+     * )
      */
     public function register(Request $request): JsonResponse
     {
@@ -89,7 +103,36 @@ class AdminAuthController extends Controller
     }
 
     /**
-     * POST /api/v1/admin/auth/login
+     * @OA\Post(
+     *     path="/api/v1/auth/login",
+     *     summary="Admin login",
+     *     tags={"Admin Authentication"},
+     *     description="Authenticates a member and returns a JWT token.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email","password"},
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="yourPassword123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=202,
+     *         description="Accepted",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci..."),
+     *             @OA\Property(property="expires_in", type="integer", example=3600)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=406,
+     *         description="Invalid credentials"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Could not create token"
+     *     )
+     * )
      */
     public function login(Request $request): JsonResponse
     {
@@ -100,7 +143,7 @@ class AdminAuthController extends Controller
 
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['message' => 'Invalid credentials.'], JsonResponse::HTTP_UNAUTHORIZED);
+                return response()->json(['message' => 'Invalid credentials.'], JsonResponse::HTTP_NOT_ACCEPTABLE);
             }
 
         } catch (JWTException $e) {
@@ -130,35 +173,50 @@ class AdminAuthController extends Controller
     }
 
     /**
-     * POST /api/v1/admin/auth/refresh
+     * @OA\Post(
+     *     path="/api/v1/auth/refresh",
+     *     summary="Refresh JWT token",
+     *     tags={"Admin Authentication"},
+     *     description="Refreshes the JWT token for the authenticated user.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=202,
+     *         description="Token refreshed",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci..."),
+     *             @OA\Property(property="token_expired", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci..."),
+     *             @OA\Property(property="expires_in", type="integer", example=3600)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized refresh due to invalid token"
+     *     )
+     * )
      */
     public function refresh(): JsonResponse
     {
-        $jwtString = $this->checkToken();
+        $access = (new UserAuthService)->checkToken();
+        if (! $access) {
+            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
+        $legacyToken = $access->token;
 
         /** @var Illuminate\Auth\AuthManager */
         $auth = auth('api');
 
-        $accessToken = AdminAccessLog::where('token', $jwtString)->first();
-        if (! $accessToken) {
-            return response()->json(['message' => 'Token not registered.', 'error' => 'token_not_found'], JsonResponse::HTTP_NOT_FOUND);
-        }
-
-        if ($accessToken->is_terminated) {
-            return response()->json(['message' => 'Token cannot be refreshed.', 'error' => 'token_terminated'], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         $refreshedToken = JWTAuth::refresh(JWTAuth::getToken());
 
-        $accessToken->expires_at = now()->addMinutes($this->jwtTime);
-        $accessToken->refresh_count = $accessToken->refresh_count + 1;
-        $accessToken->token = (string) $refreshedToken;
-        $accessToken->save();
+        $access->expires_at = now()->addMinutes($this->jwtTime);
+        $access->refresh_count = $access->refresh_count + 1;
+        $access->token = (string) $refreshedToken;
+        $access->save();
 
         return response()->json(
             [
-                'token' => $accessToken->token,
-                'token_expired' => $jwtString,
+                'token' => $access->token,
+                'token_expired' => $legacyToken,
                 'expires_in' => $auth->factory()->getTTL() * $this->jwtTime,
             ],
             JsonResponse::HTTP_ACCEPTED
@@ -166,31 +224,61 @@ class AdminAuthController extends Controller
     }
 
     /**
-     * POST /api/v1/admin/auth/logout
+     * @OA\Post(
+     *     path="/api/v1/auth/logout",
+     *     summary="Logout member",
+     *     tags={"Admin Authentication"},
+     *     description="Terminates the current JWT token and logs out the member.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=202,
+     *         description="Token terminated",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token_expired", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci...")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized access due to invalid token"
+     *     )
+     * )
      */
     public function logout(): JsonResponse
     {
-        $jwtString = $this->checkToken();
-
-        $accessToken = AdminAccessLog::where('token', $jwtString)->first();
-        if (! $accessToken) {
-            return response()->json(['message' => 'Token not registered.', 'error' => 'token_not_found'], JsonResponse::HTTP_NOT_FOUND);
+        $access = (new UserAuthService)->checkToken();
+        if (! $access) {
+            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        if ($accessToken->is_terminated) {
-            return response()->json(['message' => 'Token is already terminated.', 'error' => 'token_terminated'], JsonResponse::HTTP_NOT_MODIFIED);
-        }
-
-        $accessToken->is_terminated = true;
-        $accessToken->save();
+        $access->is_terminated = true;
+        $access->save();
 
         JWTAuth::invalidate(JWTAuth::getToken());
 
-        return response()->json(['token_expired' => $jwtString], JsonResponse::HTTP_ACCEPTED);
+        return response()->json(['token_expired' => $access->token], JsonResponse::HTTP_ACCEPTED);
     }
 
     /**
-     * GET /api/v1/admin/auth/whoami
+     * @OA\Get(
+     *     path="/api/v1/auth/whoami",
+     *     summary="Get authenticated user info",
+     *     tags={"Admin Authentication"},
+     *     description="Returns information about the authenticated user.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="email", type="string", example="john@example.com"),
+     *              @OA\Property(property="nickname", type="string", example="JohnDoe"),
+     *              @OA\Property(property="avatar", type="string", example="http://..."),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized access due to invalid token"
+     *     )
+     * )
      */
     public function whoami(): JsonResponse
     {
@@ -198,12 +286,17 @@ class AdminAuthController extends Controller
         $user = Auth::user();
         $user->load(['admin', 'adminProfile']);
 
+        $access = (new UserAuthService)->checkToken();
+        if (! $access) {
+            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
         return response()->json(
             [
                 'email' => $user->email,
-                'admin' => $user->admin->uid,
                 'nickname' => $user->adminProfile->nickname,
                 'avatar' => $user->adminProfile->avatar,
+                'token' => $access->token,
             ],
             JsonResponse::HTTP_OK
         );
