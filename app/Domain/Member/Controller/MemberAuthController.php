@@ -187,8 +187,8 @@ class MemberAuthController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=202,
-     *         description="Accepted",
+     *         response=200,
+     *         description="Ok",
      *         @OA\JsonContent(
      *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci..."),
      *             @OA\Property(property="expires_in", type="integer", example=3600)
@@ -251,7 +251,7 @@ class MemberAuthController extends Controller
                 'token' => $token,
                 'expires_in' => $auth->factory()->getTTL() * $this->jwtTime,
             ],
-            JsonResponse::HTTP_ACCEPTED
+            JsonResponse::HTTP_OK
         );
     }
 
