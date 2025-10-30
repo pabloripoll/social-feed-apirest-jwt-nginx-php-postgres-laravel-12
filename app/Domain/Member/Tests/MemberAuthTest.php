@@ -193,7 +193,7 @@ describe('Member user login fail - @POST /api/v1/auth/login', function () {
             'password' => 'wrong-password',
         ];
         $response = $this->post($route, $payload);
-        $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
+        $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->where('message', fn ($message) => is_string($message))
                 ->etc()
@@ -227,10 +227,10 @@ describe('Member auth token refresh fail - @POST /api/v1/auth/refresh', function
         $response = $this->post($route, [], [
             'Authorization' => "Bearer $wrongJwt",
         ]);
-        $response->assertStatus(JsonResponse::HTTP_NOT_FOUND)
+        $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->where('message', fn ($message) => is_string($message))
-                ->where('error', fn ($error) => $error === 'token_not_found')
+                ->where('error', fn ($error) => $error === 'token_invalid')
                 ->etc()
             );
     });
@@ -247,10 +247,10 @@ describe('Member auth token refresh fail - @POST /api/v1/auth/refresh', function
         $response = $this->post($route, [], [
             'Authorization' => "Bearer $accessLog->token",
         ]);
-        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+        $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->where('message', fn ($message) => is_string($message))
-                ->where('error', fn ($error) => $error === 'token_terminated')
+                ->where('error', fn ($error) => $error === 'token_invalid')
                 ->etc()
             );
     });
