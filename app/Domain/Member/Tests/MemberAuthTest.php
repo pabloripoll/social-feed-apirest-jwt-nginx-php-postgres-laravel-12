@@ -210,7 +210,7 @@ describe('Member user login success- @POST /api/v1/auth/login', function () {
             'password' => 'password',
         ];
         $response = $this->post($route, $payload);
-        $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
+        $response->assertStatus(JsonResponse::HTTP_OK)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->where('token', fn ($token) => is_string($token))
                 ->where('expires_in', fn ($expires_in) => is_int($expires_in))
