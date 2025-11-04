@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Domain\Member\Jobs\UserRegisterJob;
+use Illuminate\Support\Facades\Mail;
+use App\Domain\Member\Mail\UserRegisterMail;
 
 /**
  * @OA\Tag(
@@ -103,15 +106,22 @@ class MemberAuthController extends Controller
             'nickname' => $request->nickname,
         ]);
 
-        return response()->json(
-            [
-                'uid' => $member->uid,
-                'email' => $user->email,
-                'nickname' => $profile->nickname,
-                'activation_code' => $activation->code,
-            ],
-            JsonResponse::HTTP_CREATED
-        );
+        $payload = [
+            'uid' => $member->uid,
+            'email' => $user->email,
+            'nickname' => $profile->nickname,
+            'activation_code' => $activation->code,
+        ];
+
+        if (env('MAIL_SEND') === true) {
+            if (env('QUEUE_SEND') === true) {
+                UserRegisterJob::dispatch($payload);
+            } else {
+                Mail::to($payload['email'])->send(new UserRegisterMail($payload));
+            }
+        }
+
+        return response()->json($payload, JsonResponse::HTTP_CREATED);
     }
 
     /**
