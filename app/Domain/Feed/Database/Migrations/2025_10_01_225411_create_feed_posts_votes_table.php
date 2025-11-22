@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts_votes', function (Blueprint $table) {
+        Schema::create('feed_posts_votes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained((new User)->getTable());
             $table->foreignId('post_id')->constrained((new Post)->getTable());
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts_votes');
+        Schema::dropIfExists('feed_posts_votes');
     }
 };

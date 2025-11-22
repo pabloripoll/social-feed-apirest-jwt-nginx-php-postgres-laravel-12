@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Domain\Post\Database\Factories;
+namespace App\Domain\Feed\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\FeedPost>
  */
-class PostFactory extends Factory
+class FeedPostFactory extends Factory
 {
     /**
      * The current password being used by the factory.

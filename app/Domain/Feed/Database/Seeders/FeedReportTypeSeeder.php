@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Domain\Post\Database\Seeders;
+namespace App\Domain\Feed\Database\Seeders;
 
-use App\Domain\Post\Models\PostReportType;
+use App\Domain\Feed\Models\FeedReportType;
 use Illuminate\Database\Seeder;
 
-class PostReportTypeSeeder extends Seeder
+class FeedReportTypeSeeder extends Seeder
 {
     protected function types(): array
     {
@@ -40,7 +40,7 @@ class PostReportTypeSeeder extends Seeder
     public function run(): void
     {
         foreach ($this->types() as $type) {
-            PostReportType::updateOrCreate(
+            FeedReportType::updateOrCreate(
                 ['key' => $type['key']],
                 [
                     'title' => $type['title'],

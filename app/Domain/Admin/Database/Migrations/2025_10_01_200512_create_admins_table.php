@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained((new User)->getTable());
-            $table->foreignId('region_id')->constrained((new GeoRegion)->getTable());
+            $table->foreignId('region_id')->constrained((new GeoRegion)->getTable())->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_banned')->default(false);
             $table->timestamps();

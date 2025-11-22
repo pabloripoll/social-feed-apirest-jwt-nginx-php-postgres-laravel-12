@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts_report_types', function (Blueprint $table) {
+        Schema::create('feed_categories', function (Blueprint $table) {
             $table->id();
             $table->string('key', 64)->unique();
             $table->string('title', 64);
-            $table->string('description', 256)->nullable();
-            $table->smallInteger('level')->default('0');
-            $table->smallInteger('position')->default('0');
+            $table->integer('visits_count')->default('0');
+            $table->integer('posts_count')->default('0');
+            $table->integer('posts_votes_up_count')->default('0');
+            $table->integer('posts_votes_down_count')->default('0');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts_report_types');
+        Schema::dropIfExists('feed_categories');
     }
 };

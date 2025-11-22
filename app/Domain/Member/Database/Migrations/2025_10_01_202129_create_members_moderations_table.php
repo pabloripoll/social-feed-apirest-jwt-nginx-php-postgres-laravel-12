@@ -21,9 +21,9 @@ return new class extends Migration
             $table->boolean('is_applied')->default(false);
             $table->timestamp('expires_at')->nullable()->index();
             $table->boolean('is_on_member')->default(false);
-            $table->boolean('is_on_post')->default(false);
+            $table->boolean('is_on_feed_post')->default(false);
             $table->foreignId('member_user_id')->constrained((new User)->getTable());
-            $table->foreignId('member_post_id')->nullable()->constrained((new Post)->getTable());
+            $table->foreignId('member_feed_post_id')->nullable()->constrained((new Post)->getTable());
             $table->timestamps();
         });
     }

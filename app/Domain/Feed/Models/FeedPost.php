@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Domain\Post\Models;
+namespace App\Domain\Feed\Models;
 
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Post extends Model
+class FeedPost extends Model
 {
-    /** @use HasFactory<\App\Domain\Post\Database\Factories\PostFactory> */
+    /** @use HasFactory<\App\Domain\Feed\Database\Factories\PostFactory> */
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'posts';
+    protected $table = 'feed_posts';
 
     /**
      * The attributes that are mass assignable.

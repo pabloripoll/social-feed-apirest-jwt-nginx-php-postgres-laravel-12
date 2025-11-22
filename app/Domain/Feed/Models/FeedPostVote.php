@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Domain\Post\Models;
+namespace App\Domain\Feed\Models;
 
+use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PostReportType extends Model
+class FeedPostVote extends Model
 {
-    /** @use HasFactory<\App\Domain\Post\Database\Factories\PostReportType> */
+    /** @use HasFactory<\App\Domain\Feed\Database\Factories\MemberProfileFactory> */
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'posts_report_types';
+    protected $table = 'feed_posts_votes';
 
     /**
      * The attributes that are mass assignable.
@@ -21,11 +23,9 @@ class PostReportType extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'key',
-        'title',
-        'description',
-        'level',
-        'position',
+        'user_id',
+        'up',
+        'down',
     ];
 
     /**
@@ -43,5 +43,13 @@ class PostReportType extends Model
     protected function casts(): array
     {
         return [];
+    }
+
+    /**
+     * Relations
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

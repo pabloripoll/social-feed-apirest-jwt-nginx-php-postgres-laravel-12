@@ -15,7 +15,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts_reports', function (Blueprint $table) {
+        Schema::create('feed_reports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('type_id')->constrained((new PostReportType)->getTable());
             $table->foreignId('reporter_user_id')->nullable()->constrained((new User)->getTable());
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts_reports');
+        Schema::dropIfExists('feed_reports');
     }
 };

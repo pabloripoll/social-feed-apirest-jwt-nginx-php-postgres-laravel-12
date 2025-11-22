@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Domain\Post\Models;
+namespace App\Domain\Feed\Models;
 
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PostReport extends Model
+class FeedReport extends Model
 {
-    /** @use HasFactory<\App\Domain\Post\Database\Factories\PostReport> */
+    /** @use HasFactory<\App\Domain\Feed\Database\Factories\FeedReport> */
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'posts_reports';
+    protected $table = 'feed_reports';
 
     /**
      * The attributes that are mass assignable.
@@ -32,7 +32,7 @@ class PostReport extends Model
         'closed_at',
         'moderation_id',
         'member_user_id',
-        'member_post_id',
+        'member_feed_post_id',
     ];
 
     /**

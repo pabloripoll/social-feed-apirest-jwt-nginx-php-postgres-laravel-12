@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('feed_posts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('uid')->unique();
             $table->foreignId('user_id')->constrained((new User)->getTable());
@@ -39,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('feed_posts');
     }
 };
