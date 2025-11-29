@@ -3,9 +3,10 @@
 namespace App\Domain\Admin\Models;
 
 use App\Domain\User\Models\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Domain\Admin\Database\Factories\AdminProfileFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AdminProfile extends Model
 {
@@ -43,6 +44,14 @@ class AdminProfile extends Model
     protected function casts(): array
     {
         return [];
+    }
+
+    /**
+     * Model factory when is outside ./database/factories
+     */
+    public static function newFactory()
+    {
+        return AdminProfileFactory::new();
     }
 
     /**

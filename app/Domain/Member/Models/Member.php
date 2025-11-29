@@ -33,7 +33,6 @@ class Member extends Model
         'is_banned',
         'posts_count',
         'votes_count',
-        'comments_count',
     ];
 
     /**

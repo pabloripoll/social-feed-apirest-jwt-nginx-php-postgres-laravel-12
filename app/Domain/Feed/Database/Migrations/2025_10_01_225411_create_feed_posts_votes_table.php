@@ -1,7 +1,7 @@
 <?php
 
-use App\Domain\Post\Models\Post;
 use App\Domain\User\Models\User;
+use App\Domain\Feed\Models\FeedPost;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('feed_posts_votes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained((new User)->getTable());
-            $table->foreignId('post_id')->constrained((new Post)->getTable());
+            $table->foreignId('post_id')->constrained((new FeedPost)->getTable());
             $table->boolean('up')->default(false);
             $table->boolean('down')->default(false);
             $table->integer('refresh_count')->default('0');

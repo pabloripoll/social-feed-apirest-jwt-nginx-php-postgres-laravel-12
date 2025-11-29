@@ -1,8 +1,8 @@
 <?php
 
 use App\Domain\Member\Models\MemberModeration;
-use App\Domain\Post\Models\Post;
-use App\Domain\Post\Models\PostReportType;
+use App\Domain\Feed\Models\FeedPost;
+use App\Domain\Feed\Models\FeedReportType;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('feed_reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('type_id')->constrained((new PostReportType)->getTable());
+            $table->foreignId('type_id')->constrained((new FeedReportType)->getTable());
             $table->foreignId('reporter_user_id')->nullable()->constrained((new User)->getTable());
             $table->string('reporter_message', 256)->nullable();
             $table->boolean('in_review')->default(false);
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamp('closed_at')->nullable();
             $table->foreignId('moderation_id')->nullable()->constrained((new MemberModeration)->getTable());
             $table->foreignId('member_user_id')->constrained((new User)->getTable());
-            $table->foreignId('member_post_id')->nullable()->constrained((new Post)->getTable());
+            $table->foreignId('member_post_id')->nullable()->constrained((new FeedPost)->getTable());
             $table->timestamps();
             $table->index('created_at');
         });

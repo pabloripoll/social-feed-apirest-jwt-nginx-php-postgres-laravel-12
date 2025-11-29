@@ -4,22 +4,29 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
+/**
+ * @property object|null $user
+ * @property object|null $member
+ * @property object|null $admin
+ * @property string|null $accessToken
+ * @property object|null $payload
+ */
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    /** @var object */
-    public $user;
+    /** @var object|null */
+    public ?object $user = null;
 
-    /** @var object */
-    public $member;
+    /** @var object|null */
+    public ?object $member = null;
 
-    /** @var object */
-    public $admin;
+    /** @var object|null */
+    public ?object $admin = null;
 
     /** @var string|null */
-    public $accessToken;
+    public ?string $accessToken = null;
 
-    /** @var object */
-    public $payload;
+    /** @var object|null */
+    public ?object $payload = null;
 }

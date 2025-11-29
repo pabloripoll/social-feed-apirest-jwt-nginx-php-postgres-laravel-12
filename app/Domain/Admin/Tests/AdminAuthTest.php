@@ -2,11 +2,14 @@
 /** @var \Tests\TestCase $this */
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Domain\Member\Models\Member;
+use App\Domain\Admin\Models\Admin;
 
 beforeEach(function () {
+    Artisan::call('db:seed');
+
     $email = fake()->unique()->safeEmail();
     $this->payload = (object) [
         'email' => $email,
@@ -15,28 +18,58 @@ beforeEach(function () {
     ];
 });
 
-describe('Member user registration fail - @POST /api/v1/auth/register', function () {
-    it('fails that a user can register because of wrong nickname', function () {
-        $route = route('api-v1.member-auth.register');
+describe('Default admin login success - @POST /api/v1/admin/auth/login', function () {
+    it('succeeds that a default admin user can log into its account to test new admin auth controller', function () {
+        $response = defAdminLogin($this);
+        $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->where('token', fn ($token) => is_string($token))
+                ->where('expires_in', fn ($expires_in) => is_int($expires_in))
+                ->etc()
+            );
+    });
+});
+
+describe('Default admin login failed - @POST /api/v1/admin/auth/login', function () {
+    it('fails as no admin user can login through auth controller', function () {
+        $response = defAdminLogin($this, ['email' => 'member@example.com']);
+        $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->where('message', fn ($message) => is_string($message))
+                ->etc()
+            );
+    });
+});
+
+describe('Admin user registration fail - @POST /api/v1/admin/auth/register', function () {
+    it('fails that an admin user can register another admin user because of wrong nickname', function () {
+        $defAdmin = defAdminLogin($this);
+        $route = route('api-v1.admin-auth.register');
+
         $payload = [
             'email' => $this->payload->email,
             'password' => $this->payload->password,
             'password_confirmation' => $this->payload->password,
         ];
-        $response = $this->post($route, $payload);
+        $response = $this->post($route, $payload, [
+            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+        ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
                 ->where('error', fn ($error) => $error === 'nickname')
                 ->etc()
             );
+
         $payload = [
             'nickname' => $this->payload->nickname.'@',
             'email' => $this->payload->email,
             'password' => $this->payload->password,
             'password_confirmation' => $this->payload->password,
         ];
-        $response = $this->post($route, $payload);
+        $response = $this->post($route, $payload, [
+            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+        ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
@@ -46,28 +79,35 @@ describe('Member user registration fail - @POST /api/v1/auth/register', function
     });
 });
 
-describe('Member user registration fail - @POST /api/v1/auth/register', function () {
-    it('fails that a user can register because of wrong email', function () {
-        $route = route('api-v1.member-auth.register');
+describe('Admin user registration fail - @POST /api/v1/admin/auth/register', function () {
+    it('fails that an admin user can register another admin user because of wrong email', function () {
+        $defAdmin = defAdminLogin($this);
+        $route = route('api-v1.admin-auth.register');
+
         $payload = [
             'nickname' => $this->payload->nickname,
             'password' => $this->payload->password,
             'password_confirmation' => $this->payload->password,
         ];
-        $response = $this->post($route, $payload);
+        $response = $this->post($route, $payload, [
+            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+        ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
                 ->where('error', fn ($error) => $error === 'email')
                 ->etc()
             );
+
         $payload = [
             'nickname' => $this->payload->nickname,
             'email' => '@'.$this->payload->email,
             'password' => $this->payload->password,
             'password_confirmation' => $this->payload->password,
         ];
-        $response = $this->post($route, $payload);
+        $response = $this->post($route, $payload, [
+            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+        ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
@@ -77,16 +117,19 @@ describe('Member user registration fail - @POST /api/v1/auth/register', function
     });
 });
 
-describe('Member user registration fail - @POST /api/v1/auth/register', function () {
-    it('fails that a user can register because of wrong password', function () {
-        $route = route('api-v1.member-auth.register');
+describe('Admin user registration fail - @POST /api/v1/admin/auth/register', function () {
+    it('fails that an admin user can register another admin user because of wrong password', function () {
+        $defAdmin = defAdminLogin($this);
+        $route = route('api-v1.admin-auth.register');
         // missing password field
         $payload = [
             'nickname' => $this->payload->nickname,
             'email' => $this->payload->email,
             'password_confirmation' => $this->payload->password,
         ];
-        $response = $this->post($route, $payload);
+        $response = $this->post($route, $payload, [
+            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+        ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
@@ -99,7 +142,9 @@ describe('Member user registration fail - @POST /api/v1/auth/register', function
             'email' => $this->payload->email,
             'password' => $this->payload->password,
         ];
-        $response = $this->post($route, $payload);
+        $response = $this->post($route, $payload, [
+            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+        ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
@@ -113,7 +158,9 @@ describe('Member user registration fail - @POST /api/v1/auth/register', function
             'password' => $this->payload->password,
             'password_confirmation' => $this->payload->password.'?',
         ];
-        $response = $this->post($route, $payload);
+        $response = $this->post($route, $payload, [
+            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+        ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
@@ -127,7 +174,9 @@ describe('Member user registration fail - @POST /api/v1/auth/register', function
             'password' => '1234aZ!',
             'password' => '1234aZ!',
         ];
-        $response = $this->post($route, $payload);
+        $response = $this->post($route, $payload, [
+            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+        ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
@@ -137,58 +186,12 @@ describe('Member user registration fail - @POST /api/v1/auth/register', function
     });
 });
 
-describe('Member user registration success - @POST /api/v1/auth/register', function () {
-    it('succeeds that a user can register by itself as a member', function () {
-        $route = route('api-v1.member-auth.register');
-        $payload = [
-            'nickname' => $this->payload->nickname,
-            'email' => $this->payload->email,
-            'password' => $this->payload->password,
-            'password_confirmation' => $this->payload->password,
-        ];
-        $response = $this->post($route, $payload);
-        $response->assertStatus(JsonResponse::HTTP_CREATED)
-            ->assertJson(fn (AssertableJson $json) => $json
-                ->has('email')
-                ->has('nickname')
-                ->where('uid', fn ($uid) => is_int($uid))
-                ->etc()
-            );
-    });
-});
-
-describe('Member user activation - @POST /api/v1/auth/activation', function () {
-    it('succeeds that a user can activate its account access', function () {
-        $route = route('api-v1.member-auth.register');
-        $payload = [
-            'nickname' => $this->payload->nickname,
-            'email' => $this->payload->email,
-            'password' => $this->payload->password,
-            'password_confirmation' => $this->payload->password,
-        ];
-        $response = $this->post($route, $payload);
-        $response->assertStatus(JsonResponse::HTTP_CREATED);
-
-        $data = $response->json();
-        $email = $data['email'];
-        $activationCode  = $data['activation_code'];
-
-        $route = route('api-v1.member-auth.activation');
-        $payload = [
-            'code' => $activationCode,
-            'email' => $email,
-        ];
-        $response = $this->post($route, $payload);
-        $response->assertStatus(JsonResponse::HTTP_ACCEPTED);
-    });
-});
-
-describe('Member user login fail - @POST /api/v1/auth/login', function () {
+describe('Admin user login fail - @POST /api/v1/admin/auth/login', function () {
     it('fails when user login input is a wrong password', function () {
-        $member = Member::factory()->create();
-        $route = route('api-v1.member-auth.login');
+        $admin = Admin::factory()->create();
+        $route = route('api-v1.admin-auth.login');
         $payload = [
-            'email' => $member->user->email,
+            'email' => $admin->user->email,
             'password' => 'wrong-password',
         ];
         $response = $this->post($route, $payload);
@@ -200,16 +203,16 @@ describe('Member user login fail - @POST /api/v1/auth/login', function () {
     });
 });
 
-describe('Member user login success- @POST /api/v1/auth/login', function () {
+describe('Admin user login success- @POST /api/v1/admin/auth/login', function () {
     it('succeeds that a user can log into its account', function () {
-        $member = Member::factory()->create();
-        $route = route('api-v1.member-auth.login');
+        $admin = Admin::factory()->create();
+        $route = route('api-v1.admin-auth.login');
         $payload = [
-            'email' => $member->user->email,
+            'email' => $admin->user->email,
             'password' => 'password',
         ];
         $response = $this->post($route, $payload);
-        $response->assertStatus(JsonResponse::HTTP_OK)
+        $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->where('token', fn ($token) => is_string($token))
                 ->where('expires_in', fn ($expires_in) => is_int($expires_in))
@@ -218,11 +221,11 @@ describe('Member user login success- @POST /api/v1/auth/login', function () {
     });
 });
 
-describe('Member auth token refresh fail - @POST /api/v1/auth/refresh', function () {
+describe('Admin auth token refresh fail - @POST /api/v1/admin/auth/refresh', function () {
     it('fails because authentication token is not found on access logs', function () {
-        Member::factory()->withAuth()->create();
+        Admin::factory()->withAuth()->create();
         $wrongJwt = Str::random(64);
-        $route = route('api-v1.member-auth.refresh');
+        $route = route('api-v1.admin-auth.refresh');
         $response = $this->post($route, [], [
             'Authorization' => "Bearer $wrongJwt",
         ]);
@@ -235,14 +238,14 @@ describe('Member auth token refresh fail - @POST /api/v1/auth/refresh', function
     });
 });
 
-describe('Member auth token refresh fail - @POST /api/v1/auth/refresh', function () {
+describe('Admin auth token refresh fail - @POST /api/v1/admin/auth/refresh', function () {
     it('fails because authentication token is terminated and cannot be refreshed', function () {
-        $member = Member::factory()->withAuth()->create();
-        $member->load('user.memberAccessLogs');
-        $accessLog = $member->user->memberAccessLogs()->latest()->first();
+        $admin = Admin::factory()->withAuth()->create();
+        $admin->load('user.adminAccessLogs');
+        $accessLog = $admin->user->adminAccessLogs()->latest()->first();
         $accessLog->is_terminated = true;
         $accessLog->save();
-        $route = route('api-v1.member-auth.refresh');
+        $route = route('api-v1.admin-auth.refresh');
         $response = $this->post($route, [], [
             'Authorization' => "Bearer $accessLog->token",
         ]);
@@ -255,15 +258,15 @@ describe('Member auth token refresh fail - @POST /api/v1/auth/refresh', function
     });
 });
 
-describe('Member auth token refresh success - @POST /api/v1/auth/refresh', function () {
+describe('Admin auth token refresh success - @POST /api/v1/admin/auth/refresh', function () {
     it('succeeds authentication token can be refreshed', function () {
-        $member = Member::factory()->withAuth()->create();
-        $member->load('user.memberAccessLogs');
-        $accessLog = $member->user->memberAccessLogs()->latest()->first();
+        $admin = Admin::factory()->withAuth()->create();
+        $admin->load('user.adminAccessLogs');
+        $accessLog = $admin->user->adminAccessLogs()->latest()->first();
         $accessLog->is_expired = true;
         $accessLog->expires_at = now();
         $accessLog->save();
-        $route = route('api-v1.member-auth.refresh');
+        $route = route('api-v1.admin-auth.refresh');
         $response = $this->post($route, [], [
             'Authorization' => "Bearer $accessLog->token",
         ]);
@@ -277,15 +280,15 @@ describe('Member auth token refresh success - @POST /api/v1/auth/refresh', funct
     });
 });
 
-describe('Member logout success - @POST /api/v1/auth/logout', function () {
+describe('Admin logout success - @POST /api/v1/admin/auth/logout', function () {
     it('succeeds user authentication can logout', function () {
-        $member = Member::factory()->withAuth()->create();
-        $member->load('user.memberAccessLogs');
-        $accessLog = $member->user->memberAccessLogs()->latest()->first();
+        $admin = Admin::factory()->withAuth()->create();
+        $admin->load('user.adminAccessLogs');
+        $accessLog = $admin->user->adminAccessLogs()->latest()->first();
         $accessLog->is_expired = true;
         $accessLog->expires_at = now();
         $accessLog->save();
-        $route = route('api-v1.member-auth.logout');
+        $route = route('api-v1.admin-auth.logout');
         $response = $this->post($route, [], [
             'Authorization' => "Bearer $accessLog->token",
         ]);
@@ -297,9 +300,9 @@ describe('Member logout success - @POST /api/v1/auth/logout', function () {
     });
 });
 
-describe('Member whoami fail - @GET /api/v1/auth/whoami', function () {
+describe('Admin whoami fail - @GET /api/v1/admin/auth/whoami', function () {
     it('fails user cannot see its account main properties if there is no JWT', function () {
-        $route = route('api-v1.member-auth.whoami');
+        $route = route('api-v1.admin-auth.whoami');
         $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -310,14 +313,14 @@ describe('Member whoami fail - @GET /api/v1/auth/whoami', function () {
     });
 });
 
-describe('Member whoami fail - @GET /api/v1/auth/whoami', function () {
+describe('Admin whoami fail - @GET /api/v1/admin/auth/whoami', function () {
     it('fails user cannot see its account main properties JWT is terminated by authentication logout', function () {
-        $member = Member::factory()->withAuth()->create();
-        $member->load('user.memberAccessLogs');
-        $accessLog = $member->user->memberAccessLogs()->latest()->first();
+        $admin = Admin::factory()->withAuth()->create();
+        $admin->load('user.adminAccessLogs');
+        $accessLog = $admin->user->adminAccessLogs()->latest()->first();
         $accessLog->is_terminated = true;
         $accessLog->save();
-        $route = route('api-v1.member-auth.whoami');
+        $route = route('api-v1.admin-auth.whoami');
         $response = $this->get($route, [
             'Authorization' => "Bearer $accessLog->token",
         ]);
@@ -330,20 +333,21 @@ describe('Member whoami fail - @GET /api/v1/auth/whoami', function () {
     });
 });
 
-describe('Member whoami success - @GET /api/v1/auth/whoami', function () {
+describe('Admin whoami success - @GET /api/v1/admin/auth/whoami', function () {
     it('succeeds user authenticated can see itself', function () {
-        $member = Member::factory()->withAuth()->create();
-        $member->load(['profile', 'user.memberAccessLogs']);
-        $accessLog = $member->user->memberAccessLogs()->latest()->first();
-        $route = route('api-v1.member-auth.whoami');
+        $admin = Admin::factory()->withAuth()->create();
+        $admin->load(['profile', 'user.adminAccessLogs']);
+        $accessLog = $admin->user->adminAccessLogs()->latest()->first();
+
+        $route = route('api-v1.admin-auth.whoami');
         $response = $this->get($route, [
             'Authorization' => "Bearer $accessLog->token",
         ]);
         $response->assertStatus(JsonResponse::HTTP_OK)
             ->assertJson(fn (AssertableJson $json) => $json
-                ->where('email', fn ($email) => $email === $member->user->email)
-                ->where('uid', fn ($uid) => $uid === $member->uid)
-                ->where('nickname', fn ($nickname) => $nickname === $member->profile->nickname)
+                ->where('email', fn ($email) => $email === $admin->user->email)
+                ->where('uid', fn ($uid) => $uid === $admin->uid)
+                ->where('nickname', fn ($nickname) => $nickname === $admin->profile->nickname)
                 ->etc()
             );
     });

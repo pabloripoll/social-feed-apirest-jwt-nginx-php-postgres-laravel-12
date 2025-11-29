@@ -3,6 +3,7 @@
 namespace App\Domain\Member\Database\Factories;
 
 use App\Domain\User\Models\User;
+use App\Domain\User\Models\Role;
 use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Models\Member;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -30,7 +31,7 @@ class MemberFactory extends Factory
     {
         return [
             'uid' => $this->faker->unique()->numberBetween(100000, 999999),
-            'user_id' => User::factory(),
+            'user_id' => User::factory()->state(['role' => Role::MEMBER]),
             'region_id' => GeoRegion::query()->inRandomOrder()->value('id'),
             'is_active' => true,
             'is_banned' => false,

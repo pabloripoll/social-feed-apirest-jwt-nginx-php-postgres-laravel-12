@@ -1,7 +1,7 @@
 <?php
 
 use App\Domain\Member\Models\MemberNotificationType;
-use App\Domain\Post\Models\Post;
+use App\Domain\Feed\Models\FeedPost;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->boolean('is_on_member')->default(false);
             $table->boolean('is_on_feed_post')->default(false);
             $table->foreignId('member_user_id')->constrained((new User)->getTable());
-            $table->foreignId('member_feed_post_id')->nullable()->constrained((new Post)->getTable());
+            $table->foreignId('member_feed_post_id')->nullable()->constrained((new FeedPost)->getTable());
             $table->timestamps();
         });
     }

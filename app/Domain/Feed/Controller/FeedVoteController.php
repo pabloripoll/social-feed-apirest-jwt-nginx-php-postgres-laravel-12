@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Domain\Post\Controller;
+namespace App\Domain\Feed\Controller;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class PostVoteController
+class FeedVoteController
 {
     /**
      * POST /api/v1/feed/posts/{post_id}/votes/up

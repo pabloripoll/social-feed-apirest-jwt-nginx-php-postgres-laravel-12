@@ -3,6 +3,7 @@
 namespace App\Domain\Admin\Models;
 
 use App\Domain\User\Models\User;
+use App\Domain\Admin\Database\Factories\AdminAccessLogFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -53,6 +54,14 @@ class AdminAccessLog extends Model
             'payload' => 'array',
             'expires_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Model factory when is outside ./database/factories
+     */
+    public static function newFactory()
+    {
+        return AdminAccessLogFactory::new();
     }
 
     /**

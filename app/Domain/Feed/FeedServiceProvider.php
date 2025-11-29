@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Domain\Post;
+namespace App\Domain\Feed;
 
 use Illuminate\Support\ServiceProvider;
 
-class PostServiceProvider extends ServiceProvider
+class FeedServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap services

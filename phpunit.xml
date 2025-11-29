@@ -10,8 +10,8 @@
         </testsuite>
         <testsuite name="Feature">
             <directory>./tests/Feature</directory>
-            <!-- <directory>./app/Domain/Post/Tests</directory> -->
-            <!-- <directory>./app/Domain/Admin/Tests</directory> -->
+            <directory>/var/www/app/Domain/Geo/Tests</directory>
+            <directory>/var/www/app/Domain/Admin/Tests</directory>
             <directory>/var/www/app/Domain/Member/Tests</directory>
         </testsuite>
     </testsuites>

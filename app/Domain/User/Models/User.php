@@ -4,10 +4,11 @@ namespace App\Domain\User\Models;
 
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Admin\Models\AdminProfile;
+use App\Domain\Admin\Models\AdminAccessLog;
 use App\Domain\Member\Models\Member;
+use App\Domain\Member\Models\MemberProfile;
 use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\Member\Models\MemberActivationCode;
-use App\Domain\Member\Models\MemberProfile;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -104,6 +105,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(MemberProfile::class, 'user_id');
     }
 
+    public function memberAccessLogs(): HasMany
+    {
+        return $this->hasMany(MemberAccessLog::class, 'user_id');
+    }
+
     public function admin(): HasOne
     {
         return $this->hasOne(Admin::class, 'user_id');
@@ -114,8 +120,8 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(AdminProfile::class, 'user_id');
     }
 
-    public function accessLogs(): HasMany
+    public function adminAccessLogs(): HasMany
     {
-        return $this->hasMany(MemberAccessLog::class, 'user_id');
+        return $this->hasMany(AdminAccessLog::class, 'user_id');
     }
 }

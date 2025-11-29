@@ -294,6 +294,7 @@ class AdminAuthController extends Controller
         return response()->json(
             [
                 'email' => $user->email,
+                'uid' => $user->admin->uid,
                 'nickname' => $user->adminProfile->nickname,
                 'avatar' => $user->adminProfile->avatar,
                 'token' => $access->token,

@@ -1,14 +1,11 @@
 <?php
+/** @var \Tests\TestCase $this */
 
 use Tests\TestCase;
-use App\Domain\User\Models\User;
-use App\Models\LicenseSeat;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Testing\TestResponse;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Auth0\SDK\Auth0;
-use Auth0\SDK\Configuration\SdkConfiguration;
-use function Pest\Laravel\actingAs;
+use App\Domain\User\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +24,8 @@ uses(
 )->in(
     'Feature',
     'Unit',
+    '../app/Domain/Geo/Tests',
+    '../app/Domain/Admin/Tests',
     '../app/Domain/Member/Tests',
 );
 
@@ -44,9 +43,72 @@ uses(
 beforeAll(function () {
     // Run the migrations
     Artisan::call('migrate');
+
+    // Run all seeders
+    Artisan::call('db:seed');
 });
 
 afterAll(function () {
     // Rollback the migrations
     Artisan::call('migrate:rollback');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Helper Functions
+|--------------------------------------------------------------------------
+|
+|
+*/
+
+/**
+ * Admin Login TestCase instance.
+ *
+ * email and password params are editables for test cases
+ *
+ * @param Tests\TestCase $test
+ * @param array<string,mixed> $payload
+ * @return \Illuminate\Testing\TestResponse
+ */
+function defAdminLogin(TestCase $test, array $overrides = []): TestResponse
+{
+    $admin = User::query()
+        ->where('email', 'admin@example.com')
+        ->with(['adminProfile'])
+        ->first();
+
+    $route = route('api-v1.admin-auth.login');
+
+    $payload = array_merge([
+        'email' => $admin->email,
+        'password' => '12345678aZ!',
+    ], $overrides);
+
+    return $test->post($route, $payload);
+}
+
+/**
+ * Member Login TestCase instance.
+ *
+ * email and password params are editables for test cases
+ *
+ * @param Tests\TestCase $test
+ * @param array<string,mixed> $payload
+ * @return \Illuminate\Testing\TestResponse
+ */
+function defMemberLogin(TestCase $test, array $overrides = []): TestResponse
+{
+    $member = User::query()
+        ->where('email', 'member@example.com')
+        ->with(['memberProfile'])
+        ->first();
+
+    $route = route('api-v1.member-auth.login');
+
+    $payload = array_merge([
+        'email' => $member->email,
+        'password' => '12345678aZ!',
+    ], $overrides);
+
+    return $test->post($route, $payload);
+}
