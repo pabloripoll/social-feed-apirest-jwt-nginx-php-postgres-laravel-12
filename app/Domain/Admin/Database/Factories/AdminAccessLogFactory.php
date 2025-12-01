@@ -2,8 +2,8 @@
 
 namespace App\Domain\Admin\Database\Factories;
 
-use App\Domain\User\Models\User;
 use App\Domain\Admin\Models\AdminAccessLog;
+use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

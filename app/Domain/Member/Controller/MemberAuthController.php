@@ -2,26 +2,26 @@
 
 namespace App\Domain\Member\Controller;
 
+use App\Domain\Member\Jobs\UserRegisterJob;
+use App\Domain\Member\Mail\UserRegisterMail;
 use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\Member\Models\MemberActivationCode;
 use App\Domain\Member\Models\MemberProfile;
 use App\Domain\Member\Requests\MemberAuthActivationRequest;
 use App\Domain\Member\Requests\MemberAuthRegisterRequest;
-use App\Http\Controllers\Controller;
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
 use App\Domain\User\Service\UserAuthService;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Domain\Member\Jobs\UserRegisterJob;
-use Illuminate\Support\Facades\Mail;
-use App\Domain\Member\Mail\UserRegisterMail;
 
 /**
  * @OA\Tag(
@@ -42,26 +42,33 @@ class MemberAuthController extends Controller
      *     summary="Register a new member",
      *     tags={"Member Authentication"},
      *     description="Registers a new member account and returns basic profile info and the activation code.",
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"email","password","nickname"},
+     *
      *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
      *             @OA\Property(property="password", type="string", format="password", example="yourPassword123"),
      *             @OA\Property(property="nickname", type="string", example="JohnDoe"),
      *             @OA\Property(property="region_id", type="integer", example=1, nullable=true)
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=201,
      *         description="Created",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="uid", type="integer", example=156490),
      *             @OA\Property(property="email", type="string", example="john@example.com"),
      *             @OA\Property(property="nickname", type="string", example="johndoe"),
      *             @OA\Property(property="activation_code", type="string", example="A1B2C3"),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=406,
      *         description="Validation error"
@@ -130,22 +137,29 @@ class MemberAuthController extends Controller
      *     summary="Activate member account",
      *     tags={"Member Authentication"},
      *     description="Activates a member account using the activation code.",
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"email","activation_code"},
+     *
      *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
      *             @OA\Property(property="activation_code", type="string", example="A1B2C3")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=202,
      *         description="Account successfully activated",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="email", type="string", example="john@example.com"),
      *             @OA\Property(property="status", type="string", example="Account activation has been activated."),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=406,
      *         description="Validation error"
@@ -188,22 +202,29 @@ class MemberAuthController extends Controller
      *     summary="Member login",
      *     tags={"Member Authentication"},
      *     description="Authenticates a member and returns a JWT token.",
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"email","password"},
+     *
      *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
      *             @OA\Property(property="password", type="string", format="password", example="yourPassword123")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Ok",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci..."),
      *             @OA\Property(property="expires_in", type="integer", example=3600)
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=406,
      *         description="Invalid credentials"
@@ -272,15 +293,19 @@ class MemberAuthController extends Controller
      *     tags={"Member Authentication"},
      *     description="Refreshes the JWT token for the authenticated user.",
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(
      *         response=202,
      *         description="Token refreshed",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci..."),
      *             @OA\Property(property="token_expired", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci..."),
      *             @OA\Property(property="expires_in", type="integer", example=3600)
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized refresh due to invalid token"
@@ -323,13 +348,17 @@ class MemberAuthController extends Controller
      *     tags={"Member Authentication"},
      *     description="Terminates the current JWT token and logs out the member.",
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(
      *         response=202,
      *         description="Token terminated",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="token_expired", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci...")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized access due to invalid token"
@@ -357,17 +386,21 @@ class MemberAuthController extends Controller
      *     summary="Get authenticated user info",
      *     tags={"Member Authentication"},
      *     description="Returns information about the authenticated user.",
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
+     *
      *         @OA\JsonContent(
      *              type="object",
+     *
      *              @OA\Property(property="email", type="string", example="john@example.com"),
      *              @OA\Property(property="uid", type="integer", example=156490),
      *              @OA\Property(property="nickname", type="string", example="JohnDoe"),
      *              @OA\Property(property="avatar", type="string", example="http://..."),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized access due to invalid token"

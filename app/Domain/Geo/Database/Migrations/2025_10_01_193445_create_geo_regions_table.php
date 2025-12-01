@@ -1,9 +1,9 @@
 <?php
 
+use App\Domain\Geo\Models\GeoContinent;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Domain\Geo\Models\GeoContinent;
 
 return new class extends Migration
 {

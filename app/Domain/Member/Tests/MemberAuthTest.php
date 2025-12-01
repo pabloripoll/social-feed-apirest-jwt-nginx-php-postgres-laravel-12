@@ -1,10 +1,11 @@
 <?php
+
 /** @var \Tests\TestCase $this */
 
+use App\Domain\Member\Models\Member;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Domain\Member\Models\Member;
 
 beforeEach(function () {
     $email = fake()->unique()->safeEmail();
@@ -171,7 +172,7 @@ describe('Member user activation - @POST /api/v1/auth/activation', function () {
 
         $data = $response->json();
         $email = $data['email'];
-        $activationCode  = $data['activation_code'];
+        $activationCode = $data['activation_code'];
 
         $route = route('api-v1.member-auth.activation');
         $payload = [

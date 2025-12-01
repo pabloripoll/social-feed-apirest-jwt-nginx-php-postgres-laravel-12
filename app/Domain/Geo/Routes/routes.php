@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Domain\Geo\Controller\GeoController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('/api/v1/geo')->name('api-v1.geo.')->group(function () {
     Route::get('/', [GeoController::class, 'index'])->name('index');

@@ -3,12 +3,12 @@
 namespace App\Domain\User\Models;
 
 use App\Domain\Admin\Models\Admin;
-use App\Domain\Admin\Models\AdminProfile;
 use App\Domain\Admin\Models\AdminAccessLog;
+use App\Domain\Admin\Models\AdminProfile;
 use App\Domain\Member\Models\Member;
-use App\Domain\Member\Models\MemberProfile;
 use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\Member\Models\MemberActivationCode;
+use App\Domain\Member\Models\MemberProfile;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;

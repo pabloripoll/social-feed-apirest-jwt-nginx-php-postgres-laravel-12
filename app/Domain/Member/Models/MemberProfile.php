@@ -2,8 +2,8 @@
 
 namespace App\Domain\Member\Models;
 
-use App\Domain\User\Models\User;
 use App\Domain\Member\Database\Factories\MemberProfileFactory;
+use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -57,7 +57,6 @@ class MemberProfile extends Model
     /**
      * Relations
      */
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

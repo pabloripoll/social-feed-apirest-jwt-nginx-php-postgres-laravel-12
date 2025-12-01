@@ -25,10 +25,10 @@ class UserRegisterMail extends Mailable
      */
     public function build()
     {
-        $subject = $this->payload['subject'] ?? 'Welcome to ' . config('app.name');
+        $subject = $this->payload['subject'] ?? 'Welcome to '.config('app.name');
 
         return $this->subject($subject)
-                    ->view('emails.member.registration')
-                    ->text('emails.member.registration_plain');
+            ->view('emails.member.registration')
+            ->text('emails.member.registration_plain');
     }
 }

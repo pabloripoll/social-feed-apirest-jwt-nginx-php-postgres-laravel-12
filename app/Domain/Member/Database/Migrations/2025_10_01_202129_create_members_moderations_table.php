@@ -1,7 +1,7 @@
 <?php
 
-use App\Domain\Member\Models\MemberNotificationType;
 use App\Domain\Feed\Models\FeedPost;
+use App\Domain\Member\Models\MemberNotificationType;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

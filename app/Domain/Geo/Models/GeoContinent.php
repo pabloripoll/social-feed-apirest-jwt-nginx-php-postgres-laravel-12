@@ -45,7 +45,6 @@ class GeoContinent extends Model
     /**
      * Relationships
      */
-
     public function regions(): HasMany
     {
         return $this->hasMany(GeoRegion::class, 'continent_id');

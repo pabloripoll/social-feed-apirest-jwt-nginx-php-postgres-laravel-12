@@ -14,7 +14,7 @@ class GeoController
      */
     public function index(Request $request): JsonResponse
     {
-        $response = GeoContinent::select('id','name')
+        $response = GeoContinent::select('id', 'name')
             ->with('regions:id,name,continent_id')
             ->orderBy('id')
             ->get();
@@ -27,7 +27,7 @@ class GeoController
      */
     public function listContinents(Request $request): JsonResponse
     {
-        $response = GeoContinent::select('id','name')
+        $response = GeoContinent::select('id', 'name')
             ->orderBy('id')
             ->get();
 
@@ -39,7 +39,7 @@ class GeoController
      */
     public function readContinent(Request $request, int $continent_id): JsonResponse
     {
-        $response = GeoContinent::select('id','name')
+        $response = GeoContinent::select('id', 'name')
             ->where('id', $continent_id)
             ->with('regions:id,name,continent_id')
             ->orderBy('id')
@@ -57,7 +57,7 @@ class GeoController
      */
     public function listRegions(Request $request, int $continent_id): JsonResponse
     {
-        $response = GeoRegion::select('id','name')
+        $response = GeoRegion::select('id', 'name')
             ->where('continent_id', $continent_id)
             ->orderBy('id')
             ->get();
@@ -74,7 +74,7 @@ class GeoController
      */
     public function readRegion(Request $request, int $continent_id, int $region_id): JsonResponse
     {
-        $response = GeoRegion::select('id','name')
+        $response = GeoRegion::select('id', 'name')
             ->where('id', $region_id)
             ->where('continent_id', $continent_id)
             ->first();

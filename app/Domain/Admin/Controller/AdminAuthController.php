@@ -6,10 +6,10 @@ use App\Domain\Admin\Models\Admin;
 use App\Domain\Admin\Models\AdminAccessLog;
 use App\Domain\Admin\Models\AdminProfile;
 use App\Domain\Admin\Requests\AdminAuthRegisterRequest;
-use App\Http\Controllers\Controller;
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
 use App\Domain\User\Service\UserAuthService;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -37,24 +37,31 @@ class AdminAuthController extends Controller
      *     summary="Register a new member",
      *     tags={"Admin Authentication"},
      *     description="Registers a new member account and returns basic profile info and the activation code.",
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"email","password","nickname"},
+     *
      *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
      *             @OA\Property(property="password", type="string", format="password", example="yourPassword123"),
      *             @OA\Property(property="nickname", type="string", example="JohnDoe"),
      *             @OA\Property(property="region_id", type="integer", example=1, nullable=true)
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=201,
      *         description="Created",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="email", type="string", example="john@example.com"),
      *             @OA\Property(property="nickname", type="string", example="johndoe"),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=406,
      *         description="Validation error"
@@ -108,22 +115,29 @@ class AdminAuthController extends Controller
      *     summary="Admin login",
      *     tags={"Admin Authentication"},
      *     description="Authenticates a member and returns a JWT token.",
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"email","password"},
+     *
      *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
      *             @OA\Property(property="password", type="string", format="password", example="yourPassword123")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=202,
      *         description="Accepted",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci..."),
      *             @OA\Property(property="expires_in", type="integer", example=3600)
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=406,
      *         description="Invalid credentials"
@@ -179,15 +193,19 @@ class AdminAuthController extends Controller
      *     tags={"Admin Authentication"},
      *     description="Refreshes the JWT token for the authenticated user.",
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(
      *         response=202,
      *         description="Token refreshed",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci..."),
      *             @OA\Property(property="token_expired", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci..."),
      *             @OA\Property(property="expires_in", type="integer", example=3600)
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized refresh due to invalid token"
@@ -230,13 +248,17 @@ class AdminAuthController extends Controller
      *     tags={"Admin Authentication"},
      *     description="Terminates the current JWT token and logs out the member.",
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(
      *         response=202,
      *         description="Token terminated",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="token_expired", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGci...")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized access due to invalid token"
@@ -264,16 +286,20 @@ class AdminAuthController extends Controller
      *     summary="Get authenticated user info",
      *     tags={"Admin Authentication"},
      *     description="Returns information about the authenticated user.",
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
+     *
      *         @OA\JsonContent(
      *              type="object",
+     *
      *              @OA\Property(property="email", type="string", example="john@example.com"),
      *              @OA\Property(property="nickname", type="string", example="JohnDoe"),
      *              @OA\Property(property="avatar", type="string", example="http://..."),
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized access due to invalid token"

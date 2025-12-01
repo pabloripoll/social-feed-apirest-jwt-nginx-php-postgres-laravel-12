@@ -2,9 +2,9 @@
 
 namespace App\Domain\User\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\UserRole;
+use Illuminate\Database\Seeder;
 
 class UserRoleSeeder extends Seeder
 {

@@ -1,11 +1,12 @@
 <?php
+
 /** @var \Tests\TestCase $this */
 
-use Illuminate\Support\Str;
+use App\Domain\Admin\Models\Admin;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Domain\Admin\Models\Admin;
 
 beforeEach(function () {
     Artisan::call('db:seed');
@@ -52,7 +53,7 @@ describe('Admin user registration fail - @POST /api/v1/admin/auth/register', fun
             'password_confirmation' => $this->payload->password,
         ];
         $response = $this->post($route, $payload, [
-            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+            'Authorization' => 'Bearer '.$defAdmin->json()['token'],
         ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -68,7 +69,7 @@ describe('Admin user registration fail - @POST /api/v1/admin/auth/register', fun
             'password_confirmation' => $this->payload->password,
         ];
         $response = $this->post($route, $payload, [
-            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+            'Authorization' => 'Bearer '.$defAdmin->json()['token'],
         ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -90,7 +91,7 @@ describe('Admin user registration fail - @POST /api/v1/admin/auth/register', fun
             'password_confirmation' => $this->payload->password,
         ];
         $response = $this->post($route, $payload, [
-            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+            'Authorization' => 'Bearer '.$defAdmin->json()['token'],
         ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -106,7 +107,7 @@ describe('Admin user registration fail - @POST /api/v1/admin/auth/register', fun
             'password_confirmation' => $this->payload->password,
         ];
         $response = $this->post($route, $payload, [
-            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+            'Authorization' => 'Bearer '.$defAdmin->json()['token'],
         ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -128,7 +129,7 @@ describe('Admin user registration fail - @POST /api/v1/admin/auth/register', fun
             'password_confirmation' => $this->payload->password,
         ];
         $response = $this->post($route, $payload, [
-            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+            'Authorization' => 'Bearer '.$defAdmin->json()['token'],
         ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -143,7 +144,7 @@ describe('Admin user registration fail - @POST /api/v1/admin/auth/register', fun
             'password' => $this->payload->password,
         ];
         $response = $this->post($route, $payload, [
-            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+            'Authorization' => 'Bearer '.$defAdmin->json()['token'],
         ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -159,7 +160,7 @@ describe('Admin user registration fail - @POST /api/v1/admin/auth/register', fun
             'password_confirmation' => $this->payload->password.'?',
         ];
         $response = $this->post($route, $payload, [
-            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+            'Authorization' => 'Bearer '.$defAdmin->json()['token'],
         ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -175,7 +176,7 @@ describe('Admin user registration fail - @POST /api/v1/admin/auth/register', fun
             'password' => '1234aZ!',
         ];
         $response = $this->post($route, $payload, [
-            'Authorization' => "Bearer " . $defAdmin->json()['token'],
+            'Authorization' => 'Bearer '.$defAdmin->json()['token'],
         ]);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json

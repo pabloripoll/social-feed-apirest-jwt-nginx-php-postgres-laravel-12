@@ -2,14 +2,14 @@
 
 namespace App\Domain\Member\Database\Factories;
 
-use App\Domain\User\Models\User;
-use App\Domain\User\Models\Role;
 use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Models\Member;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Domain\Member\Models\MemberProfile;
 use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\Member\Models\MemberActivationCode;
+use App\Domain\Member\Models\MemberProfile;
+use App\Domain\User\Models\Role;
+use App\Domain\User\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
@@ -64,8 +64,7 @@ class MemberFactory extends Factory
      *
      * Optionally, additional access log attributes can be provided via the $accessLogAttributes array.
      *
-     * @param array $accessLogAttributes Additional attributes for MemberAccessLog
-     * @return static
+     * @param  array  $accessLogAttributes  Additional attributes for MemberAccessLog
      */
     public function withAuth(array $accessLogAttributes = []): static
     {

@@ -1,8 +1,8 @@
 <?php
 
-use App\Domain\Member\Models\MemberModeration;
 use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Feed\Models\FeedReportType;
+use App\Domain\Member\Models\MemberModeration;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

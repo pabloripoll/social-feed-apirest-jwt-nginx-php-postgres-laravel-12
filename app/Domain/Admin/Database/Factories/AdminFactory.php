@@ -2,13 +2,13 @@
 
 namespace App\Domain\Admin\Database\Factories;
 
-use App\Domain\User\Models\User;
-use App\Domain\User\Models\Role;
 use App\Domain\Admin\Models\Admin;
-use App\Domain\Geo\Models\GeoRegion;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Domain\Admin\Models\AdminProfile;
 use App\Domain\Admin\Models\AdminAccessLog;
+use App\Domain\Admin\Models\AdminProfile;
+use App\Domain\Geo\Models\GeoRegion;
+use App\Domain\User\Models\Role;
+use App\Domain\User\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
@@ -58,8 +58,7 @@ class AdminFactory extends Factory
      *
      * Optionally, additional access log attributes can be provided via the $accessLogAttributes array.
      *
-     * @param array $accessLogAttributes Additional attributes for AdminAccessLog
-     * @return static
+     * @param  array  $accessLogAttributes  Additional attributes for AdminAccessLog
      */
     public function withAuth(array $accessLogAttributes = []): static
     {

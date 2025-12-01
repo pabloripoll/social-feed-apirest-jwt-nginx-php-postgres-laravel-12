@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Domain\Feed\Controller\FeedController;
 use App\Domain\Feed\Controller\FeedPostController;
-use App\Domain\Feed\Controller\FeedVoteController;
 use App\Domain\Feed\Controller\FeedReportController;
+use App\Domain\Feed\Controller\FeedVoteController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('/api/v1')->name('api-v1.')->group(function () {
 

@@ -1,4 +1,5 @@
 <?php
+
 /** @var \Tests\TestCase $this */
 
 use App\Domain\Geo\Models\GeoContinent;
@@ -70,7 +71,7 @@ describe('List continents - @GET /api/v1/geo/continents', function () {
 describe('Read continent - @GET /api/v1/geo/continents/{continent_id}', function () {
     it('fails to read a continent by its id as it does not exist', function () {
         $route = route('api-v1.geo.continent-read', [
-            'continent_id' => 123456
+            'continent_id' => 123456,
         ]);
         $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_NOT_FOUND)
@@ -85,7 +86,7 @@ describe('Read continent - @GET /api/v1/geo/continents/{continent_id}', function
     it('succeeds every visitor can access and read a continent by its id', function () {
         $continent = GeoContinent::first();
         $route = route('api-v1.geo.continent-read', [
-            'continent_id' => $continent->id
+            'continent_id' => $continent->id,
         ]);
         $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_OK)
@@ -101,7 +102,7 @@ describe('Read continent - @GET /api/v1/geo/continents/{continent_id}', function
 describe('List continent regions - @GET /api/v1/geo/continents/{continent_id}/regions', function () {
     it('fails to read a continent by its id as it does not exist', function () {
         $route = route('api-v1.geo.regions-listing', [
-            'continent_id' => 123456
+            'continent_id' => 123456,
         ]);
         $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_NOT_FOUND)
@@ -116,7 +117,7 @@ describe('List continent regions - @GET /api/v1/geo/continents/{continent_id}/re
     it('succeeds every visitor can access and list all continent regionss', function () {
         $continent = GeoContinent::first();
         $route = route('api-v1.geo.regions-listing', [
-            'continent_id' => $continent->id
+            'continent_id' => $continent->id,
         ]);
         $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_OK)
@@ -144,7 +145,7 @@ describe('Read continent region - @GET /api/v1/geo/continents/{continent_id}/reg
     it('fails to read a continent by its id as it does not exist', function () {
         $route = route('api-v1.geo.region-read', [
             'continent_id' => 123456,
-            'region_id' => 123456
+            'region_id' => 123456,
         ]);
         $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_NOT_FOUND)
@@ -160,7 +161,7 @@ describe('Read continent region - @GET /api/v1/geo/continents/{continent_id}/reg
         $region = GeoRegion::first();
         $route = route('api-v1.geo.region-read', [
             'continent_id' => $region->continent_id,
-            'region_id' => 123456
+            'region_id' => 123456,
         ]);
         $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_NOT_FOUND)
@@ -176,7 +177,7 @@ describe('Read continent region - @GET /api/v1/geo/continents/{continent_id}/reg
         $region = GeoRegion::first();
         $route = route('api-v1.geo.region-read', [
             'continent_id' => $region->continent_id,
-            'region_id' => $region->id
+            'region_id' => $region->id,
         ]);
         $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_OK)

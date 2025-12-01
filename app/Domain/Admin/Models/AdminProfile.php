@@ -2,11 +2,11 @@
 
 namespace App\Domain\Admin\Models;
 
-use App\Domain\User\Models\User;
 use App\Domain\Admin\Database\Factories\AdminProfileFactory;
+use App\Domain\User\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AdminProfile extends Model
 {

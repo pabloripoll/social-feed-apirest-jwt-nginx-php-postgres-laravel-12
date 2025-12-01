@@ -2,12 +2,11 @@
 
 namespace App\Domain\User\Service;
 
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Domain\Admin\Models\AdminAccessLog;
 use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\User\Models\Role;
-use App\Support\Debug;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserAuthService
 {
@@ -19,7 +18,7 @@ class UserAuthService
     /**
      * Check JWT
      */
-    public function checkToken(): AdminAccessLog | MemberAccessLog | null
+    public function checkToken(): AdminAccessLog|MemberAccessLog|null
     {
         $token = JWTAuth::getToken();
         if (! $token) {

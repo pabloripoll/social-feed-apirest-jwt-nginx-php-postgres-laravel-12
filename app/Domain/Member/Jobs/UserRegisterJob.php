@@ -35,6 +35,7 @@ class UserRegisterJob implements ShouldQueue
             // Basic validation: ensure we have a recipient email
             if (empty($this->payload['email'])) {
                 Log::error('UserRegisterJob: missing email in payload', ['payload' => $this->payload]);
+
                 return; // or throw new Exception('Missing email') if you want retries
             }
 
@@ -43,7 +44,7 @@ class UserRegisterJob implements ShouldQueue
 
         } catch (Exception $e) {
             // Handling for unexpected errors
-            Log::error('Unexpected error while processing UserRegisterJob: ' . $e->getMessage(), ['trace' => $e->getTraceAsString(), 'payload' => $this->payload]);
+            Log::error('Unexpected error while processing UserRegisterJob: '.$e->getMessage(), ['trace' => $e->getTraceAsString(), 'payload' => $this->payload]);
             throw $e; // Re-throw the exception to trigger the retry mechanism
         }
     }
@@ -54,7 +55,7 @@ class UserRegisterJob implements ShouldQueue
     public function failed(Exception $exception)
     {
         // Logic to be executed when the job completely fails
-        Log::critical('Critical failure while processing order after multiple retries: ' . $exception->getMessage(), ['trace' => $exception->getTraceAsString()]);
+        Log::critical('Critical failure while processing order after multiple retries: '.$exception->getMessage(), ['trace' => $exception->getTraceAsString()]);
         // Consider sending notifications to support teams or implementing other failure handling strategies
     }
 }

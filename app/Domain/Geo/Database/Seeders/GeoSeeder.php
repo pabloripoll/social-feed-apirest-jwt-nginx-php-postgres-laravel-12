@@ -2,9 +2,9 @@
 
 namespace App\Domain\Geo\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Domain\Geo\Models\GeoContinent;
 use App\Domain\Geo\Models\GeoRegion;
+use Illuminate\Database\Seeder;
 
 class GeoSeeder extends Seeder
 {

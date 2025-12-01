@@ -2,8 +2,8 @@
 
 namespace App\Domain\Member\Database\Factories;
 
-use App\Domain\User\Models\User;
 use App\Domain\Member\Models\MemberActivationCode;
+use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -35,8 +35,7 @@ class MemberActivationCodeFactory extends Factory
      *
      * Use this method to specify whether the created entity should be active or inactive.
      *
-     * @param bool|null $state Whether the entity should be active (true) or inactive (false). Defaults to true.
-     * @return static
+     * @param  bool|null  $state  Whether the entity should be active (true) or inactive (false). Defaults to true.
      */
     public function isActive(?bool $state = true): static
     {
