@@ -18,7 +18,7 @@ The API supports a registry of platform "members," enabling users to create post
 
 - [REST API Features](#apirest-features)
 - [Infrastructure Platform](#infrastructure-platform)
-- [REST API - Laravel 12](#apirest-laravel)
+- [REST API - Laravel 12](#apirest-setup)
 - [API Authentication with JWT](#apirest-jwt)
 - [Swagger API Documentation](#apirest-swagger)
 - [Domain Driven Design](#apirest-ddd)
@@ -94,14 +94,14 @@ Follow the documentation to implement it:
 - https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-16.4?tab=readme-ov-file#platform--usage
 <br><br>
 
-## <a id="apirest-laravel"></a>REST API - Laravel 12
+## <a id="apirest-setup"></a>REST API - Laravel 12
 
 The following steps assume you are using the recommended [NGINX-PHP with Postgres 16.4 platform repository](https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-16.4).
 
 Clone the repository
 ```bash
 $ cd ./apirest
-$ git clone https://github.com/your-username/social-feed-laravel.git .
+$ git clone https://github.com/pabloripoll/social-feed-apirest-jwt-nginx-php-postgres-laravel-12 .
 ```
 <br>
 
