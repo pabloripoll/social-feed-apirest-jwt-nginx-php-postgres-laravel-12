@@ -57,7 +57,7 @@ The API supports a registry of platform "members," enabling users to create post
 
 ## <a id="infrastructure-platform"></a>Infrastructure Platform
 
-You can use your own local infrastructure to clone and run this repository. However, if you use [GNU Make](https://www.gnu.org/software/make/) installed, we recommend using the dedicated Docker repository [**NGINX 1.28, PHP 8.3 - POSTGRES 17.5**](https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-17.5)
+You can use your own local infrastructure to clone and run this repository. However, if you use [GNU Make](https://www.gnu.org/software/make/) installed, we recommend using the dedicated Docker repository [**NGINX 1.28, PHP 8.3 - POSTGRES 16.4**](https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-16.4)
 
 With just a few configuration steps, you can quickly set up this project—or any other—with this same required stack.
 
@@ -82,7 +82,7 @@ With just a few configuration steps, you can quickly set up this project—or an
 │   │   │   └── Dockerfile
 │   │   │
 │   │   └── Makefile
-│   └── postgres-17.5
+│   └── postgres-16.4
 │       ├── docker
 │       └── Makefile
 ├── .env
@@ -91,12 +91,12 @@ With just a few configuration steps, you can quickly set up this project—or an
 ```
 
 Follow the documentation to implement it:
-- https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-17.5?tab=readme-ov-file#platform--usage
+- https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-16.4?tab=readme-ov-file#platform--usage
 <br><br>
 
 ## <a id="apirest-laravel"></a>REST API - Laravel 12
 
-The following steps assume you are using the recommended [NGINX-PHP with Postgres 17.5 platform repository](https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-17.5).
+The following steps assume you are using the recommended [NGINX-PHP with Postgres 16.4 platform repository](https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-16.4).
 
 Clone the repository
 ```bash
@@ -250,7 +250,7 @@ There are several approaches to structuring a DDD project. In this project, each
 
 ## <a id="apirest-testing"></a>REST API testing
 
-There are some tests on each Domain. There are some unit and integration tests. To run the tests, first you need to create the testing database. There is a GNU Make recipe to do so. The name of the testing database will be created automatically adding to the database name set on the [Platform Repository Environment file](https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-17.5/blob/main/.env.example): *[DATABASE_NAME]_testing*
+There are some tests on each Domain. There are some unit and integration tests. To run the tests, first you need to create the testing database. There is a GNU Make recipe to do so. The name of the testing database will be created automatically adding to the database name set on the [Platform Repository Environment file](https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-16.4/blob/main/.env.example): *[DATABASE_NAME]_testing*
 
 Remember to have set the [./.env.testing](./.env.testing). The name
 ```bash
