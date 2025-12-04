@@ -14,16 +14,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('members_moderations', function (Blueprint $table) {
+        Schema::create('users_moderations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('admin_user_id')->constrained((new User)->getTable());
             $table->foreignId('type_id')->constrained((new MemberNotificationType)->getTable());
             $table->boolean('is_applied')->default(false);
             $table->timestamp('expires_at')->nullable()->index();
-            $table->boolean('is_on_member')->default(false);
+            $table->boolean('is_on_user')->default(false);
+            $table->foreignId('user_id')->constrained((new User)->getTable());
             $table->boolean('is_on_feed_post')->default(false);
-            $table->foreignId('member_user_id')->constrained((new User)->getTable());
-            $table->foreignId('member_feed_post_id')->nullable()->constrained((new FeedPost)->getTable());
+            $table->foreignId('feed_post_id')->nullable()->constrained((new FeedPost)->getTable());
             $table->timestamps();
         });
     }
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('members_moderations');
+        Schema::dropIfExists('users_moderations');
     }
 };

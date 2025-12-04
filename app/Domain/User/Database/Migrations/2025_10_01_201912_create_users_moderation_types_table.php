@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('members_moderation_types', function (Blueprint $table) {
+        Schema::create('users_moderation_types', function (Blueprint $table) {
             $table->id();
             $table->string('key', 64)->unique();
             $table->string('title', 64);
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('members_moderation_types');
+        Schema::dropIfExists('users_moderation_types');
     }
 };

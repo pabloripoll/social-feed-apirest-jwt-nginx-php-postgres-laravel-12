@@ -25,8 +25,8 @@ class DatabaseSeeder extends Seeder
             \App\Domain\User\Database\Seeders\UserRoleSeeder::class,
             \App\Domain\Admin\Database\Seeders\AdminSeeder::class,
             \App\Domain\Member\Database\Seeders\MemberSeeder::class,
-            \App\Domain\Member\Database\Seeders\MemberModerationTypeSeeder::class,
             \App\Domain\Member\Database\Seeders\MemberNotificationTypeSeeder::class,
+            \App\Domain\User\Database\Seeders\UserModerationTypeSeeder::class,
         ]);
     }
 }

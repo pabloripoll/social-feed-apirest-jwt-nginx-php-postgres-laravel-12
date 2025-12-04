@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Domain\Member\Models;
+namespace App\Domain\User\Models;
 
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class MemberModeration extends Model
+class UserModeration extends Model
 {
-    /** @use HasFactory<\App\Domain\Member\Database\Factories\MemberModeration> */
+    /** @use HasFactory<\App\Domain\User\Database\Factories\UserModeration> */
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'members_moderations';
+    protected $table = 'users_moderations';
 
     /**
      * The attributes that are mass assignable.
@@ -27,10 +27,10 @@ class MemberModeration extends Model
         'type_id',
         'is_applied',
         'applied_until',
-        'is_on_member',
-        'is_on_post',
-        'member_user_id',
-        'member_post_id',
+        'is_on_user',
+        'user_id',
+        'is_on_feed_post',
+        'feed_post_id',
     ];
 
     /**

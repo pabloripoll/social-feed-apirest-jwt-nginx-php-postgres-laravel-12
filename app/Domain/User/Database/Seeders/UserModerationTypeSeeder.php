@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Domain\Member\Database\Seeders;
+namespace App\Domain\User\Database\Seeders;
 
-use App\Domain\Member\Models\MemberModerationType;
+use App\Domain\User\Models\UserModerationType;
 use Illuminate\Database\Seeder;
 
-class MemberModerationTypeSeeder extends Seeder
+class UserModerationTypeSeeder extends Seeder
 {
     protected function types(): array
     {
@@ -16,19 +16,19 @@ class MemberModerationTypeSeeder extends Seeder
                 'description' => 'User access and its content forbidden.',
             ],
             [
-                'key' => 'user-suspension',
-                'title' => 'User Suspension',
-                'description' => 'User access suspension for a determined period of time.',
+                'key' => 'user-suspended',
+                'title' => 'User Suspended',
+                'description' => 'User access suspended for a determined period of time.',
             ],
             [
-                'key' => 'post-banned',
-                'title' => 'Post Banned',
-                'description' => 'Post access forbidden.',
+                'key' => 'feed-post-banned',
+                'title' => 'Feed Post Banned',
+                'description' => 'Feed post access forbidden due to non-compliance with community standards and/or quality protocol.',
             ],
             [
-                'key' => 'post-suspension',
-                'title' => 'Post Suspension',
-                'description' => 'Post suspended due to non-compliance with community standards and/or quality protocol.',
+                'key' => 'feed-post-suspended',
+                'title' => 'Feed Post Suspended',
+                'description' => 'Feed post access suspended but can be available again after the suggested adjustments to comply community standards and/or quality protocol.',
             ],
         ];
     }
@@ -42,7 +42,7 @@ class MemberModerationTypeSeeder extends Seeder
         $pos = 0;
         foreach ($this->types() as $type) {
             $pos++;
-            MemberModerationType::updateOrCreate(
+            UserModerationType::updateOrCreate(
                 ['key' => $type['key']],
                 [
                     'title' => $type['title'],

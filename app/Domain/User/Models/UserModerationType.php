@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Domain\Member\Models;
+namespace App\Domain\User\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MemberModerationType extends Model
+class UserModerationType extends Model
 {
-    /** @use HasFactory<\App\Domain\Member\Database\Factories\MemberModerationType> */
+    /** @use HasFactory<\App\Domain\User\Database\Factories\UserModerationType> */
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'members_moderation_types';
+    protected $table = 'users_moderation_types';
 
     /**
      * The attributes that are mass assignable.
