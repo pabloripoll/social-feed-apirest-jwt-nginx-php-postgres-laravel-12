@@ -5,10 +5,10 @@ namespace App\Domain\Member\Database\Factories;
 use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberAccessLog;
-use App\Domain\Member\Models\MemberActivationCode;
 use App\Domain\Member\Models\MemberProfile;
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
+use App\Domain\User\Models\UserActivationCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -41,7 +41,7 @@ class MemberFactory extends Factory
     /**
      * Configure the factory to automatically create related entities after a member is created.
      *
-     * This will create a MemberProfile and an active MemberActivationCode for the newly created member.
+     * This will create a MemberProfile and an active UserActivationCode for the newly created member.
      */
     public function configure()
     {
@@ -51,7 +51,7 @@ class MemberFactory extends Factory
                     'user_id' => $member->user_id,
                     'nickname' => preg_replace('/[^A-Za-z0-9]/', '', strstr($member->user->email, '@', true)),
                 ]);
-            MemberActivationCode::factory()
+            UserActivationCode::factory()
                 ->isActive(true)
                 ->create([
                     'user_id' => $member->user_id,

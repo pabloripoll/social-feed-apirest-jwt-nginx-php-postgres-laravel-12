@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Domain\Member\Models;
+namespace App\Domain\User\Models;
 
-use App\Domain\Member\Database\Factories\MemberActivationCodeFactory;
+use App\Domain\User\Database\Factories\UserActivationCodeFactory;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
-class MemberActivationCode extends Model
+class UserActivationCode extends Model
 {
-    /** @use HasFactory<\App\Domain\Member\Database\Factories\MemberFactory> */
+    /** @use HasFactory<\App\Domain\User\Database\Factories\UserFactory> */
     use HasFactory;
 
     /**
@@ -72,7 +72,7 @@ class MemberActivationCode extends Model
      */
     public static function newFactory()
     {
-        return MemberActivationCodeFactory::new();
+        return UserActivationCodeFactory::new();
     }
 
     /**

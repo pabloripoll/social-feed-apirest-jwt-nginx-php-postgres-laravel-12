@@ -6,12 +6,12 @@ use App\Domain\Member\Jobs\UserRegisterJob;
 use App\Domain\Member\Mail\UserRegisterMail;
 use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberAccessLog;
-use App\Domain\Member\Models\MemberActivationCode;
 use App\Domain\Member\Models\MemberProfile;
 use App\Domain\Member\Requests\MemberAuthActivationRequest;
 use App\Domain\Member\Requests\MemberAuthRegisterRequest;
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
+use App\Domain\User\Models\UserActivationCode;
 use App\Domain\User\Service\UserAuthService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -103,7 +103,7 @@ class MemberAuthController extends Controller
         ]);
 
         $requiresActivation = (bool) env('LOGIN_ACTIVATION_CODE');
-        $activation = MemberActivationCode::create([
+        $activation = UserActivationCode::create([
             'user_id' => $user->id,
             'is_active' => ! $requiresActivation,
         ]);
@@ -258,11 +258,11 @@ class MemberAuthController extends Controller
         $user = Auth::user();
 
         $configActivation = (bool) env('LOGIN_ACTIVATION_CODE');
-        $memberActivation = MemberActivationCode::query()
+        $userActivationCode = UserActivationCode::query()
             ->where('user_id', $user->id)
             ->where('is_active', true)
             ->first();
-        if ($configActivation && ! $memberActivation) {
+        if ($configActivation && ! $userActivationCode) {
             return response()->json(['message' => 'Access requires activation.'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 

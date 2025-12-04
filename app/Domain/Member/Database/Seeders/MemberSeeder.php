@@ -4,10 +4,10 @@ namespace App\Domain\Member\Database\Seeders;
 
 use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Models\Member;
-use App\Domain\Member\Models\MemberActivationCode;
 use App\Domain\Member\Models\MemberProfile;
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
+use App\Domain\User\Models\UserActivationCode;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -39,7 +39,7 @@ class MemberSeeder extends Seeder
             ]
         );
 
-        MemberActivationCode::updateOrCreate(
+        UserActivationCode::updateOrCreate(
             ['user_id' => $user->id],
             [
                 'is_active' => true,

@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Domain\Member\Database\Factories;
+namespace App\Domain\User\Database\Factories;
 
-use App\Domain\Member\Models\MemberActivationCode;
+use App\Domain\User\Models\UserActivationCode;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Domain\Member\Models\MemberActivationCode>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Domain\User\Models\UserActivationCode>
  */
-class MemberActivationCodeFactory extends Factory
+class UserActivationCodeFactory extends Factory
 {
     /**
      * The current password being used by the factory.
      */
-    protected $model = MemberActivationCode::class;
+    protected $model = UserActivationCode::class;
 
     /**
      * Define the model's default state.
