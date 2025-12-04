@@ -11,6 +11,7 @@
         <testsuite name="Feature">
             <directory>./tests/Feature</directory>
             <directory>/var/www/app/Domain/Geo/Tests</directory>
+            <directory>/var/www/app/Domain/User/Tests</directory>
             <directory>/var/www/app/Domain/Admin/Tests</directory>
             <directory>/var/www/app/Domain/Member/Tests</directory>
         </testsuite>

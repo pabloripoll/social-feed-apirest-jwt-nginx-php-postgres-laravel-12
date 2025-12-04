@@ -5,9 +5,9 @@ use App\Domain\Admin\Controller\AdminAuthController;
 use App\Domain\Admin\Controller\AdminProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('/api/v1/admin')->name('api-v1.admin.')->group(function () {
+Route::prefix('/api/v1/admin')->name('api-v1.')->group(function () {
 
-    Route::prefix('/account')->name('account.')->group(function () {
+    Route::prefix('/account')->name('admin-account.')->group(function () {
 
         Route::post('/login', [AdminAuthController::class, 'login'])->name('login');
 

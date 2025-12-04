@@ -25,6 +25,7 @@ uses(
     'Feature',
     'Unit',
     '../app/Domain/Geo/Tests',
+    '../app/Domain/User/Tests',
     '../app/Domain/Admin/Tests',
     '../app/Domain/Member/Tests',
 );
@@ -77,7 +78,7 @@ function defAdminLogin(TestCase $test, array $overrides = []): TestResponse
         ->with(['adminProfile'])
         ->first();
 
-    $route = route('api-v1.admin-auth.login');
+    $route = route('api-v1.admin-account.login');
 
     $payload = array_merge([
         'email' => $admin->email,
@@ -103,7 +104,7 @@ function defMemberLogin(TestCase $test, array $overrides = []): TestResponse
         ->with(['memberProfile'])
         ->first();
 
-    $route = route('api-v1.member-auth.login');
+    $route = route('api-v1.member-account.login');
 
     $payload = array_merge([
         'email' => $member->email,
