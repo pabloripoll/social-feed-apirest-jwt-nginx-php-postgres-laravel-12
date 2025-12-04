@@ -7,11 +7,11 @@ use App\Domain\Member\Mail\UserRegisterMail;
 use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\Member\Models\MemberProfile;
-use App\Domain\Member\Requests\MemberAuthActivationRequest;
 use App\Domain\Member\Requests\MemberAuthRegisterRequest;
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
 use App\Domain\User\Models\UserActivationCode;
+use App\Domain\User\Requests\UserAuthActivationRequest;
 use App\Domain\User\Service\UserAuthService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -168,7 +168,7 @@ class MemberAuthController extends Controller
      */
     public function activation(Request $request): JsonResponse
     {
-        $formRequest = new MemberAuthActivationRequest;
+        $formRequest = new UserAuthActivationRequest;
 
         $validator = Validator::make(
             $request->all(),

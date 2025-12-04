@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Domain\Member\Requests;
+namespace App\Domain\User\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MemberAuthActivationRequest extends FormRequest
+class UserAuthActivationRequest extends FormRequest
 {
     public function authorize(): bool
     {
