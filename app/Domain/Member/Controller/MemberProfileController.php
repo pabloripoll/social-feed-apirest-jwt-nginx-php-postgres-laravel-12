@@ -45,16 +45,6 @@ class MemberProfileController
     }
 
     /**
-     * PATCH /api/v1/account/profile
-     */
-    public function updateProfile(Request $request): JsonResponse
-    {
-        $response = ['test' => true];
-
-        return response()->json($response, JsonResponse::HTTP_OK);
-    }
-
-    /**
      * GET /api/v1/member/{member_uid}/profile
      */
     public function readMemberProfile(Request $request, int $member_uid): JsonResponse
