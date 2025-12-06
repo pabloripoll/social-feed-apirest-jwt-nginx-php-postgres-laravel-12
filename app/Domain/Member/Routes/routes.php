@@ -30,7 +30,7 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
 
     Route::prefix('/members')->name('members.')->group(function () {
         Route::get('/', [MemberProfileController::class, 'listSections'])->name('list-sections');
-        Route::get('/{member_uid}/profile', [MemberProfileController::class, 'readProfile'])->name('read-profile');
+        Route::get('/{member_uid}/profile', [MemberProfileController::class, 'readMemberProfile'])->name('read-profile');
         Route::get('/{member_uid}/posts', [MemberProfileController::class, 'listPosts'])->name('list-posts');
     });
 
