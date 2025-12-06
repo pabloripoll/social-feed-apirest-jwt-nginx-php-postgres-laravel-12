@@ -15,8 +15,10 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
 
             Route::get('/profile', [MemberAccountController::class, 'readProfile'])->name('read-profile');
             Route::patch('/profile', [MemberAccountController::class, 'updateProfile'])->name('update-profile');
-            Route::post('/profile/avatar', [MemberAccountController::class, 'uploadAvatar'])->name('upload-avatar');
-            Route::delete('/profile/avatar', [MemberAccountController::class, 'deleteAvatar'])->name('delete-avatar');
+
+            Route::get('/profile/avatars', [MemberAccountController::class, 'uploadAvatar'])->name('list-avatars');
+            Route::post('/profile/avatars', [MemberAccountController::class, 'uploadAvatar'])->name('upload-avatars');
+            Route::delete('/profile/avatars/{avatar_id}', [MemberAccountController::class, 'deleteAvatarById'])->name('delete-avatars');
 
             Route::get('/notifications', [MemberAccountController::class, 'listNotifications'])->name('list-notifications');
             Route::put('/notifications/{notification_id}/read', [MemberAccountController::class, 'setNotificationRead'])->name('set-notification-read');
