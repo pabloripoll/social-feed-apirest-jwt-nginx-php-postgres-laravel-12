@@ -16,17 +16,25 @@ class MemberProfileController
         /** @var Illuminate\Auth\AuthManager $user */
         $user = Auth::user();
         $user->load(['member', 'memberProfile']);
-        $userAccount = $user->member;
-        $userProfile = $user->memberProfile;
+
+        $member = $user->member;
+        $profile = $user->memberProfile;
+        $region = $member?->region;
+        $continent = $region?->continent;
 
         return response()->json(
             [
                 'email' => $user->email,
-                'uid' => $userAccount->uid,
-                'nickname' => $userProfile->nickname,
-                'avatar' => $user->avatar,
-                'region' => [
-                    'region_id' => $user->region_id,
+                'uid' => $member->uid,
+                'nickname' => $profile->nickname,
+                'avatar' => $member->avatar,
+                'account_created_at' => $user->created_at->format('Y-m-d H:i:s'),
+                'email_verified_at' => $user->email_verified_at->format('Y-m-d H:i:s'),
+                'geo' => [
+                    'continent_id' => $continent->id ?? null,
+                    'continent_name' => $continent->name ?? null,
+                    'region_id' => $region->id ?? null,
+                    'region_name' => $region->name ?? null,
                 ],
             ],
             JsonResponse::HTTP_OK

@@ -2,8 +2,9 @@
 
 namespace App\Domain\Member\Models;
 
-use App\Domain\Member\Database\Factories\MemberFactory;
 use App\Domain\User\Models\User;
+use App\Domain\Geo\Models\GeoRegion;
+use App\Domain\Member\Database\Factories\MemberFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -101,5 +102,10 @@ class Member extends Model
             'user_id',   // Local key on members table...
             'id'         // Local key on users table...
         );
+    }
+
+    public function region(): BelongsTo
+    {
+        return $this->belongsTo(GeoRegion::class, 'region_id', 'id');
     }
 }
