@@ -9,6 +9,7 @@ use App\Domain\User\Requests\UserAuthActivationRequest;
 use App\Domain\User\Service\UserAuthService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -32,9 +33,9 @@ class UserAuthController extends Controller
     /**
      * @OA\Post(
      *     path="/api/v1/auth/activation",
-     *     summary="Activate member account",
-     *     tags={"Member Authentication"},
-     *     description="Activates a member account using the activation code.",
+     *     summary="Activate user account",
+     *     tags={"User Authentication"},
+     *     description="Activates a user account using the activation code.",
      *
      *     @OA\RequestBody(
      *         required=true,
@@ -48,13 +49,24 @@ class UserAuthController extends Controller
      *     ),
      *
      *     @OA\Response(
+     *         response=200,
+     *         description="Account has been already activated",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="email", type="string", example="john@example.com"),
+     *             @OA\Property(property="status", type="string", example="Account has been already activated."),
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
      *         response=202,
      *         description="Account successfully activated",
      *
      *         @OA\JsonContent(
      *
      *             @OA\Property(property="email", type="string", example="john@example.com"),
-     *             @OA\Property(property="status", type="string", example="Account activation has been activated."),
+     *             @OA\Property(property="status", type="string", example="Account successfully activated."),
      *         )
      *     ),
      *
@@ -80,7 +92,22 @@ class UserAuthController extends Controller
             return response()->json(['message' => $errors[$field][0], 'error' => $field], JsonResponse::HTTP_NOT_ACCEPTABLE);
         }
 
-        $user = User::where('email', $request->email)->with('activationCode')->first();
+        $user = User::where('email', $request->email)
+            ->with('activationCode')
+            ->first();
+
+        if ($user->activationCode->is_active === true) {
+            return response()->json(
+                [
+                    'email' => $user->email,
+                    'status' => 'Account has been already activated.',
+                ],
+                JsonResponse::HTTP_OK
+            );
+        }
+
+        $user->email_verified_at = Carbon::now();
+        $user->save();
 
         $user->activationCode->is_active = true;
         $user->activationCode->save();
@@ -88,7 +115,7 @@ class UserAuthController extends Controller
         return response()->json(
             [
                 'email' => $user->email,
-                'status' => 'Account activation has been activated.',
+                'status' => 'Account successfully activated.',
             ],
             JsonResponse::HTTP_ACCEPTED
         );
@@ -98,7 +125,7 @@ class UserAuthController extends Controller
      * @OA\Post(
      *     path="/api/v1/auth/refresh",
      *     summary="Refresh JWT token",
-     *     tags={"Member Authentication"},
+     *     tags={"User Authentication"},
      *     description="Refreshes the JWT token for the authenticated user.",
      *     security={{"bearerAuth":{}}},
      *
@@ -152,9 +179,9 @@ class UserAuthController extends Controller
     /**
      * @OA\Post(
      *     path="/api/v1/auth/logout",
-     *     summary="Logout member",
-     *     tags={"Member Authentication"},
-     *     description="Terminates the current JWT token and logs out the member.",
+     *     summary="Logout user",
+     *     tags={"User Authentication"},
+     *     description="Terminates the current JWT token and logs out the user.",
      *     security={{"bearerAuth":{}}},
      *
      *     @OA\Response(
