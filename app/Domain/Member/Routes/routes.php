@@ -1,7 +1,7 @@
 <?php
 
-use App\Domain\Member\Controller\MemberAccountController;
 use App\Domain\Member\Controller\MemberAuthController;
+use App\Domain\Member\Controller\MemberAccountController;
 use App\Domain\Member\Controller\MemberProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,6 +12,8 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
         Route::post('/login', [MemberAuthController::class, 'login'])->name('login');
 
         Route::middleware(['jwt', 'member'])->group(function () {
+
+            Route::get('/settings', [MemberAccountController::class, 'readSettings'])->name('read-settings');
 
             Route::get('/profile', [MemberProfileController::class, 'readProfile'])->name('read-profile');
 
