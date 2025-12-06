@@ -14,6 +14,7 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
         Route::middleware(['jwt', 'member'])->group(function () {
 
             Route::get('/settings', [MemberAccountController::class, 'readSettings'])->name('read-settings');
+            Route::get('/access-logs', [MemberAccountController::class, 'listAccessLogs'])->name('read-access-logs');
 
             Route::get('/profile', [MemberProfileController::class, 'readProfile'])->name('read-profile');
 
