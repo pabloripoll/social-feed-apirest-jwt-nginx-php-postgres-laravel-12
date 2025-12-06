@@ -2,6 +2,7 @@
 
 namespace App\Domain\Member\Controller;
 
+use App\Domain\User\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,7 +30,8 @@ class MemberProfileController
                 'nickname' => $profile->nickname,
                 'avatar' => $member->avatar,
                 'account_created_at' => $user->created_at->format('Y-m-d H:i:s'),
-                'email_verified_at' => $user->email_verified_at->format('Y-m-d H:i:s'),
+                'email_verified_at' => $user->email_verified_at?->format('Y-m-d H:i:s'),
+                'password_changed_at' => $user->password_changed_at?->format('Y-m-d H:i:s'),
                 'geo' => [
                     'continent_id' => $continent->id ?? null,
                     'continent_name' => $continent->name ?? null,
