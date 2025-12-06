@@ -22,14 +22,12 @@ class FeedCategory extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'user_id',
-        'region_id',
-        'uid',
-        'is_active',
-        'is_banned',
+        'key',
+        'title',
+        'visits_count',
         'posts_count',
-        'votes_count',
-        'comments_count',
+        'posts_votes_up_count',
+        'posts_votes_down_count',
     ];
 
     /**

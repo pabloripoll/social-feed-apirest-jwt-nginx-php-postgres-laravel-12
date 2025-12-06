@@ -11,16 +11,16 @@ class MemberNotificationTypeSeeder extends Seeder
     {
         return [
             [
-                'key' => 'new-following-post',
-                'title' => 'New following post',
-                'message_singular' => 'New post from @<member>.',
-                'message_multiple' => 'New posts from @<member> and others <count> members.',
+                'key' => 'new-feed-post',
+                'title' => 'New feed post',
+                'message_singular' => 'New Feed Post from @<member>.',
+                'message_multiple' => 'New Feed Posts from @<member> and others <count> members.',
             ],
             [
-                'key' => 'new-post-vote',
-                'title' => 'New post vote',
-                'message_singular' => 'New vote from @<member> on <post-title>.',
-                'message_multiple' => 'New votes from @<member> and others <count> members on <post-title>.',
+                'key' => 'new-feed-post-thumb-up',
+                'title' => 'Thumbs up on feed post',
+                'message_singular' => 'New thumb up from @<member> on <fee-post-title>.',
+                'message_multiple' => 'New thumbs up from @<member> and others <count> members on <feed-post-title>.',
             ],
         ];
     }

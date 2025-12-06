@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class FeedPostVote extends Model
+class FeedPostThumb extends Model
 {
     /** @use HasFactory<\App\Domain\Feed\Database\Factories\MemberProfileFactory> */
     use HasFactory;
@@ -15,7 +15,7 @@ class FeedPostVote extends Model
     /**
      * @var string
      */
-    protected $table = 'feed_posts_votes';
+    protected $table = 'feed_posts_thumbs';
 
     /**
      * The attributes that are mass assignable.
@@ -24,8 +24,10 @@ class FeedPostVote extends Model
      */
     protected $fillable = [
         'user_id',
+        'feed_post_id',
         'up',
         'down',
+        'refresh_count',
     ];
 
     /**

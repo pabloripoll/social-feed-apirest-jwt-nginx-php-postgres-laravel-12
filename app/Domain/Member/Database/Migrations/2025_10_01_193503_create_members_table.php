@@ -22,9 +22,9 @@ return new class extends Migration
             $table->boolean('is_banned')->default(false);
             $table->integer('following_count')->default('0');
             $table->integer('followers_count')->default('0');
-            $table->integer('posts_count')->default('0');
-            $table->integer('posts_votes_up_count')->default('0');
-            $table->integer('posts_votes_down_count')->default('0');
+            $table->integer('feed_posts_count')->default('0');
+            $table->integer('feed_posts_thumbs_up_count')->default('0');
+            $table->integer('feed_posts_thumbs_down_count')->default('0');
             $table->timestamps();
         });
     }

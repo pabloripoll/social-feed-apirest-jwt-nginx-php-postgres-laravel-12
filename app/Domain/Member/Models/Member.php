@@ -31,8 +31,9 @@ class Member extends Model
         'uid',
         'is_active',
         'is_banned',
-        'posts_count',
-        'votes_count',
+        'feed_posts_count',
+        'feed_posts_thumbs_up_count',
+        'feed_posts_thumbs_down_count',
     ];
 
     /**

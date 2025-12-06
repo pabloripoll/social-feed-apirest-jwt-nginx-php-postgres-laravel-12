@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feed_posts_votes', function (Blueprint $table) {
+        Schema::create('feed_posts_thumbs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained((new User)->getTable());
-            $table->foreignId('post_id')->constrained((new FeedPost)->getTable());
+            $table->foreignId('feed_post_id')->constrained((new FeedPost)->getTable());
             $table->boolean('up')->default(false);
             $table->boolean('down')->default(false);
             $table->integer('refresh_count')->default('0');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feed_posts_votes');
+        Schema::dropIfExists('feed_posts_thumbs');
     }
 };

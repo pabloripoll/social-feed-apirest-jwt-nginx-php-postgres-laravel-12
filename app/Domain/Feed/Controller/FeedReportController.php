@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class FeedReportController
 {
     /**
-     * POST /api/v1/feed/posts/{post_id}/votes/up
+     * POST /api/v1/feed/posts/{post_id}/report
      */
-    public function createVoteUp(Request $request): JsonResponse
+    public function createReport(Request $request): JsonResponse
     {
         $response = ['test' => true];
 
@@ -18,9 +18,9 @@ class FeedReportController
     }
 
     /**
-     * DELETE /api/v1/feed/posts/{post_id}/votes/up
+     * GET /api/v1/feed/posts/{post_id}/report/{report_id}
      */
-    public function deleteVoteUp(Request $request): JsonResponse
+    public function readReport(Request $request, int $post_id, int $report_id): JsonResponse
     {
         $response = ['test' => true];
 
@@ -28,9 +28,9 @@ class FeedReportController
     }
 
     /**
-     * POST /api/v1/feed/posts/{post_id}/votes/up
+     * PATCH /api/v1/feed/posts/{post_id}/report/{report_id}
      */
-    public function createVoteDown(Request $request): JsonResponse
+    public function patchReport(Request $request, int $post_id, int $report_id): JsonResponse
     {
         $response = ['test' => true];
 
@@ -38,9 +38,9 @@ class FeedReportController
     }
 
     /**
-     * DELETE /api/v1/feed/posts/{post_id}/votes/up
+     * DELETE /api/v1/feed/posts/{post_id}/report/{report_id}
      */
-    public function deleteVoteDown(Request $request): JsonResponse
+    public function deleteReport(Request $request, int $post_id, int $report_id): JsonResponse
     {
         $response = ['test' => true];
 

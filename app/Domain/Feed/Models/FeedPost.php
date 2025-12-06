@@ -23,14 +23,21 @@ class FeedPost extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'uid',
         'user_id',
         'region_id',
-        'uid',
+        'category_id',
         'is_active',
+        'is_draft',
         'is_banned',
-        'posts_count',
-        'votes_count',
-        'comments_count',
+        'visits_count',
+        'reports_count',
+        'thumbs_up_count',
+        'thumbs_down_count',
+        'title',
+        'slug',
+        'summary',
+        'article',
     ];
 
     /**
@@ -71,8 +78,8 @@ class FeedPost extends Model
      * Relations
      */
 
-    /* public function user(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
-    } */
+    }
 }

@@ -24,8 +24,8 @@ return new class extends Migration
             $table->boolean('is_banned')->default(false);
             $table->integer('visits_count')->default('0');
             $table->integer('reports_count')->default('0');
-            $table->integer('votes_up_count')->default('0');
-            $table->integer('votes_down_count')->default('0');
+            $table->integer('thumbs_up_count')->default('0');
+            $table->integer('thumbs_down_count')->default('0');
             $table->string('title', 128)->nullable();
             $table->string('slug', 128)->nullable();
             $table->string('summary', 256)->nullable();

@@ -5,12 +5,12 @@ namespace App\Domain\Feed\Controller;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class FeedVoteController
+class FeedThumbController
 {
     /**
-     * POST /api/v1/feed/posts/{post_id}/votes/up
+     * POST /api/v1/feed/posts/{post_id}/thumbs/up
      */
-    public function createVoteUp(Request $request): JsonResponse
+    public function createThumbUp(Request $request): JsonResponse
     {
         $response = ['test' => true];
 
@@ -18,9 +18,9 @@ class FeedVoteController
     }
 
     /**
-     * DELETE /api/v1/feed/posts/{post_id}/votes/up
+     * DELETE /api/v1/feed/posts/{post_id}/thumbs/up
      */
-    public function deleteVoteUp(Request $request): JsonResponse
+    public function deleteThumbUp(Request $request): JsonResponse
     {
         $response = ['test' => true];
 
@@ -28,9 +28,9 @@ class FeedVoteController
     }
 
     /**
-     * POST /api/v1/feed/posts/{post_id}/votes/up
+     * POST /api/v1/feed/posts/{post_id}/thumbs/up
      */
-    public function createVoteDown(Request $request): JsonResponse
+    public function createThumbDown(Request $request): JsonResponse
     {
         $response = ['test' => true];
 
@@ -38,9 +38,9 @@ class FeedVoteController
     }
 
     /**
-     * DELETE /api/v1/feed/posts/{post_id}/votes/up
+     * DELETE /api/v1/feed/posts/{post_id}/thumbs/up
      */
-    public function deleteVoteDown(Request $request): JsonResponse
+    public function deleteThumbDown(Request $request): JsonResponse
     {
         $response = ['test' => true];
 
