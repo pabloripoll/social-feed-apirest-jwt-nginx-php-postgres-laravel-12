@@ -11,32 +11,20 @@ class FeedCategorySeeder extends Seeder
     {
         return [
             [
-                'key' => 'informatics',
-                'title' => 'Informatics',
+                'key' => 'thoughts',
+                'title' => 'Thoughts',
             ],
             [
-                'key' => 'electronics',
-                'title' => 'Electronics',
+                'key' => 'cooking',
+                'title' => 'Cooking',
             ],
             [
-                'key' => 'electricity',
-                'title' => 'Electricity',
+                'key' => 'hands-on',
+                'title' => 'Hands On',
             ],
             [
-                'key' => 'sound-audio',
-                'title' => 'Sound and Audio',
-            ],
-            [
-                'key' => 'mechanics',
-                'title' => 'Mechanics',
-            ],
-            [
-                'key' => 'chemistry',
-                'title' => 'Chemistry',
-            ],
-            [
-                'key' => 'mathematics',
-                'title' => 'Mathematics',
+                'key' => 'decoration',
+                'title' => 'Decoration',
             ],
         ];
     }
