@@ -44,7 +44,12 @@ class FeedCategory extends Model
      */
     protected function casts(): array
     {
-        return [];
+        return [
+            'visits_count' => 'integer',
+            'posts_count' => 'integer',
+            'posts_votes_up_count' => 'integer',
+            'posts_votes_down_count' => 'integer',
+        ];
     }
 
     /**
