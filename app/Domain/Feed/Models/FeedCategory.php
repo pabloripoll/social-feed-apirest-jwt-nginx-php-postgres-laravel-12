@@ -4,7 +4,6 @@ namespace App\Domain\Feed\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FeedCategory extends Model
 {
@@ -48,28 +47,6 @@ class FeedCategory extends Model
     }
 
     /**
-     * On creating register auto-generated values
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            // Generate a unique 9-digit integer UID
-            do {
-                $uid = random_int(100000, 999999); // 6 digits
-            } while (self::where('uid', $uid)->exists());
-
-            $model->uid = $uid;
-        });
-    }
-
-    /**
      * Relations
      */
-
-    /* public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    } */
 }
