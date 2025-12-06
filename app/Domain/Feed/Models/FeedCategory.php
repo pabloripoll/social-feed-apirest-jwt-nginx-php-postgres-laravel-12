@@ -2,8 +2,9 @@
 
 namespace App\Domain\Feed\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FeedCategory extends Model
 {
@@ -49,4 +50,8 @@ class FeedCategory extends Model
     /**
      * Relations
      */
+    public function posts(): HasMany
+    {
+        return $this->hasMany(FeedPost::class, 'category_id', 'id');
+    }
 }
