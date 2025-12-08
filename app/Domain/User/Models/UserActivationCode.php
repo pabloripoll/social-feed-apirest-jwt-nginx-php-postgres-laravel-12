@@ -17,7 +17,7 @@ class UserActivationCode extends Model
     /**
      * @var string
      */
-    protected $table = 'members_activation_codes';
+    protected $table = 'users_activation_codes';
 
     /**
      * The attributes that are mass assignable.

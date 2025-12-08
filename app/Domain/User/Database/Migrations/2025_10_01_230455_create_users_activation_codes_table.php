@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('members_activation_codes', function (Blueprint $table) {
+        Schema::create('users_activation_codes', function (Blueprint $table) {
             $table->id();
             $table->string('code', 32)->unique();
             $table->foreignId('user_id')->nullable()->constrained((new User)->getTable());
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('members_activation_codes');
+        Schema::dropIfExists('users_activation_codes');
     }
 };
