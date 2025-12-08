@@ -18,7 +18,6 @@ class AdminProfileFactory extends Factory
         return [
             'user_id' => User::factory(),
             'nickname' => $this->faker->regexify('[A-Za-z0-9]{8,32}'),
-            'avatar' => null,
         ];
     }
 

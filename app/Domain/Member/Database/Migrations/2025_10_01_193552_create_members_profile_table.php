@@ -16,7 +16,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained((new User)->getTable());
             $table->string('nickname', 32)->unique();
-            $table->text('avatar')->nullable();
             $table->timestamps();
         });
     }
