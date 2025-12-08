@@ -15,7 +15,7 @@ class UserAuthActivationRequest extends FormRequest
     {
         return [
             'email' => 'required|string|email|max:64|exists:users',
-            'code' => 'required|string|exists:members_activation_codes',
+            'code' => 'required|string|exists:users_activation_codes',
         ];
     }
 }
