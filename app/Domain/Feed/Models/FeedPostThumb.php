@@ -24,7 +24,7 @@ class FeedPostThumb extends Model
      */
     protected $fillable = [
         'user_id',
-        'feed_post_id',
+        'post_id',
         'up',
         'down',
         'refresh_count',

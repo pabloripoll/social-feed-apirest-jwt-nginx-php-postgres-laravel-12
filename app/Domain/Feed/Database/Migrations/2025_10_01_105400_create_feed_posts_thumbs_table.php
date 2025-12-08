@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('feed_posts_thumbs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained((new User)->getTable());
-            $table->foreignId('feed_post_id')->constrained((new FeedPost)->getTable());
+            $table->foreignId('post_id')->constrained((new FeedPost)->getTable());
             $table->boolean('up')->default(false);
             $table->boolean('down')->default(false);
             $table->integer('refresh_count')->default('0');
