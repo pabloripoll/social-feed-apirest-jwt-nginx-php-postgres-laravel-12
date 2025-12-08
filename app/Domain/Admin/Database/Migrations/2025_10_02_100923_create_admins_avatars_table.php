@@ -17,11 +17,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained((new User)->getTable());
             $table->boolean('is_selected')->default(false);
             $table->integer('position')->default('0');
-            $table->string('type', 16);
+            $table->string('type', 32)->comment('type of file');
             $table->string('extension', 16);
-            $table->string('path', 64);
+            $table->string('path', 128);
             $table->string('name', 128);
-            $table->string('title', 128)->nullable();
+            $table->string('title', 128);
+            $table->string('slug', 128);
             $table->text('url');
             $table->timestamps();
         });
