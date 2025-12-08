@@ -2,10 +2,10 @@
 
 namespace App\Domain\Member\Controller;
 
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use App\Domain\Member\Models\MemberAccessLog;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 class MemberAccountController
 {
     /**
@@ -27,8 +27,8 @@ class MemberAccountController
                     'members_access_logs.created_at',
                     'members_access_logs.expires_at',
                 ])
-                ->orderBy('members_access_logs.created_at', 'desc')
-                ->limit(1);
+                    ->orderBy('members_access_logs.created_at', 'desc')
+                    ->limit(1);
             },
         ]);
 
@@ -52,12 +52,12 @@ class MemberAccountController
                     'region_id' => $region->id ?? null,
                     'region_name' => $region->name ?? null,
                 ],
-                'access_logs' => $user->member->accessLogs?->map(fn($log) => [
-                    'ip_address'  => $log->ip_address,
-                    'user_agent'  => $log->user_agent,
-                    'created_at'  => $log->created_at?->format('Y-m-d H:i:s'),
-                    'expires_at'  => $log->expires_at?->format('Y-m-d H:i:s'),
-                ])
+                'access_logs' => $user->member->accessLogs?->map(fn ($log) => [
+                    'ip_address' => $log->ip_address,
+                    'user_agent' => $log->user_agent,
+                    'created_at' => $log->created_at?->format('Y-m-d H:i:s'),
+                    'expires_at' => $log->expires_at?->format('Y-m-d H:i:s'),
+                ]),
             ],
             JsonResponse::HTTP_OK
         );
@@ -77,7 +77,7 @@ class MemberAccountController
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get()
-            ->map(fn($log) => [
+            ->map(fn ($log) => [
                 'ip_address' => $log->ip_address,
                 'user_agent' => $log->user_agent,
                 'created_at' => $log->created_at?->format('Y-m-d H:i:s'),
@@ -87,7 +87,7 @@ class MemberAccountController
         return response()->json(
             [
                 'page' => 1,
-                'result' => $logs
+                'result' => $logs,
             ],
             JsonResponse::HTTP_OK
         );

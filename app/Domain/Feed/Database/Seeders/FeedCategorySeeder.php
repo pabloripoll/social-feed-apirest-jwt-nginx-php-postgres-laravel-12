@@ -2,8 +2,8 @@
 
 namespace App\Domain\Feed\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Domain\Feed\Models\FeedCategory;
+use Illuminate\Database\Seeder;
 
 class FeedCategorySeeder extends Seeder
 {

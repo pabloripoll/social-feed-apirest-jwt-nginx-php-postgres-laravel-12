@@ -2,8 +2,8 @@
 
 namespace App\Domain\User\Database\Factories;
 
-use App\Domain\User\Models\UserActivationCode;
 use App\Domain\User\Models\User;
+use App\Domain\User\Models\UserActivationCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

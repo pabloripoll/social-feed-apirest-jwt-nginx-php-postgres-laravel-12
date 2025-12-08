@@ -2,9 +2,9 @@
 
 namespace App\Domain\Member\Models;
 
-use App\Domain\User\Models\User;
 use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Database\Factories\MemberFactory;
+use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

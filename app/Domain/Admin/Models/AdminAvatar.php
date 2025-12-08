@@ -2,16 +2,16 @@
 
 namespace App\Domain\Admin\Models;
 
+use App\Domain\Admin\Database\Factories\AdminAvatarFactory;
 use App\Domain\User\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Domain\Admin\Database\Factories\AdminAvatarFactory;
 
 class AdminAvatar extends Model
 {
     /** @use HasFactory<\App\Domain\Admin\Database\Factories\AdminAvatar> */
-    //use HasFactory;
+    // use HasFactory;
 
     /**
      * @var string

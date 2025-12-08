@@ -3,7 +3,6 @@
 namespace App\Domain\Member\Controller;
 
 use App\Domain\Member\Models\Member;
-use App\Domain\User\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -57,7 +56,7 @@ class MemberProfileController
         if (! $member) {
             return response()->json(
                 [
-                    'message' => 'Member ' . $member_uid . ' not found.',
+                    'message' => 'Member '.$member_uid.' not found.',
                     'error' => 'member_not_found',
                 ],
                 JsonResponse::HTTP_NOT_FOUND
@@ -82,8 +81,8 @@ class MemberProfileController
                     'region_name' => $region->name ?? null,
                 ],
                 'feed' => [
-                    'posts_count' => $member->feed_posts_count
-                ]
+                    'posts_count' => $member->feed_posts_count,
+                ],
             ],
             JsonResponse::HTTP_OK
         );

@@ -3,12 +3,13 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class QueueMessage extends Command
 {
     protected $signature = 'rabbit:produce {message}';
+
     protected $description = 'Produce a message to RabbitMQ';
 
     public function handle()

@@ -4,18 +4,15 @@ namespace App\Domain\User\Controller;
 
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
-use App\Domain\User\Models\UserActivationCode;
 use App\Domain\User\Requests\UserAuthActivationRequest;
 use App\Domain\User\Service\UserAuthService;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
  * @OA\Tag(

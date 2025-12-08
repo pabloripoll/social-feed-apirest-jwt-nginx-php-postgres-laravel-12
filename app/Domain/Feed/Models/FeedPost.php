@@ -3,8 +3,8 @@
 namespace App\Domain\Feed\Models;
 
 use App\Domain\User\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FeedPost extends Model
@@ -77,7 +77,6 @@ class FeedPost extends Model
     /**
      * Relations
      */
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

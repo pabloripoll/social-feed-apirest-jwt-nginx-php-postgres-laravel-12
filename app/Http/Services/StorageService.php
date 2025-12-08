@@ -65,7 +65,7 @@ class StorageService
     public static function bucketProxy(string $link, ?string $bucket = null): string
     {
         $bucket = ($bucket ?? env('AWS_URL'));
-        $bucket = rtrim($bucket, '/') . '/';
+        $bucket = rtrim($bucket, '/').'/';
         $domain = env('APP_URL');
         $proxy = $domain.'/shared/files/';
 

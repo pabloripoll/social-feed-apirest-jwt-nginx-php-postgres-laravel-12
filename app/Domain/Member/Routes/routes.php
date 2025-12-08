@@ -1,7 +1,7 @@
 <?php
 
-use App\Domain\Member\Controller\MemberAuthController;
 use App\Domain\Member\Controller\MemberAccountController;
+use App\Domain\Member\Controller\MemberAuthController;
 use App\Domain\Member\Controller\MemberProfileController;
 use Illuminate\Support\Facades\Route;
 

@@ -49,7 +49,7 @@ class AdminProfileFactory extends Factory
             // split on common separators (dot, underscore, hyphen, plus)
             // support multibyte characters and title-case each part
             $parts = preg_split('/[._\-\+]+/u', $local);
-            $parts = array_filter($parts, fn($p) => $p !== '');
+            $parts = array_filter($parts, fn ($p) => $p !== '');
 
             $parts = array_map(function ($part) {
                 // convert to lowercase then title-case (handles multibyte)

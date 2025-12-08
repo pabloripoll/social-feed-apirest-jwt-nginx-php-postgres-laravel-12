@@ -2,16 +2,16 @@
 
 namespace App\Domain\Member\Models;
 
+use App\Domain\Member\Database\Factories\MemberAvatarFactory;
 use App\Domain\User\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Domain\Member\Database\Factories\MemberAvatarFactory;
 
 class MemberAvatar extends Model
 {
     /** @use HasFactory<\App\Domain\Member\Database\Factories\MemberAvatar> */
-    //use HasFactory;
+    // use HasFactory;
 
     /**
      * @var string

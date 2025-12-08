@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Media;
 
+use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class FileController extends Controller
 {
