@@ -26,6 +26,8 @@ class AdminProfile extends Model
     protected $fillable = [
         'user_id',
         'nickname',
+        'name',
+        'age',
     ];
 
     /**
