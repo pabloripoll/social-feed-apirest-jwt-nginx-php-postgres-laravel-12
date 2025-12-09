@@ -6,6 +6,7 @@ use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FeedPost extends Model
 {
@@ -77,6 +78,7 @@ class FeedPost extends Model
     /**
      * Relations
      */
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -85,5 +87,10 @@ class FeedPost extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(FeedCategory::class, 'category_id', 'id');
+    }
+
+    public function media(): HasMany
+    {
+        return $this->hasMany(FeedMultimedia::class, 'post_id');
     }
 }

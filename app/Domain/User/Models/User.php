@@ -5,6 +5,7 @@ namespace App\Domain\User\Models;
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Admin\Models\AdminAccessLog;
 use App\Domain\Admin\Models\AdminProfile;
+use App\Domain\Feed\Models\FeedMultimedia;
 use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\Member\Models\MemberProfile;
@@ -87,6 +88,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Relations
      */
+
     public function role(): HasOne
     {
         return $this->hasOne(Role::class, 'role');
@@ -125,5 +127,10 @@ class User extends Authenticatable implements JWTSubject
     public function adminAccessLogs(): HasMany
     {
         return $this->hasMany(AdminAccessLog::class, 'user_id');
+    }
+
+    public function feedMedia(): HasMany
+    {
+        return $this->hasMany(FeedMultimedia::class, 'user_id');
     }
 }
