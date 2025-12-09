@@ -29,11 +29,11 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
     Route::prefix('/account/feed')->middleware(['jwt', 'member'])->name('feed.')->group(function () {
         Route::get('/posts', [FeedPostController::class, 'listPosts'])->name('posts-listing');
         Route::post('/posts', [FeedPostController::class, 'createPost'])->name('post-create');
-        Route::get('/posts/{post_id}', [FeedPostController::class, 'getPost'])->name('post-read');
-        Route::put('/posts/{post_id}', [FeedPostController::class, 'activatePost'])->name('post-activate');
-        Route::patch('/posts/{post_id}', [FeedPostController::class, 'updatePost'])->name('post-patch');
-        Route::delete('/posts/{post_id}', [FeedPostController::class, 'deletePost'])->name('post-delete');
-        Route::post('/posts/{post_id}/media', [FeedPostController::class, 'uploadPostMedia'])->name('post-media-upload');
-        Route::delete('/posts/{post_id}/media', [FeedPostController::class, 'deletePostMedia'])->name('post-media-delete');
+        Route::get('/posts/{post_uid}', [FeedPostController::class, 'getPost'])->name('post-read');
+        Route::put('/posts/{post_uid}', [FeedPostController::class, 'activatePost'])->name('post-activate');
+        Route::patch('/posts/{post_uid}', [FeedPostController::class, 'updatePost'])->name('post-patch');
+        Route::delete('/posts/{post_uid}', [FeedPostController::class, 'deletePost'])->name('post-delete');
+        Route::post('/posts/{post_uid}/media', [FeedPostController::class, 'uploadPostMedia'])->name('post-media-upload');
+        Route::delete('/posts/{post_uid}/media', [FeedPostController::class, 'deletePostMedia'])->name('post-media-delete');
     });
 });

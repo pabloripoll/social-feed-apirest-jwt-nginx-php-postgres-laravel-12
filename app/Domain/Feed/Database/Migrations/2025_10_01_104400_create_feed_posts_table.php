@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('uid')->unique();
             $table->foreignId('user_id')->constrained((new User)->getTable());
             $table->foreignId('region_id')->nullable()->constrained((new GeoRegion)->getTable());
-            $table->foreignId('category_id')->constrained((new User)->getTable());
+            $table->foreignId('category_id')->nullable()->constrained((new User)->getTable());
             $table->boolean('is_sketch')->default(false);
             $table->boolean('is_draft')->default(false);
             $table->boolean('is_active')->default(false);
