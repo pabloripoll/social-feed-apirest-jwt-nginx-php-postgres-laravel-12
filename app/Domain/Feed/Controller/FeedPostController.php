@@ -54,7 +54,17 @@ class FeedPostController
     /**
      * PUT /api/v1/account/feed/posts/{post_uid}
      */
-    public function setPost(Request $request, int $post_uid): JsonResponse
+    public function broadcastPost(Request $request, int $post_uid): JsonResponse
+    {
+        $response = ['test' => true];
+
+        return response()->json($response, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * GET /api/v1/account/feed/posts/{post_uid}
+     */
+    public function readPost(Request $request, int $post_uid): JsonResponse
     {
         $response = ['test' => true];
 
