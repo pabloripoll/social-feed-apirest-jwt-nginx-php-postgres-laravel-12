@@ -11,6 +11,10 @@ class FeedCategorySeeder extends Seeder
     {
         return [
             [
+                'key' => 'example',
+                'title' => 'Example',
+            ],
+            [
                 'key' => 'thoughts',
                 'title' => 'Thoughts',
             ],

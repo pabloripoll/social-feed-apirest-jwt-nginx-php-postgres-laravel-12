@@ -67,9 +67,13 @@ class FeedPost extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            // Generate a unique 9-digit integer UID
+            // If caller already supplied a uid, keep it
+            if (! empty($model->uid)) {
+                return;
+            }
+            // Generate a unique 7-digit integer UID
             do {
-                $uid = random_int(100000, 999999); // 6 digits
+                $uid = random_int(1000000, 9999999);
             } while (self::where('uid', $uid)->exists());
 
             $model->uid = $uid;
