@@ -28,6 +28,7 @@ uses(
     '../app/Domain/User/Tests',
     '../app/Domain/Admin/Tests',
     '../app/Domain/Member/Tests',
+    '../app/Domain/Feed/Tests',
 );
 
 /*
@@ -112,4 +113,16 @@ function defMemberLogin(TestCase $test, array $overrides = []): TestResponse
     ], $overrides);
 
     return $test->post($route, $payload);
+}
+
+/**
+ * Fake JWT.
+ *
+ * *should be improved with wrong token paramenters*
+ *
+ * @return string
+ */
+function fakeJWT(): string
+{
+    return 'xyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNzY1MzY5OTEyLCJleHAiOjE3NjUzNzUzMTIsIm5iZiI6MTc2NTM2OTkxMiwianRpIjoiTEhYZHJadzRYUUxjZVo4QiIsInN1YiI6IjEiLCJwcnYiOiJkZjZjYjdlMDg0NmY3YTZmYjc4OTQ5ZDRhN2I0YzBjYmRjYjE4YTc4Iiwicm9sZSI6IlJPTEVfTUVNQkVSIn0.E2dOATFAzwT1YzeFc9aq24AF_bDogXLUAudeCH7M5Lc';
 }

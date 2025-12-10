@@ -48,7 +48,7 @@ class FeedPostController
             'post_uid' => $post->uid,
         ];
 
-        return response()->json($response, JsonResponse::HTTP_OK);
+        return response()->json($response, JsonResponse::HTTP_CREATED);
     }
 
     /**

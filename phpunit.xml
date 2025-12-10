@@ -14,6 +14,7 @@
             <directory>/var/www/app/Domain/User/Tests</directory>
             <directory>/var/www/app/Domain/Admin/Tests</directory>
             <directory>/var/www/app/Domain/Member/Tests</directory>
+            <directory>/var/www/app/Domain/Feed/Tests</directory>
         </testsuite>
     </testsuites>
     <source>
