@@ -28,6 +28,7 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
 
     Route::prefix('/account/feed')->middleware(['jwt', 'member'])->name('account-feed.')->group(function () {
         Route::get('/posts', [FeedPostController::class, 'listPosts'])->name('posts-listing');
+        Route::get('/posts/sketch', [FeedPostController::class, 'readSketchPost'])->name('post-read-sketch');
         Route::post('/posts', [FeedPostController::class, 'createPost'])->name('post-create');
         Route::put('/posts/{post_uid}', [FeedPostController::class, 'editPost'])->name('post-edit');
         Route::get('/posts/{post_uid}', [FeedPostController::class, 'readPost'])->name('post-read');

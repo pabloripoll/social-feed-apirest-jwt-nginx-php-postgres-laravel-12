@@ -190,6 +190,47 @@ class FeedPostController
     }
 
     /**
+     * GET /api/v1/account/feed/posts/sketch
+     */
+    public function readSketchPost(): JsonResponse
+    {
+        /** @var \App\Domain\User\Models\User $user */
+        $user = Auth::user();
+        $user->load(['member']);
+
+        $memberStatus = (new MemberService)->checkAccess($user);
+        if (! $memberStatus) {
+            return response()->json([
+                    'message' => $memberStatus->message,
+                    'error' => $memberStatus->error,
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $post = FeedPost::query()
+            ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
+            ->where('user_id', $user->id)
+            ->where('is_sketch', true)
+            ->first();
+        if (! $post) {
+            return response()->json([
+                    'message' => 'No feed sketch post found.',
+                    'error' => 'not_found',
+                ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
+        $response = [
+            'message' => 'Feed sketch post has successfully read.',
+            'post' => new FeedPostResource($post)
+        ];
+
+        return response()->json($response, JsonResponse::HTTP_OK);
+    }
+
+    /**
      * PATCH /api/v1/account/feed/posts/{post_uid}
      */
     public function updatePost(Request $request, int $post_uid): JsonResponse

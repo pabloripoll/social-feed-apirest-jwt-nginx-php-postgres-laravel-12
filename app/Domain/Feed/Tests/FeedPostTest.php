@@ -5,7 +5,6 @@
 use App\Domain\Feed\Models\FeedCategory;
 use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Models\Member;
-use App\Support\Debug;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Artisan;
@@ -216,7 +215,7 @@ describe('Member user on reading a feed post - @GET /api/v1/account/feed/posts/{
         $response = $this->withToken($accessLog->token)->put($route, $payload);
 
         $route = route('api-v1.account-feed.post-read', $params);
-        $response = $this->withToken($accessLog->token)->get($route); Debug::log($response->json());
+        $response = $this->withToken($accessLog->token)->get($route);
         $response->assertStatus(JsonResponse::HTTP_OK)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('post', fn (AssertableJson $postJson) => $postJson
@@ -247,6 +246,48 @@ describe('Member user on reading a feed post - @GET /api/v1/account/feed/posts/{
                     ->whereType('summary', 'string')
                     ->where('article', $payload['article'])
                     ->whereType('article', 'string')
+                    ->etc()
+                )
+                ->etc()
+            );
+    });
+});
+
+describe('Member user on reading a feed sketch post - @GET /api/v1/account/feed/posts/sketch', function () {
+    it('succeeds member can read its own latest feed sketched post', function () {
+        $member = Member::factory()->withAuth()->create();
+        $member->load(['user.memberAccessLogs']);
+        $accessLog = $member->user->memberAccessLogs()->latest()->first();
+
+        $route = route('api-v1.account-feed.post-create');
+        $response = $this->withToken($accessLog->token)->post($route, []);
+        $post_uid = $response['post_uid'];
+
+        $route = route('api-v1.account-feed.post-read-sketch');
+        $response = $this->withToken($accessLog->token)->get($route);
+        $response->assertStatus(JsonResponse::HTTP_OK)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->has('post', fn (AssertableJson $postJson) => $postJson
+                    ->where('uid', $post_uid)
+                    ->has('user', fn (AssertableJson $userJson) => $userJson
+                        ->whereType('uid', 'integer')
+                        ->where('uid', (int) $member->uid)
+                        ->whereType('nickname', 'string')
+                        ->etc()
+                    )
+                    ->has('continent_id')
+                    ->has('continent_name')
+                    ->has('region_id')
+                    ->has('region_name')
+                    ->has('category_id')
+                    ->where('is_sketch', true)
+                    ->where('is_draft', false)
+                    ->where('is_active', false)
+                    ->where('is_banned', false)
+                    ->has('title')
+                    ->has('slug')
+                    ->has('summary')
+                    ->has('article')
                     ->etc()
                 )
                 ->etc()
