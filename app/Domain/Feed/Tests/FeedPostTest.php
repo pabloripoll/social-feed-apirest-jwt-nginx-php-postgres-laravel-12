@@ -3,11 +3,11 @@
 /** @var \Tests\TestCase $this */
 
 use App\Domain\Feed\Models\FeedCategory;
-use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Models\Member;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Artisan;
+use Faker\Factory as FakerFactory;
 
 beforeEach(function () {
     Artisan::call('db:seed');
@@ -77,6 +77,7 @@ describe('Member user on editing a feed post - @PUT /api/v1/account/feed/posts/{
         $route = route('api-v1.account-feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
         $post_uid = $response->json('post_uid');
+
         $failPayload = $payload;
         $failPayload['status'] = 'other';
         $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
@@ -91,6 +92,7 @@ describe('Member user on editing a feed post - @PUT /api/v1/account/feed/posts/{
         $route = route('api-v1.account-feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
         $post_uid = $response->json('post_uid');
+
         $failPayload = $payload;
         $failPayload['category_id'] = 123;
         $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
@@ -112,8 +114,8 @@ describe('Member user on editing a feed post as draft- @PUT /api/v1/account/feed
 
         $route = route('api-v1.account-feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
-
         $post_uid = (int) $response['post_uid'];
+
         $category = FeedCategory::where('key', 'example')->first();
 
         $params = [
@@ -294,6 +296,158 @@ describe('Member user on reading a feed sketch post - @GET /api/v1/account/feed/
                     ->has('slug')
                     ->has('summary')
                     ->has('article')
+                    ->etc()
+                )
+                ->etc()
+            );
+    });
+});
+
+describe('Member user on updating a feed post - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
+    it('fails when member send wrong request params to update a feed post', function () {
+        $faker = FakerFactory::create();
+        $member = Member::factory()->withAuth()->create();
+        $member->load(['user.memberAccessLogs']);
+        $accessLog = $member->user->memberAccessLogs()->latest()->first();
+
+        $route = route('api-v1.account-feed.post-create');
+        $response = $this->withToken($accessLog->token)->post($route, []);
+
+        $post_uid = (int) $response['post_uid'];
+        $category = FeedCategory::where('key', 'example')->first();
+
+        $params = [
+            'post_uid' => $post_uid,
+        ];
+        $payload = [
+            'status' => 'broadcast',
+            'category_id' => $category->id,
+            'title' => $faker->sentence(6),
+            'article' => $faker->paragraphs(5, true),
+        ];
+        $route = route('api-v1.account-feed.post-edit', $params);
+        $response = $this->withToken($accessLog->token)->put($route, $payload);
+        $post_uid = $response->json()['post']['uid'];
+
+        $failPayload = $payload;
+        $failPayload['status'] = 'other';
+        $route = route('api-v1.account-feed.post-update', ['post_uid' => $post_uid]);
+        $response = $this->withToken($accessLog->token)->patch($route, $failPayload);
+        $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->where('error', 'status')
+                ->whereType('message', 'string')
+                ->etc()
+            );
+
+        $failPayload = $payload;
+        $failPayload['category_id'] = 123;
+        $route = route('api-v1.account-feed.post-update', ['post_uid' => $post_uid]);
+        $response = $this->withToken($accessLog->token)->patch($route, $failPayload);
+        $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->where('error', 'category_id')
+                ->whereType('message', 'string')
+                ->etc()
+            );
+    });
+});
+
+describe('Member user on updating a feed post - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
+    it('succeeds when member update a feed post from active to draft', function () {
+        $faker = FakerFactory::create();
+        $member = Member::factory()->withAuth()->create();
+        $member->load(['user.memberAccessLogs']);
+        $accessLog = $member->user->memberAccessLogs()->latest()->first();
+
+        $route = route('api-v1.account-feed.post-create');
+        $response = $this->withToken($accessLog->token)->post($route, []);
+
+        $post_uid = (int) $response['post_uid'];
+        $category = FeedCategory::where('key', 'example')->first();
+
+        $params = [
+            'post_uid' => $post_uid,
+        ];
+        $payload = [
+            'status' => 'broadcast',
+            'category_id' => $category->id,
+            'title' => $faker->sentence(6),
+            'article' => $faker->paragraphs(5, true),
+        ];
+        $route = route('api-v1.account-feed.post-edit', $params);
+        $response = $this->withToken($accessLog->token)->put($route, $payload);
+
+        $payload['status'] = 'draft';
+        $route = route('api-v1.account-feed.post-update', ['post_uid' => $post_uid]);
+        $response = $this->withToken($accessLog->token)->patch($route, $payload);
+        $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->has('post', fn (AssertableJson $postJson) => $postJson
+                    ->where('uid', $post_uid)
+                    ->where('category_id', $category->id)
+                    ->where('is_draft', true)
+                    ->where('is_active', false)
+                    ->where('title', $payload['title'])
+                    ->has('slug')
+                    ->has('summary')
+                    ->where('article', $payload['article'])
+                    ->whereType('category_id', 'integer')
+                    ->whereType('is_draft', 'boolean')
+                    ->whereType('is_active', 'boolean')
+                    ->whereType('slug', 'string')
+                    ->whereType('summary', 'string')
+                    ->etc()
+                )
+                ->etc()
+            );
+    });
+});
+
+describe('Member user on updating a feed post - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
+    it('succeeds when member update a feed post from draft to active', function () {
+        $faker = FakerFactory::create();
+        $member = Member::factory()->withAuth()->create();
+        $member->load(['user.memberAccessLogs']);
+        $accessLog = $member->user->memberAccessLogs()->latest()->first();
+
+        $route = route('api-v1.account-feed.post-create');
+        $response = $this->withToken($accessLog->token)->post($route, []);
+
+        $post_uid = (int) $response['post_uid'];
+        $category = FeedCategory::where('key', 'example')->first();
+
+        $params = [
+            'post_uid' => $post_uid,
+        ];
+        $payload = [
+            'status' => 'draft',
+            'category_id' => $category->id,
+            'title' => $faker->sentence(6),
+            'article' => $faker->paragraphs(5, true),
+        ];
+        $route = route('api-v1.account-feed.post-edit', $params);
+        $response = $this->withToken($accessLog->token)->put($route, $payload);
+
+        $payload['status'] = 'broadcast';
+        $route = route('api-v1.account-feed.post-update', ['post_uid' => $post_uid]);
+        $response = $this->withToken($accessLog->token)->patch($route, $payload);
+        $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->has('post', fn (AssertableJson $postJson) => $postJson
+                    ->where('uid', $post_uid)
+                    ->where('category_id', $category->id)
+                    ->where('is_draft', false)
+                    ->where('is_active', true)
+                    ->where('title', $payload['title'])
+                    ->has('slug')
+                    ->has('summary')
+                    ->where('article', $payload['article'])
+                    ->whereType('category_id', 'integer')
+                    ->whereType('is_draft', 'boolean')
+                    ->whereType('is_active', 'boolean')
+                    ->whereType('slug', 'string')
+                    ->whereType('summary', 'string')
                     ->etc()
                 )
                 ->etc()
