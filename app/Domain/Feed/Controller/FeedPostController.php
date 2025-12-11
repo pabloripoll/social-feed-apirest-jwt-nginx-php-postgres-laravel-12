@@ -84,15 +84,6 @@ class FeedPostController
             );
         }
 
-        if ($postScketched->is_banned) {
-            return response()->json([
-                    'message' => 'Feed post cannot be edited.',
-                    'error' => 'not_editable',
-                ],
-                JsonResponse::HTTP_UNAUTHORIZED
-            );
-        }
-
         if (! $postScketched->is_sketch) {
             return response()->json([
                     'message' => 'Feed post has been already edited.',
