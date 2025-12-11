@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Domain\Feed\Requests\FeedPostCreateRequest;
+use App\Domain\Feed\Requests\FeedPostEditRequest;
 use App\Domain\Member\Service\MemberService;
 use App\Domain\Feed\Resources\FeedPostResource;
 
@@ -95,7 +95,7 @@ class FeedPostController
 
         $postScketched->delete();
 
-        $formRequest = new FeedPostCreateRequest;
+        $formRequest = new FeedPostEditRequest;
 
         $validator = Validator::make(
             $request->all(),

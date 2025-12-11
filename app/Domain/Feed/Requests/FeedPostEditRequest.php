@@ -5,7 +5,7 @@ namespace App\Domain\Feed\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class FeedPostCreateRequest extends FormRequest
+class FeedPostEditRequest extends FormRequest
 {
     public function authorize(): bool
     {
