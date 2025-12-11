@@ -20,8 +20,8 @@ class FeedPostResource extends JsonResource
         $user = $request->user();
 
         // Safely access relations if loaded
+        $continent = $this->whenLoaded('continent') ? $this->continent : null;
         $region = $this->whenLoaded('region') ? $this->region : null;
-        $continent = $region ? ($region->continent ?? null) : ($this->region?->continent ?? null);
         $category = $this->whenLoaded('category') ? $this->category : null;
         $owner = $this->whenLoaded('user') ? $this->user : null;
 
@@ -39,7 +39,8 @@ class FeedPostResource extends JsonResource
             'region_name'     => $region ? $region->name : null,
 
             'category_id'     => $this->category_id,
-            'category_name'   => $category ? ($category->name ?? $category->title ?? null) : null,
+            'category_key'    => $category ? ($category->key ?? null) : null,
+            'category_name'   => $category ? ($category->title ?? null) : null,
 
             'is_sketch'       => (bool) ($this->is_sketch ?? false),
             'is_draft'        => (bool) ($this->is_draft ?? false),

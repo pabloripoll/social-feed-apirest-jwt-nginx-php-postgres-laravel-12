@@ -59,7 +59,7 @@ class FeedPostController
     {
         /** @var \App\Domain\User\Models\User $user */
         $user = Auth::user();
-        $user->load(['member']);
+        $user->load(['member', 'memberProfile']);
 
         $memberStatus = (new MemberService)->checkAccess($user);
         if (! $memberStatus) {
@@ -123,6 +123,7 @@ class FeedPostController
         $post->uid          = $post_uid;
         $post->user_id      = $user->id;
         $post->category_id  = $validated['category_id'];
+        $post->continent_id = $user->member->continent_id;
         $post->region_id    = $user->member->region_id;
         $post->is_sketch    = false;
         $post->is_draft     = $validated['status'] == 'draft' ? true : false;
