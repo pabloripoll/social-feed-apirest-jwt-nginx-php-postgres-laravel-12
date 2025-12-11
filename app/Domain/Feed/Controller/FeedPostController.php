@@ -164,7 +164,7 @@ class FeedPostController
         }
 
         $post = FeedPost::query()
-            ->with(['user.member', 'category', 'region.continent', 'media'])
+            ->with(['user.member', 'category', 'continent', 'region', 'media'])
             ->where('uid', $post_uid)
             ->where('user_id', $user->id)
             ->first();
