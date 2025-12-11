@@ -3,6 +3,7 @@
 /** @var \Tests\TestCase $this */
 
 use App\Domain\Feed\Models\FeedCategory;
+use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Models\Member;
 use App\Support\Debug;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -78,7 +79,7 @@ describe('Member user on editing a feed post - @POST /api/v1/account/feed/posts'
         $failPayload = $payload;
         $failPayload['status'] = 'other';
         $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
-        $response = $this->withToken($accessLog->token)->put($route, $failPayload); Debug::log([$response->status(), $response->json()]);
+        $response = $this->withToken($accessLog->token)->put($route, $failPayload);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->where('error', 'status')
@@ -92,7 +93,7 @@ describe('Member user on editing a feed post - @POST /api/v1/account/feed/posts'
         $failPayload = $payload;
         $failPayload['category_id'] = 123;
         $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
-        $response = $this->withToken($accessLog->token)->put($route, $failPayload); Debug::log([$response->status(), $response->json()]);
+        $response = $this->withToken($accessLog->token)->put($route, $failPayload);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->where('error', 'category_id')
@@ -183,6 +184,54 @@ describe('Member user on editing a feed post for broadcasting - @POST /api/v1/ac
                     ->whereType('summary', 'string')
                     ->etc()
                 )
+                ->etc()
+            );
+    });
+});
+
+describe('Member user on reading a feed post - @POST /api/v1/account/feed/posts', function () {
+    it('succeeds member can read its own feed post', function () {
+        $member = Member::factory()->withAuth()->create();
+        $member->load(['user.memberAccessLogs']);
+        $accessLog = $member->user->memberAccessLogs()->latest()->first();
+
+        $region = GeoRegion::latest()->first();
+
+        $member->region_id = $region->id;
+
+        $route = route('api-v1.account-feed.post-create');
+        $response = $this->withToken($accessLog->token)->post($route, []);
+        $post_uid = $response['post_uid'];
+        $category = FeedCategory::where('key', 'example')->first();
+        $params = [
+            'post_uid' => $post_uid,
+        ];
+        $payload = [
+            'status' => 'broadcast',
+            'category_id' => $category->id,
+            'title' => 'Some example title',
+            'article' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque pen',
+        ];
+        $route = route('api-v1.account-feed.post-edit', $params);
+        $response = $this->withToken($accessLog->token)->put($route, $payload);
+
+        $route = route('api-v1.account-feed.post-read', $params);
+        $response = $this->withToken($accessLog->token)->get($route); Debug::log($response->json());
+        $response->assertStatus(JsonResponse::HTTP_OK)
+            ->assertJson(fn (AssertableJson $json) => $json
+                ->where('uid', (string) $post_uid)
+                ->where('category_id', $category->id)
+                ->where('is_draft', false)
+                ->where('is_active', true)
+                ->where('title', $payload['title'])
+                ->has('slug')
+                ->has('summary')
+                ->where('article', $payload['article'])
+                ->whereType('category_id', 'integer')
+                ->whereType('is_draft', 'boolean')
+                ->whereType('is_active', 'boolean')
+                ->whereType('slug', 'string')
+                ->whereType('summary', 'string')
                 ->etc()
             );
     });

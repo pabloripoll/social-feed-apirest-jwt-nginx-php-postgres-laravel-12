@@ -94,6 +94,11 @@ class FeedPost extends Model
         return $this->belongsTo(FeedCategory::class, 'category_id', 'id');
     }
 
+    public function region(): BelongsTo
+    {
+        return $this->belongsTo(FeedCategory::class, 'region_id', 'id');
+    }
+
     public function media(): HasMany
     {
         return $this->hasMany(FeedMultimedia::class, 'post_id');

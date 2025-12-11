@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\Feed\Requests\FeedPostCreateRequest;
 use App\Domain\Member\Service\MemberService;
+use App\Domain\Feed\Resources\FeedPostResource;
 
 class FeedPostController
 {
@@ -39,7 +40,6 @@ class FeedPostController
 
         $post = new FeedPost;
         $post->user_id = $user->id;
-        $post->region_id = $user->member->region_id;
         $post->is_sketch = true;
         $post->save();
 
@@ -123,6 +123,7 @@ class FeedPostController
         $post->uid          = $post_uid;
         $post->user_id      = $user->id;
         $post->category_id  = $validated['category_id'];
+        $post->region_id    = $user->member->region_id;
         $post->is_sketch    = false;
         $post->is_draft     = $validated['status'] == 'draft' ? true : false;
         $post->is_active    = $validated['status'] == 'broadcast' ? true : false;
@@ -136,16 +137,7 @@ class FeedPostController
         $statusText = $validated['status'] == 'broadcast' ? 'published.' : 'saved as draft.';
         $response = [
             'message' => 'Feed post has successfully ' . $statusText,
-            'post' => [
-                'uid'           => $post->uid,
-                'category_id'   => $post->category_id,
-                'is_draft'      => $post->is_draft,
-                'is_active'     => $post->is_active,
-                'title'         => $post->title,
-                'slug'          => $post->slug,
-                'summary'       => $post->summary,
-                'article'       => $post->article,
-            ]
+            'post' => new FeedPostResource($post)
         ];
 
         return response()->json($response, JsonResponse::HTTP_ACCEPTED);
@@ -154,11 +146,37 @@ class FeedPostController
     /**
      * GET /api/v1/account/feed/posts/{post_uid}
      */
-    public function readPost(Request $request, int $post_uid): JsonResponse
+    public function readPost(int $post_uid): JsonResponse
     {
-        $response = ['test' => true];
+        /** @var \App\Domain\User\Models\User $user */
+        $user = Auth::user();
+        $user->load(['member']);
 
-        return response()->json($response, JsonResponse::HTTP_OK);
+        $memberStatus = (new MemberService)->checkAccess($user);
+        if (! $memberStatus) {
+            return response()->json([
+                    'message' => $memberStatus->message,
+                    'error' => $memberStatus->error,
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $post = FeedPost::query()
+            ->with(['user.member', 'category', 'region.continent', 'media'])
+            ->where('uid', $post_uid)
+            ->where('user_id', $user->id)
+            ->first();
+        if (! $post) {
+            return response()->json([
+                    'message' => 'Feed post not found.',
+                    'error' => 'not_found',
+                ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
+        return response()->json(new FeedPostResource($post), JsonResponse::HTTP_OK);
     }
 
     /**
