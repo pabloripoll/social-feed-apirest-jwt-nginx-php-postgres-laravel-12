@@ -2,6 +2,8 @@
 
 namespace App\Domain\Admin\Models;
 
+use App\Domain\Geo\Models\GeoContinent;
+use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Admin\Database\Factories\AdminFactory;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -99,5 +101,15 @@ class Admin extends Model
             'user_id',   // Local key on members table...
             'id'         // Local key on users table...
         );
+    }
+
+    public function continent(): BelongsTo
+    {
+        return $this->belongsTo(GeoContinent::class, 'continent_id', 'id');
+    }
+
+    public function region(): BelongsTo
+    {
+        return $this->belongsTo(GeoRegion::class, 'region_id', 'id');
     }
 }

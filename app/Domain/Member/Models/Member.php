@@ -2,6 +2,7 @@
 
 namespace App\Domain\Member\Models;
 
+use App\Domain\Geo\Models\GeoContinent;
 use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Database\Factories\MemberFactory;
 use App\Domain\User\Models\User;
@@ -103,6 +104,11 @@ class Member extends Model
             'user_id',   // Local key on members table...
             'id'         // Local key on users table...
         );
+    }
+
+    public function continent(): BelongsTo
+    {
+        return $this->belongsTo(GeoContinent::class, 'continent_id', 'id');
     }
 
     public function region(): BelongsTo

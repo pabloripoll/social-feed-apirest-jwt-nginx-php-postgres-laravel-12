@@ -2,6 +2,8 @@
 
 namespace App\Domain\Feed\Models;
 
+use App\Domain\Geo\Models\GeoContinent;
+use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -94,9 +96,14 @@ class FeedPost extends Model
         return $this->belongsTo(FeedCategory::class, 'category_id', 'id');
     }
 
+    public function continent(): BelongsTo
+    {
+        return $this->belongsTo(GeoContinent::class, 'continent_id', 'id');
+    }
+
     public function region(): BelongsTo
     {
-        return $this->belongsTo(FeedCategory::class, 'region_id', 'id');
+        return $this->belongsTo(GeoRegion::class, 'region_id', 'id');
     }
 
     public function media(): HasMany
