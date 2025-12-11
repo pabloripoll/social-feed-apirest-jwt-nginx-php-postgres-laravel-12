@@ -60,7 +60,7 @@ describe('Member user on creating a feed post - @POST /api/v1/account/feed/posts
     });
 });
 
-describe('Member user on editing a feed post - @POST /api/v1/account/feed/posts', function () {
+describe('Member user on editing a feed post - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
     it('fails when member send wrong request params to edit a feed post', function () {
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -103,7 +103,7 @@ describe('Member user on editing a feed post - @POST /api/v1/account/feed/posts'
     });
 });
 
-describe('Member user on editing a feed post as draft- @POST /api/v1/account/feed/posts', function () {
+describe('Member user on editing a feed post as draft- @PUT /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member edit a feed post for saving it as a draft', function () {
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -146,7 +146,7 @@ describe('Member user on editing a feed post as draft- @POST /api/v1/account/fee
     });
 });
 
-describe('Member user on editing a feed post for broadcasting - @POST /api/v1/account/feed/posts', function () {
+describe('Member user on editing a feed post for broadcasting - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member edit a feed post for broadcasting', function () {
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -189,7 +189,7 @@ describe('Member user on editing a feed post for broadcasting - @POST /api/v1/ac
     });
 });
 
-describe('Member user on reading a feed post - @POST /api/v1/account/feed/posts', function () {
+describe('Member user on reading a feed post - @GET /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds member can read its own feed post', function () {
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -219,19 +219,36 @@ describe('Member user on reading a feed post - @POST /api/v1/account/feed/posts'
         $response = $this->withToken($accessLog->token)->get($route); Debug::log($response->json());
         $response->assertStatus(JsonResponse::HTTP_OK)
             ->assertJson(fn (AssertableJson $json) => $json
-                ->where('uid', (string) $post_uid)
-                ->where('category_id', $category->id)
-                ->where('is_draft', false)
-                ->where('is_active', true)
-                ->where('title', $payload['title'])
-                ->has('slug')
-                ->has('summary')
-                ->where('article', $payload['article'])
-                ->whereType('category_id', 'integer')
-                ->whereType('is_draft', 'boolean')
-                ->whereType('is_active', 'boolean')
-                ->whereType('slug', 'string')
-                ->whereType('summary', 'string')
+                ->has('post', fn (AssertableJson $postJson) => $postJson
+                    ->where('uid', $post_uid)
+                    ->has('user', fn (AssertableJson $userJson) => $userJson
+                        ->whereType('uid', 'integer')
+                        ->where('uid', (int) $member->uid)
+                        ->whereType('nickname', 'string')
+                        ->etc()
+                    )
+                    ->whereType('continent_id', 'integer')
+                    ->whereType('continent_name', 'string')
+                    ->whereType('region_id', 'integer')
+                    ->whereType('region_name', 'string')
+                    ->where('category_id', $category->id)
+                    ->whereType('category_id', 'integer')
+                    ->where('is_draft', false)
+                    ->whereType('is_draft', 'boolean')
+                    ->where('is_active', true)
+                    ->whereType('is_active', 'boolean')
+                    ->where('is_banned', false)
+                    ->whereType('is_banned', 'boolean')
+                    ->where('title', $payload['title'])
+                    ->whereType('title', 'string')
+                    ->has('slug')
+                    ->whereType('slug', 'string')
+                    ->has('summary')
+                    ->whereType('summary', 'string')
+                    ->where('article', $payload['article'])
+                    ->whereType('article', 'string')
+                    ->etc()
+                )
                 ->etc()
             );
     });

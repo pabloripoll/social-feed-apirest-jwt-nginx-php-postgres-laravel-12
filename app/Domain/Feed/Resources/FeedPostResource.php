@@ -26,7 +26,7 @@ class FeedPostResource extends JsonResource
         $member = $this->whenLoaded('member') ? $this->member : null;
 
         return [
-            'uid'             => (string) $this->uid,
+            'uid'             => $this->uid,
             'user'            => [
                 'uid'      => $member->uid,
                 'nickname' => $member->profile->nickname,
