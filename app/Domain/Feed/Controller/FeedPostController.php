@@ -300,7 +300,60 @@ class FeedPostController
      */
     public function deletePost(int $post_uid): JsonResponse
     {
-        $response = ['test' => true];
+        /** @var \App\Domain\User\Models\User $user */
+        $user = Auth::user();
+        $user->load(['member', 'memberProfile']);
+
+        $memberStatus = (new MemberService)->checkAccess($user);
+        if (! $memberStatus) {
+            return response()->json([
+                    'message' => $memberStatus->message,
+                    'error' => $memberStatus->error,
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $post = FeedPost::query()
+            ->where('uid', $post_uid)
+            ->where('user_id', $user->id)
+            ->first();
+        if (! $post) {
+            return response()->json([
+                    'message' => 'Feed post not found.',
+                    'error' => 'not_found',
+                ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
+        if ($post->is_banned) {
+            return response()->json([
+                    'message' => 'Feed post cannot be edited.',
+                    'error' => 'not_editable',
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $legacyPost = [
+            'uid' => $post->uid,
+            'user_id' => $post->user_id,
+            'title' => $post->title,
+            'created_at' => $post->created_at->format('Y-m-d H:i:s'),
+        ];
+
+        // Delete dependencies
+
+        // Update dependencies
+
+        // Delete post
+        $post->delete();
+
+        $response = [
+            'message' => 'post sketch has been succefully deleted.',
+            'post' => $legacyPost,
+        ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
     }

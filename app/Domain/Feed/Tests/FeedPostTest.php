@@ -3,6 +3,7 @@
 /** @var \Tests\TestCase $this */
 
 use App\Domain\Feed\Models\FeedCategory;
+use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Member\Models\Member;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -452,5 +453,36 @@ describe('Member Feed Post - update to broadcast - @PATCH /api/v1/account/feed/p
                 )
                 ->etc()
             );
+    });
+});
+
+describe('Member Feed Post - delete - @DELETE /api/v1/account/feed/posts/{post_uid}', function () {
+    it('succeeds when member delete a feed post', function () {
+        $faker = FakerFactory::create();
+        $member = Member::factory()->withAuth()->create();
+        $member->load(['user.memberAccessLogs']);
+        $accessLog = $member->user->memberAccessLogs()->latest()->first();
+
+        $route = route('api-v1.account-feed.post-create');
+        $response = $this->withToken($accessLog->token)->post($route, []);
+        $post_uid = $response->json()['post_uid'];
+
+        $category = FeedCategory::where('key', 'example')->first();
+        $payload = [
+            'status' => 'draft',
+            'category_id' => $category->id,
+            'title' => $faker->sentence(6),
+            'article' => $faker->paragraphs(5, true),
+        ];
+        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
+        $response = $this->withToken($accessLog->token)->put($route, $payload);
+
+        $route = route('api-v1.account-feed.post-delete', ['post_uid' => $post_uid]);
+        $response = $this->withToken($accessLog->token)->delete($route);
+        $response->assertStatus(JsonResponse::HTTP_OK);
+
+        $route = route('api-v1.account-feed.post-read', ['post_uid' => $post_uid]);
+        $response = $this->withToken($accessLog->token)->get($route);
+        $response->assertStatus(JsonResponse::HTTP_NOT_FOUND);
     });
 });
