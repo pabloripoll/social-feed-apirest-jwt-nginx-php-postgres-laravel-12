@@ -164,7 +164,7 @@ class FeedPostController
         }
 
         $post = FeedPost::query()
-            ->with(['user.member', 'category', 'continent', 'region', 'media'])
+            ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
             ->where('uid', $post_uid)
             ->where('user_id', $user->id)
             ->first();
@@ -177,7 +177,16 @@ class FeedPostController
             );
         }
 
-        return response()->json(new FeedPostResource($post), JsonResponse::HTTP_OK);
+        $statusText = 'Feed post has no status!';
+        $statusText = $post->is_active !== true ? $statusText : 'Feed post set as active and is available for all users.';
+        $statusText = $post->is_draft !== true ? $statusText : 'Feed post is a draft - Only creator can access it.';
+        $statusText = $post->is_banned !== true ? $statusText : 'Feed post set as deactivated because has been banned - Only creator can access it.';
+        $response = [
+            'message' => 'Feed post has successfully read. ' . $statusText,
+            'post' => new FeedPostResource($post)
+        ];
+
+        return response()->json($response, JsonResponse::HTTP_OK);
     }
 
     /**

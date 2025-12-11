@@ -23,14 +23,14 @@ class FeedPostResource extends JsonResource
         $continent = $this->whenLoaded('continent') ? $this->continent : null;
         $region = $this->whenLoaded('region') ? $this->region : null;
         $category = $this->whenLoaded('category') ? $this->category : null;
-        $owner = $this->whenLoaded('user') ? $this->user : null;
+        $member = $this->whenLoaded('member') ? $this->member : null;
 
         return [
             'uid'             => (string) $this->uid,
-            'user'            => $owner ? [
-                'uid'      => $owner->uid,
-                'nickname' => $owner->relationLoaded('member') ? ($owner->member->nickname ?? null) : null,
-            ] : null,
+            'user'            => [
+                'uid'      => $member->uid,
+                'nickname' => $member->profile->nickname,
+            ],
 
             'continent_id'    => $this->continent_id,
             'continent_name'  => $continent ? $continent->name : null,
