@@ -4,6 +4,7 @@ namespace App\Domain\Feed\Models;
 
 use App\Domain\Geo\Models\GeoContinent;
 use App\Domain\Geo\Models\GeoRegion;
+use App\Domain\Member\Models\Member;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -89,6 +90,11 @@ class FeedPost extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function member(): BelongsTo
+    {
+        return $this->belongsTo(Member::class, 'user_id', 'user_id');
     }
 
     public function category(): BelongsTo
