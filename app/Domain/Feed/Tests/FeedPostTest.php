@@ -109,6 +109,7 @@ describe('Member Feed Post - edit fail - @PUT /api/v1/account/feed/posts/{post_u
 
 describe('Member Feed Post - edit as draft - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member edit a feed post for saving it as a draft', function () {
+        $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -125,8 +126,8 @@ describe('Member Feed Post - edit as draft - @PUT /api/v1/account/feed/posts/{po
         $payload = [
             'status' => 'draft',
             'category_id' => $category->id,
-            'title' => 'Some example title',
-            'article' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque pen',
+            'title' => $faker->sentence(6),
+            'article' => $faker->paragraphs(5, true),
         ];
         $route = route('api-v1.account-feed.post-edit', $params);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
@@ -155,6 +156,7 @@ describe('Member Feed Post - edit as draft - @PUT /api/v1/account/feed/posts/{po
 
 describe('Member Feed Post - edit for active broadcasting - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member edit a feed post for broadcasting', function () {
+        $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -171,8 +173,8 @@ describe('Member Feed Post - edit for active broadcasting - @PUT /api/v1/account
         $payload = [
             'status' => 'broadcast',
             'category_id' => $category->id,
-            'title' => 'Some example title',
-            'article' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque pen',
+            'title' => $faker->sentence(6),
+            'article' => $faker->paragraphs(5, true),
         ];
         $route = route('api-v1.account-feed.post-edit', $params);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
@@ -201,6 +203,7 @@ describe('Member Feed Post - edit for active broadcasting - @PUT /api/v1/account
 
 describe('Member Feed Post - read - @GET /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds member can read its own feed post', function () {
+        $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -217,8 +220,8 @@ describe('Member Feed Post - read - @GET /api/v1/account/feed/posts/{post_uid}',
         $payload = [
             'status' => 'broadcast',
             'category_id' => $category->id,
-            'title' => 'Some example title',
-            'article' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque pen',
+            'title' => $faker->sentence(6),
+            'article' => $faker->paragraphs(5, true),
         ];
         $route = route('api-v1.account-feed.post-edit', $params);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
