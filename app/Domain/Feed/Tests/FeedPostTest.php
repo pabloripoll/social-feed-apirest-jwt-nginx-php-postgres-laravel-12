@@ -13,7 +13,7 @@ beforeEach(function () {
     Artisan::call('db:seed');
 });
 
-describe('Non authenticated user on creating a feed post - @POST /api/v1/account/feed/posts', function () {
+describe('Member Feed Post - Not authenticated - @POST /api/v1/account/feed/posts', function () {
     it('succeeds a not authenticated user cannot access to protected route without header token', function () {
         $route = route('api-v1.account-feed.post-create');
         $response = $this->post($route, []);
@@ -26,7 +26,7 @@ describe('Non authenticated user on creating a feed post - @POST /api/v1/account
     });
 });
 
-describe('Wrong authenticated user on creating a feed post - @POST /api/v1/account/feed/posts', function () {
+describe('Member Feed Post - wrong authenticated - @POST /api/v1/account/feed/posts', function () {
     it('succeeds a user cannot access to protected route with an invalid token', function () {
         $route = route('api-v1.account-feed.post-create');
         $fakeToken = fakeJWT();
@@ -42,7 +42,7 @@ describe('Wrong authenticated user on creating a feed post - @POST /api/v1/accou
     });
 });
 
-describe('Member user on creating a feed post - @POST /api/v1/account/feed/posts', function () {
+describe('Member Feed Post - create - @POST /api/v1/account/feed/posts', function () {
     it('succeeds authenticated member user can create a feed post', function () {
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -60,7 +60,7 @@ describe('Member user on creating a feed post - @POST /api/v1/account/feed/posts
     });
 });
 
-describe('Member user on editing a feed post - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
+describe('Member Feed Post - edit fail - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
     it('fails when member send wrong request params to edit a feed post', function () {
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -106,7 +106,7 @@ describe('Member user on editing a feed post - @PUT /api/v1/account/feed/posts/{
     });
 });
 
-describe('Member user on editing a feed post as draft- @PUT /api/v1/account/feed/posts/{post_uid}', function () {
+describe('Member Feed Post - edit as draft - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member edit a feed post for saving it as a draft', function () {
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -152,7 +152,7 @@ describe('Member user on editing a feed post as draft- @PUT /api/v1/account/feed
     });
 });
 
-describe('Member user on editing a feed post for broadcasting - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
+describe('Member Feed Post - edit for active broadcasting - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member edit a feed post for broadcasting', function () {
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -198,7 +198,7 @@ describe('Member user on editing a feed post for broadcasting - @PUT /api/v1/acc
     });
 });
 
-describe('Member user on reading a feed post - @GET /api/v1/account/feed/posts/{post_uid}', function () {
+describe('Member Feed Post - read - @GET /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds member can read its own feed post', function () {
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -261,7 +261,7 @@ describe('Member user on reading a feed post - @GET /api/v1/account/feed/posts/{
     });
 });
 
-describe('Member user on reading a feed sketch post - @GET /api/v1/account/feed/posts/sketch', function () {
+describe('Member Feed Post - read sketch - @GET /api/v1/account/feed/posts/sketch', function () {
     it('succeeds member can read its own latest feed sketched post', function () {
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -303,7 +303,7 @@ describe('Member user on reading a feed sketch post - @GET /api/v1/account/feed/
     });
 });
 
-describe('Member user on updating a feed post - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
+describe('Member Feed Post - update fail - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
     it('fails when member send wrong request params to update a feed post', function () {
         $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
@@ -353,7 +353,7 @@ describe('Member user on updating a feed post - @PATCH /api/v1/account/feed/post
     });
 });
 
-describe('Member user on updating a feed post - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
+describe('Member Feed Post - update to draft - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member update a feed post from active to draft', function () {
         $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
@@ -404,7 +404,7 @@ describe('Member user on updating a feed post - @PATCH /api/v1/account/feed/post
     });
 });
 
-describe('Member user on updating a feed post - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
+describe('Member Feed Post - update to broadcast - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member update a feed post from draft to active', function () {
         $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
