@@ -120,16 +120,13 @@ describe('Member Feed Post - edit as draft - @PUT /api/v1/account/feed/posts/{po
 
         $category = FeedCategory::where('key', 'example')->first();
 
-        $params = [
-            'post_uid' => $post_uid,
-        ];
         $payload = [
             'status' => 'draft',
             'category_id' => $category->id,
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', $params);
+        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
         $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -167,16 +164,13 @@ describe('Member Feed Post - edit for active broadcasting - @PUT /api/v1/account
         $post_uid = (int) $response['post_uid'];
         $category = FeedCategory::where('key', 'example')->first();
 
-        $params = [
-            'post_uid' => $post_uid,
-        ];
         $payload = [
             'status' => 'broadcast',
             'category_id' => $category->id,
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', $params);
+        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
         $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -214,19 +208,16 @@ describe('Member Feed Post - read - @GET /api/v1/account/feed/posts/{post_uid}',
         $post_uid = $response['post_uid'];
         $category = FeedCategory::where('key', 'example')->first();
 
-        $params = [
-            'post_uid' => $post_uid,
-        ];
         $payload = [
             'status' => 'broadcast',
             'category_id' => $category->id,
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', $params);
+        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
 
-        $route = route('api-v1.account-feed.post-read', $params);
+        $route = route('api-v1.account-feed.post-read', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->get($route);
         $response->assertStatus(JsonResponse::HTTP_OK)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -320,16 +311,13 @@ describe('Member Feed Post - update fail - @PATCH /api/v1/account/feed/posts/{po
         $post_uid = (int) $response['post_uid'];
         $category = FeedCategory::where('key', 'example')->first();
 
-        $params = [
-            'post_uid' => $post_uid,
-        ];
         $payload = [
             'status' => 'broadcast',
             'category_id' => $category->id,
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', $params);
+        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
         $post_uid = $response->json()['post']['uid'];
 
@@ -370,16 +358,13 @@ describe('Member Feed Post - update to draft - @PATCH /api/v1/account/feed/posts
         $post_uid = (int) $response['post_uid'];
         $category = FeedCategory::where('key', 'example')->first();
 
-        $params = [
-            'post_uid' => $post_uid,
-        ];
         $payload = [
             'status' => 'broadcast',
             'category_id' => $category->id,
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', $params);
+        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
 
         $payload['status'] = 'draft';
@@ -421,16 +406,13 @@ describe('Member Feed Post - update to broadcast - @PATCH /api/v1/account/feed/p
         $post_uid = (int) $response['post_uid'];
         $category = FeedCategory::where('key', 'example')->first();
 
-        $params = [
-            'post_uid' => $post_uid,
-        ];
         $payload = [
             'status' => 'draft',
             'category_id' => $category->id,
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', $params);
+        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
 
         $payload['status'] = 'broadcast';
