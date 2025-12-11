@@ -28,6 +28,7 @@ class Admin extends Model
     protected $fillable = [
         'uid',
         'user_id',
+        'continent_id',
         'region_id',
         'is_active',
         'is_banned',

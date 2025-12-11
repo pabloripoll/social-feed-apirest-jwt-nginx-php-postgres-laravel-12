@@ -29,10 +29,13 @@ class MemberFactory extends Factory
      */
     public function definition(): array
     {
+        $region = GeoRegion::query()->inRandomOrder()->first();
+
         return [
             'uid' => $this->faker->unique()->numberBetween(100000, 999999),
             'user_id' => User::factory()->state(['role' => Role::MEMBER]),
-            'region_id' => GeoRegion::query()->inRandomOrder()->value('id'),
+            'continent_id' => $region->continent_id,
+            'region_id' => $region->id,
             'is_active' => true,
             'is_banned' => false,
         ];

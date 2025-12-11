@@ -27,9 +27,10 @@ class Member extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'user_id',
-        'region_id',
         'uid',
+        'user_id',
+        'continent_id',
+        'region_id',
         'is_active',
         'is_banned',
         'feed_posts_count',

@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Geo\Models\GeoContinent;
 use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -17,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('uid')->unique();
             $table->foreignId('user_id')->constrained((new User)->getTable());
+            $table->foreignId('continent_id')->nullable()->constrained((new GeoContinent)->getTable());
             $table->foreignId('region_id')->nullable()->constrained((new GeoRegion)->getTable());
             $table->boolean('is_active')->default(true);
             $table->boolean('is_banned')->default(false);

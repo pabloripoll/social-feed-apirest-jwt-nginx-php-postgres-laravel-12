@@ -25,16 +25,17 @@ class AdminSeeder extends Seeder
             ]
         );
 
-        $regionId = GeoRegion::where('name', 'Western')
+        $region = GeoRegion::where('name', 'Western')
             ->whereHas('continent', function ($query) {
                 $query->where('name', 'Europe');
             })
-            ->value('id');
+            ->first();
 
         Admin::updateOrCreate(
             ['user_id' => $user->id],
             [
-                'region_id' => $regionId,
+                'continent_id' => $region->continent_id,
+                'region_id' => $region->id,
             ]);
 
         AdminProfile::updateOrCreate(
