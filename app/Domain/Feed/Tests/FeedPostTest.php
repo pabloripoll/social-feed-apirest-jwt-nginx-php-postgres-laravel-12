@@ -47,6 +47,7 @@ describe('Member user on creating a feed post - @POST /api/v1/account/feed/posts
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
+
         $route = route('api-v1.account-feed.post-create');
         $response = $this->post($route, [], [
             'Authorization' => "Bearer $accessLog->token",
@@ -64,6 +65,7 @@ describe('Member user on editing a feed post - @PUT /api/v1/account/feed/posts/{
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
+
         $category = FeedCategory::where('key', 'example')->first();
         $payload = [
             'status' => 'broadcast',
@@ -107,10 +109,13 @@ describe('Member user on editing a feed post as draft- @PUT /api/v1/account/feed
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
+
         $route = route('api-v1.account-feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
+
         $post_uid = (int) $response['post_uid'];
         $category = FeedCategory::where('key', 'example')->first();
+
         $params = [
             'post_uid' => $post_uid,
         ];
@@ -150,10 +155,13 @@ describe('Member user on editing a feed post for broadcasting - @PUT /api/v1/acc
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
+
         $route = route('api-v1.account-feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
+
         $post_uid = (int) $response['post_uid'];
         $category = FeedCategory::where('key', 'example')->first();
+
         $params = [
             'post_uid' => $post_uid,
         ];
@@ -194,14 +202,12 @@ describe('Member user on reading a feed post - @GET /api/v1/account/feed/posts/{
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
-        $region = GeoRegion::latest()->first();
-
-        $member->region_id = $region->id;
-
         $route = route('api-v1.account-feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
+
         $post_uid = $response['post_uid'];
         $category = FeedCategory::where('key', 'example')->first();
+
         $params = [
             'post_uid' => $post_uid,
         ];
