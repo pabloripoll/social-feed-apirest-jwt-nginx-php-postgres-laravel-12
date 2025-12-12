@@ -2,6 +2,7 @@
 
 namespace App\Domain\Feed\Controller;
 
+use App\Domain\Feed\Models\FeedCategory;
 use App\Domain\Feed\Models\FeedPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\Feed\Requests\FeedPostEditRequest;
 use App\Domain\Member\Service\MemberService;
 use App\Domain\Feed\Resources\FeedPostResource;
+use App\Domain\Member\Models\Member;
 
 class FeedPostController
 {
@@ -125,6 +127,15 @@ class FeedPostController
         $post->summary      = Str::limit(trim(strip_tags($validated['article'])), 128);
         $post->article      = $validated['article'];
         $post->save();
+
+        // Dependencies
+        $member = Member::where('user_id', $user->id)->first();
+        $member->feed_posts_count = $member->feed_posts_count + 1;
+        $member->save();
+
+        $category = FeedCategory::find($post->category_id);
+        $category->posts_count = $category->posts_count + 1;
+        $category->save();
 
         $statusText = $validated['status'] == 'broadcast' ? 'published.' : 'saved as draft.';
         $response = [
@@ -286,6 +297,17 @@ class FeedPostController
         $post->article      = $validated['article'];
         $post->save();
 
+        // Dependencies
+        if ($post->category_id != $validated['category_id']) {
+            $legCategory = FeedCategory::find($post->category_id);
+            $legCategory->posts_count = max(0, $legCategory->posts_count - 1);
+            $legCategory->save();
+
+            $newCategory = FeedCategory::find($validated['category_id']);
+            $newCategory->posts_count = $newCategory->posts_count + 1;
+            $newCategory->save();
+        }
+
         $statusText = $validated['status'] == 'broadcast' ? 'publish updated.' : 'updated as draft.';
         $response = [
             'message' => 'Feed post has successfully ' . $statusText,
@@ -343,9 +365,14 @@ class FeedPostController
             'created_at' => $post->created_at->format('Y-m-d H:i:s'),
         ];
 
-        // Delete dependencies
+        // Dependencies
+        $member = Member::where('user_id', $user->id)->first();
+        $member->feed_posts_count = max(0, $member->feed_posts_count - 1);
+        $member->save();
 
-        // Update dependencies
+        $category = FeedCategory::find($post->category_id);
+        $category->posts_count = max(0, $category->posts_count - 1);
+        $category->save();
 
         // Delete post
         $post->delete();
