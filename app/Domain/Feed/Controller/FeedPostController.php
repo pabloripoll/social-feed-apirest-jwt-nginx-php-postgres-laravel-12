@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\Feed\Requests\FeedPostEditRequest;
-use App\Domain\Member\Service\MemberService;
 use App\Domain\Feed\Resources\FeedPostResource;
 use App\Domain\Member\Models\Member;
 
@@ -24,16 +23,6 @@ class FeedPostController
         /** @var \App\Domain\User\Models\User $user */
         $user = Auth::user();
         $user->load(['member']);
-
-        $memberStatus = (new MemberService)->checkAccess($user);
-        if (! $memberStatus) {
-            return response()->json([
-                    'message' => $memberStatus->message,
-                    'error' => $memberStatus->error,
-                ],
-                JsonResponse::HTTP_UNAUTHORIZED
-            );
-        }
 
         FeedPost::query()
             ->where('user_id', $user->id)
@@ -62,16 +51,6 @@ class FeedPostController
         /** @var \App\Domain\User\Models\User $user */
         $user = Auth::user();
         $user->load(['member', 'memberProfile']);
-
-        $memberStatus = (new MemberService)->checkAccess($user);
-        if (! $memberStatus) {
-            return response()->json([
-                    'message' => $memberStatus->message,
-                    'error' => $memberStatus->error,
-                ],
-                JsonResponse::HTTP_UNAUTHORIZED
-            );
-        }
 
         $postScketched = FeedPost::query()
             ->where('uid', $post_uid)
@@ -155,16 +134,6 @@ class FeedPostController
         $user = Auth::user();
         $user->load(['member']);
 
-        $memberStatus = (new MemberService)->checkAccess($user);
-        if (! $memberStatus) {
-            return response()->json([
-                    'message' => $memberStatus->message,
-                    'error' => $memberStatus->error,
-                ],
-                JsonResponse::HTTP_UNAUTHORIZED
-            );
-        }
-
         $post = FeedPost::query()
             ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
             ->where('uid', $post_uid)
@@ -200,16 +169,6 @@ class FeedPostController
         $user = Auth::user();
         $user->load(['member']);
 
-        $memberStatus = (new MemberService)->checkAccess($user);
-        if (! $memberStatus) {
-            return response()->json([
-                    'message' => $memberStatus->message,
-                    'error' => $memberStatus->error,
-                ],
-                JsonResponse::HTTP_UNAUTHORIZED
-            );
-        }
-
         $post = FeedPost::query()
             ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
             ->where('user_id', $user->id)
@@ -240,16 +199,6 @@ class FeedPostController
         /** @var \App\Domain\User\Models\User $user */
         $user = Auth::user();
         $user->load(['member', 'memberProfile']);
-
-        $memberStatus = (new MemberService)->checkAccess($user);
-        if (! $memberStatus) {
-            return response()->json([
-                    'message' => $memberStatus->message,
-                    'error' => $memberStatus->error,
-                ],
-                JsonResponse::HTTP_UNAUTHORIZED
-            );
-        }
 
         $post = FeedPost::query()
             ->where('uid', $post_uid)
@@ -325,16 +274,6 @@ class FeedPostController
         /** @var \App\Domain\User\Models\User $user */
         $user = Auth::user();
         $user->load(['member', 'memberProfile']);
-
-        $memberStatus = (new MemberService)->checkAccess($user);
-        if (! $memberStatus) {
-            return response()->json([
-                    'message' => $memberStatus->message,
-                    'error' => $memberStatus->error,
-                ],
-                JsonResponse::HTTP_UNAUTHORIZED
-            );
-        }
 
         $post = FeedPost::query()
             ->where('uid', $post_uid)
