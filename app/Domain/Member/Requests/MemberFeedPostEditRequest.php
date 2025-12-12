@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Domain\Feed\Requests;
+namespace App\Domain\Member\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class FeedPostEditRequest extends FormRequest
+class MemberFeedPostEditRequest extends FormRequest
 {
     public function authorize(): bool
     {

@@ -15,7 +15,7 @@ beforeEach(function () {
 
 describe('Member Feed Post - Not authenticated - @POST /api/v1/account/feed/posts', function () {
     it('succeeds a not authenticated user cannot access to protected route without header token', function () {
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->post($route, []);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -28,7 +28,7 @@ describe('Member Feed Post - Not authenticated - @POST /api/v1/account/feed/post
 
 describe('Member Feed Post - wrong authenticated - @POST /api/v1/account/feed/posts', function () {
     it('succeeds a user cannot access to protected route with an invalid token', function () {
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $fakeToken = fakeJWT();
         $response = $this->post($route, [], [
             'Authorization' => "Bearer " . $fakeToken,
@@ -48,7 +48,7 @@ describe('Member Feed Post - create - @POST /api/v1/account/feed/posts', functio
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->post($route, [], [
             'Authorization' => "Bearer $accessLog->token",
         ]);
@@ -74,13 +74,13 @@ describe('Member Feed Post - edit fail - @PUT /api/v1/account/feed/posts/{post_u
             'article' => 'Lorem ipsum dolor sit amet...',
         ];
 
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
         $post_uid = $response->json('post_uid');
 
         $failPayload = $payload;
         $failPayload['status'] = 'other';
-        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $failPayload);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -89,13 +89,13 @@ describe('Member Feed Post - edit fail - @PUT /api/v1/account/feed/posts/{post_u
                 ->etc()
             );
 
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
         $post_uid = $response->json('post_uid');
 
         $failPayload = $payload;
         $failPayload['category_id'] = 123;
-        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $failPayload);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -113,7 +113,7 @@ describe('Member Feed Post - edit as draft - @PUT /api/v1/account/feed/posts/{po
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
         $post_uid = (int) $response['post_uid'];
 
@@ -125,7 +125,7 @@ describe('Member Feed Post - edit as draft - @PUT /api/v1/account/feed/posts/{po
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
         $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -157,7 +157,7 @@ describe('Member Feed Post - edit for active broadcasting - @PUT /api/v1/account
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
 
         $post_uid = (int) $response['post_uid'];
@@ -169,7 +169,7 @@ describe('Member Feed Post - edit for active broadcasting - @PUT /api/v1/account
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
         $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -201,7 +201,7 @@ describe('Member Feed Post - read - @GET /api/v1/account/feed/posts/{post_uid}',
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
 
         $post_uid = $response['post_uid'];
@@ -213,10 +213,10 @@ describe('Member Feed Post - read - @GET /api/v1/account/feed/posts/{post_uid}',
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
 
-        $route = route('api-v1.account-feed.post-read', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-read', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->get($route);
         $response->assertStatus(JsonResponse::HTTP_OK)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -261,11 +261,11 @@ describe('Member Feed Post - read sketch - @GET /api/v1/account/feed/posts/sketc
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
         $post_uid = $response['post_uid'];
 
-        $route = route('api-v1.account-feed.post-read-sketch');
+        $route = route('api-v1.member-account.feed.post-read-sketch');
         $response = $this->withToken($accessLog->token)->get($route);
         $response->assertStatus(JsonResponse::HTTP_OK)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -304,7 +304,7 @@ describe('Member Feed Post - update fail - @PATCH /api/v1/account/feed/posts/{po
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
 
         $post_uid = (int) $response['post_uid'];
@@ -316,13 +316,13 @@ describe('Member Feed Post - update fail - @PATCH /api/v1/account/feed/posts/{po
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
         $post_uid = $response->json()['post']['uid'];
 
         $failPayload = $payload;
         $failPayload['status'] = 'other';
-        $route = route('api-v1.account-feed.post-update', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-update', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->patch($route, $failPayload);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -333,7 +333,7 @@ describe('Member Feed Post - update fail - @PATCH /api/v1/account/feed/posts/{po
 
         $failPayload = $payload;
         $failPayload['category_id'] = 123;
-        $route = route('api-v1.account-feed.post-update', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-update', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->patch($route, $failPayload);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -351,7 +351,7 @@ describe('Member Feed Post - update to draft - @PATCH /api/v1/account/feed/posts
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
 
         $post_uid = (int) $response['post_uid'];
@@ -363,11 +363,11 @@ describe('Member Feed Post - update to draft - @PATCH /api/v1/account/feed/posts
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
 
         $payload['status'] = 'draft';
-        $route = route('api-v1.account-feed.post-update', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-update', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->patch($route, $payload);
         $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -399,7 +399,7 @@ describe('Member Feed Post - update to broadcast - @PATCH /api/v1/account/feed/p
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
 
         $post_uid = (int) $response['post_uid'];
@@ -411,11 +411,11 @@ describe('Member Feed Post - update to broadcast - @PATCH /api/v1/account/feed/p
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
 
         $payload['status'] = 'broadcast';
-        $route = route('api-v1.account-feed.post-update', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-update', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->patch($route, $payload);
         $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
             ->assertJson(fn (AssertableJson $json) => $json
@@ -447,7 +447,7 @@ describe('Member Feed Post - delete - @DELETE /api/v1/account/feed/posts/{post_u
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
-        $route = route('api-v1.account-feed.post-create');
+        $route = route('api-v1.member-account.feed.post-create');
         $response = $this->withToken($accessLog->token)->post($route, []);
         $post_uid = $response->json()['post_uid'];
 
@@ -458,14 +458,14 @@ describe('Member Feed Post - delete - @DELETE /api/v1/account/feed/posts/{post_u
             'title' => $faker->sentence(6),
             'article' => $faker->paragraphs(5, true),
         ];
-        $route = route('api-v1.account-feed.post-edit', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-edit', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->put($route, $payload);
 
-        $route = route('api-v1.account-feed.post-delete', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-delete', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->delete($route);
         $response->assertStatus(JsonResponse::HTTP_OK);
 
-        $route = route('api-v1.account-feed.post-read', ['post_uid' => $post_uid]);
+        $route = route('api-v1.member-account.feed.post-read', ['post_uid' => $post_uid]);
         $response = $this->withToken($accessLog->token)->get($route);
         $response->assertStatus(JsonResponse::HTTP_NOT_FOUND);
     });
