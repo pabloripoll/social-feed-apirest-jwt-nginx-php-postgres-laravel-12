@@ -10,13 +10,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 beforeEach(function () {
     Artisan::call('db:seed');
-
-    $email = fake()->unique()->safeEmail();
-    $this->payload = (object) [
-        'email' => $email,
-        'nickname' => preg_replace('/[^A-Za-z0-9]/', '', strstr($email, '@', true)),
-        'password' => '12345678aZ!',
-    ];
 });
 
 describe('User role admin auth token refresh fail - @POST /api/v1/admin/auth/refresh', function () {
