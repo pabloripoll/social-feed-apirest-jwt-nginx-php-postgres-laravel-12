@@ -24,10 +24,10 @@ class FeedCategory extends Model
     protected $fillable = [
         'key',
         'title',
-        'visits_count',
         'posts_count',
         'posts_votes_up_count',
         'posts_votes_down_count',
+        'posts_favorites_count',
     ];
 
     /**
@@ -45,10 +45,10 @@ class FeedCategory extends Model
     protected function casts(): array
     {
         return [
-            'visits_count' => 'integer',
             'posts_count' => 'integer',
             'posts_votes_up_count' => 'integer',
             'posts_votes_down_count' => 'integer',
+            'posts_favorites_count' => 'integer',
         ];
     }
 

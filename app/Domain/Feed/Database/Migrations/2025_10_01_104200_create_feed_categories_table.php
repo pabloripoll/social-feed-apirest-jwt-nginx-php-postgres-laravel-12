@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('key', 64)->unique();
             $table->string('title', 64);
-            $table->integer('visits_count')->default('0');
             $table->integer('posts_count')->default('0');
             $table->integer('posts_votes_up_count')->default('0');
             $table->integer('posts_votes_down_count')->default('0');
+            $table->integer('posts_favorites_count')->default('0');
             $table->timestamps();
         });
     }
