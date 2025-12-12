@@ -3,7 +3,6 @@
 /** @var \Tests\TestCase $this */
 
 use App\Domain\Feed\Models\FeedCategory;
-use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Member\Models\Member;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
