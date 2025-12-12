@@ -29,11 +29,11 @@ class UserAuthService
             $payload = JWTAuth::decode($token);
 
             if ($payload['role'] == Role::ADMIN) {
-                $accessToken = AdminAccessLog::where('token', $token)->first();
+                $accessToken = AdminAccessLog::where('token', $token)->latest()->first();
             }
 
             if ($payload['role'] == Role::MEMBER) {
-                $accessToken = MemberAccessLog::where('token', $token)->first();
+                $accessToken = MemberAccessLog::where('token', $token)->latest()->first();
             }
 
             if (! $accessToken) {
