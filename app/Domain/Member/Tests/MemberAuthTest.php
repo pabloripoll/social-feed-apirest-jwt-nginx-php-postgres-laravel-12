@@ -3,10 +3,13 @@
 /** @var \Tests\TestCase $this */
 
 use App\Domain\Member\Models\Member;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 beforeEach(function () {
+    Artisan::call('db:seed');
+
     $email = fake()->unique()->safeEmail();
     $this->payload = (object) [
         'email' => $email,
