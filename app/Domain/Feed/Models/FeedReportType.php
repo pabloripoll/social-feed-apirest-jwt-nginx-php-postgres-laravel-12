@@ -22,10 +22,10 @@ class FeedReportType extends Model
      */
     protected $fillable = [
         'key',
-        'title',
-        'description',
         'level',
         'position',
+        'title',
+        'description',
     ];
 
     /**

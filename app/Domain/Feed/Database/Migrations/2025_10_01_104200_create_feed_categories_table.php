@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('feed_categories', function (Blueprint $table) {
             $table->id();
             $table->string('key', 64)->unique();
-            $table->string('title', 64);
+            $table->smallInteger('position')->default('0');
             $table->integer('posts_count')->default('0');
-            $table->integer('posts_votes_up_count')->default('0');
-            $table->integer('posts_votes_down_count')->default('0');
+            $table->integer('posts_thumbs_up_count')->default('0');
+            $table->integer('posts_thumbs_down_count')->default('0');
             $table->integer('posts_favorites_count')->default('0');
+            $table->string('title', 64);
+            $table->string('description', 256)->nullable();
             $table->timestamps();
         });
     }

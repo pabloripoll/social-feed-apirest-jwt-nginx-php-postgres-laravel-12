@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('feed_report_types', function (Blueprint $table) {
             $table->id();
             $table->string('key', 64)->unique();
-            $table->string('title', 64);
-            $table->string('description', 256)->nullable();
             $table->smallInteger('level')->default('0');
             $table->smallInteger('position')->default('0');
+            $table->string('title', 64);
+            $table->string('description', 256)->nullable();
             $table->timestamps();
         });
     }

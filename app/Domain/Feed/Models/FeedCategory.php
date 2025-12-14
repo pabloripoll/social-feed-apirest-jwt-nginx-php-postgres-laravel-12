@@ -23,11 +23,13 @@ class FeedCategory extends Model
      */
     protected $fillable = [
         'key',
-        'title',
+        'position',
         'posts_count',
-        'posts_votes_up_count',
-        'posts_votes_down_count',
+        'posts_thumbs_up_count',
+        'posts_thumbs_down_count',
         'posts_favorites_count',
+        'title',
+        'description',
     ];
 
     /**

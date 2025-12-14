@@ -16,9 +16,6 @@ class FeedPostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // current authenticated user (may be null)
-        $user = $request->user();
-
         // Safely access relations if loaded
         $continent = $this->whenLoaded('continent') ? $this->continent : null;
         $region = $this->whenLoaded('region') ? $this->region : null;
