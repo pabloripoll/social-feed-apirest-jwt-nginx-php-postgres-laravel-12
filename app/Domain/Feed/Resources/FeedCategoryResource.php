@@ -23,7 +23,7 @@ class FeedCategoryResource extends JsonResource
             'posts_count' => (int) ($this->posts_count ?? 0),
             'posts_thumbs_up_count' => (int) ($this->posts_thumbs_up_count ?? 0),
             'posts_thumbs_down_count' => (int) ($this->posts_thumbs_down_count ?? 0),
-            'posts_favorites_count' => (int) ($this->posts_favorites_count ?? 0),
+            'posts_favourites_count' => (int) ($this->posts_favourites_count ?? 0),
             'title' => $this->title,
             'description' => $this->description,
         ];

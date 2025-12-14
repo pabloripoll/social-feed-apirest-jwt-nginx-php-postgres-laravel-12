@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class FeedPostFavorite extends Model
+class FeedPostFavourite extends Model
 {
-    /** @use HasFactory<\App\Domain\Feed\Database\Factories\FeedPostFavoriteFactory> */
+    /** @use HasFactory<\App\Domain\Feed\Database\Factories\FeedPostFavouriteFactory> */
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'feed_posts_favorite';
+    protected $table = 'feed_posts_favourites';
 
     /**
      * The attributes that are mass assignable.

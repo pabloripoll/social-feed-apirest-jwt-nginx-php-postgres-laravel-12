@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feed_posts_favorites', function (Blueprint $table) {
+        Schema::create('feed_posts_favourites', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained((new User)->getTable());
             $table->foreignId('post_id')->constrained((new FeedPost)->getTable());
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feed_posts_favorites');
+        Schema::dropIfExists('feed_posts_favourites');
     }
 };

@@ -38,7 +38,7 @@ class FeedPost extends Model
         'reports_count',
         'thumbs_up_count',
         'thumbs_down_count',
-        'favorites_count',
+        'favourites_count',
         'title',
         'slug',
         'summary',

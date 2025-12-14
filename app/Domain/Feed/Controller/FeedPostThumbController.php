@@ -5,7 +5,7 @@ namespace App\Domain\Feed\Controller;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class FeedThumbController
+class FeedPostThumbController
 {
     /**
      * POST /api/v1/feed/posts/{post_id}/thumbs/up

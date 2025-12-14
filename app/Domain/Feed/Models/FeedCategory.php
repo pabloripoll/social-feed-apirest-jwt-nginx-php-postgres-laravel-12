@@ -27,7 +27,7 @@ class FeedCategory extends Model
         'posts_count',
         'posts_thumbs_up_count',
         'posts_thumbs_down_count',
-        'posts_favorites_count',
+        'posts_favourites_count',
         'title',
         'description',
     ];
@@ -50,7 +50,7 @@ class FeedCategory extends Model
             'posts_count' => 'integer',
             'posts_votes_up_count' => 'integer',
             'posts_votes_down_count' => 'integer',
-            'posts_favorites_count' => 'integer',
+            'posts_favourites_count' => 'integer',
         ];
     }
 

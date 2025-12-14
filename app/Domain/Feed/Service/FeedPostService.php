@@ -22,7 +22,7 @@ class FeedPostService
 
         return [
             'categories' => $categories,
-            'favorites' => [
+            'favourites' => [
                 'most' => 'Most',
                 'least' => 'Least',
             ],
