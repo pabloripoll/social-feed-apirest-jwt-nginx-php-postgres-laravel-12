@@ -2,18 +2,11 @@
 
 namespace App\Domain\Feed\Controller;
 
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\Feed\Models\FeedCategory;
-use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Feed\Models\FeedReportType;
-use App\Domain\Feed\Requests\FeedPostRequest;
-use App\Domain\Feed\Resources\FeedPostResource;
 use App\Domain\Feed\Resources\FeedCategoryResource;
 use App\Domain\Feed\Resources\FeedReportTypeResource;
-use App\Support\Paginate;
-use Illuminate\Support\Facades\Validator;
-use App\Domain\Feed\Service\FeedPostService;
 
 class FeedController
 {
