@@ -72,4 +72,40 @@ class FeedPostController
 
         return response()->json($response, JsonResponse::HTTP_OK);
     }
+
+    /**
+     * GET /api/v1/feed/posts/{uid}
+     */
+    public function readPost(int $uid): JsonResponse
+    {
+        $post = FeedPost::query()
+            ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
+            ->where('uid', $uid)
+            ->where('is_active', true)
+            ->first();
+        if (! $post) {
+            return response()->json([
+                    'message' => 'No feed sketch post found.',
+                    'error' => 'post_not_found',
+                ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
+        if ($post->is_banned) {
+            return response()->json([
+                    'message' => 'Feed post cannot be edited.',
+                    'error' => 'post_banned',
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $response = [
+            'message' => 'Feed post has successfully read.',
+            'post' => new FeedPostResource($post),
+        ];
+
+        return response()->json($response, JsonResponse::HTTP_OK);
+    }
 }
