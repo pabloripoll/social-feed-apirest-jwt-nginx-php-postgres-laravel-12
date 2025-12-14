@@ -12,7 +12,7 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
         Route::get('/reports', [FeedController::class, 'reportsTypes'])->name('report-types');
         Route::get('/categories', [FeedController::class, 'categories'])->name('categories');
 
-        Route::get('/posts', [FeedController::class, 'posts'])->name('posts');
+        Route::get('/posts', [FeedPostController::class, 'posts'])->name('posts');
         Route::get('/posts/{post_id}', [FeedPostController::class, 'readPost'])->name('post-read');
         Route::get('/posts/{post_id}/thumbs', [FeedPostController::class, 'listPostThumbs'])->name('post-thumbs-read');
 
