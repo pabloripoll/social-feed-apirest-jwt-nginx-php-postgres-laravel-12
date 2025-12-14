@@ -13,6 +13,7 @@ use App\Domain\Feed\Resources\FeedCategoryResource;
 use App\Domain\Feed\Resources\FeedReportTypeResource;
 use App\Support\Paginate;
 use Illuminate\Support\Facades\Validator;
+use App\Domain\Feed\Service\FeedPostService;
 
 class FeedController
 {
@@ -34,29 +35,6 @@ class FeedController
         $categories = FeedCategory::orderBy('position', 'asc')->get();
 
         return response()->json(FeedCategoryResource::collection($categories), JsonResponse::HTTP_CREATED);
-    }
-
-    protected function feedPostFilters()
-    {
-        $categories = [];
-        $feedCategories = FeedCategory::select(['key','title'])->orderBy('position', 'asc')->get();
-        foreach ($feedCategories as $row) {
-            $categories[$row['key']] = $row['title'];
-        }
-
-        return [
-            'categories' => $categories,
-            'favorites' => [
-                'most' => 'Most',
-                'least' => 'Least',
-            ],
-            'sorting' => [
-                'recent' => 'Recent',
-                'oldest' => 'Oldest',
-                'thumbs-up' => 'Thumbs Up',
-                'thumbs-down' => 'Thumbs Up',
-            ],
-        ];
     }
 
     /**
@@ -111,7 +89,7 @@ class FeedController
         $posts = $query->paginate($listing->limit, ['*'], 'page', $listing->page);
 
         $response = [
-            'filters' => $this->feedPostFilters(),
+            'filters' => FeedPostService::filters(),
             'listing' => $listing,
             'result' => FeedPostResource::collection($posts),
         ];
