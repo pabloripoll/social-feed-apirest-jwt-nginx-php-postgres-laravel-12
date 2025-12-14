@@ -47,7 +47,6 @@ class FeedPostResource extends JsonResource
             'reports_count'     => (int) ($this->reports_count ?? 0),
             'thumbs_up_count'   => (int) ($this->thumbs_up_count ?? 0),
             'thumbs_down_count' => (int) ($this->thumbs_down_count ?? 0),
-            'favourites_count'   => (int) ($this->favourites_count ?? 0),
 
             'title'           => $this->title,
             'slug'            => $this->slug,

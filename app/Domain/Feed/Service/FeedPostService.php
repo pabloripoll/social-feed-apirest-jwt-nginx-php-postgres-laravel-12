@@ -22,10 +22,6 @@ class FeedPostService
 
         return [
             'categories' => $categories,
-            'favourites' => [
-                'most' => 'Most',
-                'least' => 'Least',
-            ],
             'sorting' => [
                 'recent' => 'Recent',
                 'oldest' => 'Oldest',

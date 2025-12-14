@@ -28,11 +28,6 @@ class FeedPostRequest extends FormRequest
             $input['category'] = is_numeric($category) ? (int) $category : $category;
         }
 
-        // normalize favourites
-        if ($this->has('favourites')) {
-            $input['favourites'] = strtolower((string) $this->input('favourites'));
-        }
-
         // normalize sort-by
         if ($this->has('sort-by')) {
             $input['sort-by'] = strtolower((string) $this->input('sort-by'));
@@ -48,7 +43,6 @@ class FeedPostRequest extends FormRequest
     {
         return [
             'category' => ['nullable', 'string', Rule::exists('feed_categories', 'key')],
-            'favourites' => ['nullable', 'string', Rule::in(['most', 'least'])],
             'sort-by' => ['nullable', 'string', Rule::in(['thumbs-up', 'thumbs-down', 'recent', 'oldest'])],
         ];
     }
@@ -61,9 +55,6 @@ class FeedPostRequest extends FormRequest
         return [
             'category.string' => 'The category id must be an string.',
             'category.exists' => 'The selected category key does not exist.',
-
-            'favourites.string' => 'The favourites value must be a string.',
-            'favourites.in' => 'The favourites option must be one of: most, least.',
 
             'sort-by.string' => 'The sort-by value must be a string.',
             'sort-by.in' => 'The sort-by option must be one of: thumbs-up, thumbs-down, recent, oldest.',

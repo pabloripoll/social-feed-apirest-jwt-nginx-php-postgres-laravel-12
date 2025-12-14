@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('posts_count')->default('0');
             $table->integer('posts_thumbs_up_count')->default('0');
             $table->integer('posts_thumbs_down_count')->default('0');
-            $table->integer('posts_favourites_count')->default('0');
             $table->string('title', 64);
             $table->string('description', 256)->nullable();
             $table->timestamps();
