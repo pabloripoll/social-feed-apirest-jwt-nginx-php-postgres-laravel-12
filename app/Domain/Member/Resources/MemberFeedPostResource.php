@@ -16,21 +16,13 @@ class MemberFeedPostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // current authenticated user (may be null)
-        $user = $request->user();
-
         // Safely access relations if loaded
         $continent = $this->whenLoaded('continent') ? $this->continent : null;
         $region = $this->whenLoaded('region') ? $this->region : null;
         $category = $this->whenLoaded('category') ? $this->category : null;
-        $member = $this->whenLoaded('member') ? $this->member : null;
 
         return [
             'uid'             => $this->uid,
-            'user'            => [
-                'uid'      => $member->uid,
-                'nickname' => $member->profile->nickname,
-            ],
 
             'continent_id'    => $this->continent_id,
             'continent_name'  => $continent ? $continent->name : null,

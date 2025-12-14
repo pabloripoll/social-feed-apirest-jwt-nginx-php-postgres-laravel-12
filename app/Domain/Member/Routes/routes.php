@@ -26,7 +26,7 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
         });
 
         Route::prefix('/feed')->middleware(['jwt', 'member'])->name('feed.')->group(function () {
-            Route::get('/posts', [MemberFeedPostController::class, 'listPosts'])->name('posts-listing');
+            Route::get('/posts', [MemberFeedPostController::class, 'posts'])->name('posts-listing');
             Route::get('/posts/sketch', [MemberFeedPostController::class, 'readSketchPost'])->name('post-read-sketch');
             Route::post('/posts', [MemberFeedPostController::class, 'createPost'])->name('post-create');
             Route::put('/posts/{post_uid}', [MemberFeedPostController::class, 'editPost'])->name('post-edit');
@@ -39,8 +39,7 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
     });
 
     Route::prefix('/members')->name('members.')->group(function () {
-        Route::get('/', [MemberProfileController::class, 'listSections'])->name('list-sections');
-        Route::get('/{member_uid}/profile', [MemberProfileController::class, 'readMemberProfile'])->name('read-profile');
-        Route::get('/{member_uid}/posts', [MemberProfileController::class, 'listPosts'])->name('list-posts');
+        Route::get('/{member_uid}/profile', [MemberProfileController::class, 'readProfile'])->name('read-profile');
+        Route::get('/{member_uid}/posts', [MemberProfileController::class, 'posts'])->name('list-posts');
     });
 });
