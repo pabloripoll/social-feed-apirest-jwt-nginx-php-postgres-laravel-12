@@ -14,44 +14,63 @@ use Illuminate\Support\Facades\Hash;
 class MemberSeeder extends Seeder
 {
     /**
+     * Base members to test api manually
+     */
+    protected function members(): array
+    {
+        return [
+            [
+                'email' => 'member@example.com',
+                'nickname' => 'member',
+            ],
+            [
+                'email' => 'tester@example.com',
+                'nickname' => 'tester',
+            ],
+        ];
+    }
+
+    /**
      * $ php artisan db:seed
      */
     public function run(): void
     {
-        $user = User::firstOrCreate(
-            ['email' => 'member@example.com'],
-            [
-                'role' => Role::MEMBER,
-                'password' => Hash::make('12345678aZ!'),
-            ]
-        );
+        foreach ($this->members() as $member) {
+            $user = User::firstOrCreate(
+                ['email' => $member['email']],
+                [
+                    'role' => Role::MEMBER,
+                    'password' => Hash::make('12345678aZ!'),
+                ]
+            );
 
-        $region = GeoRegion::where('name', 'Western')
-            ->whereHas('continent', function ($query) {
-                $query->where('name', 'Europe');
-            })
-            ->first();
+            $region = GeoRegion::where('name', 'Western')
+                ->whereHas('continent', function ($query) {
+                    $query->where('name', 'Europe');
+                })
+                ->first();
 
-        Member::updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'continent_id' => $region->continent_id,
-                'region_id' => $region->id,
-            ]
-        );
+            Member::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'continent_id' => $region->continent_id,
+                    'region_id' => $region->id,
+                ]
+            );
 
-        UserActivationCode::updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'is_active' => true,
-            ]
-        );
+            UserActivationCode::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'is_active' => true,
+                ]
+            );
 
-        MemberProfile::updateOrCreate(
-            ['nickname' => 'member'],
-            [
-                'user_id' => $user->id,
-            ]
-        );
+            MemberProfile::updateOrCreate(
+                ['nickname' => $member['nickname']],
+                [
+                    'user_id' => $user->id,
+                ]
+            );
+        }
     }
 }
