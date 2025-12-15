@@ -2,12 +2,10 @@
 
 /** @var \Tests\TestCase $this */
 
-use App\Domain\Feed\Models\FeedCategory;
 use App\Domain\Member\Models\Member;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Artisan;
-use Faker\Factory as FakerFactory;
 
 beforeEach(function () {
     Artisan::call('db:seed');

@@ -4,7 +4,6 @@
 
 use App\Domain\Feed\Models\FeedCategory;
 use App\Domain\Member\Models\Member;
-use App\Support\Debug;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Artisan;
