@@ -26,7 +26,7 @@ class FeedPostService
                 'recent' => 'Recent',
                 'oldest' => 'Oldest',
                 'thumbs-up' => 'Thumbs Up',
-                'thumbs-down' => 'Thumbs Up',
+                'thumbs-down' => 'Thumbs Down',
             ],
         ];
     }
