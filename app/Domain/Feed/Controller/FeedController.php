@@ -27,6 +27,6 @@ class FeedController
     {
         $categories = FeedCategory::orderBy('position', 'asc')->get();
 
-        return response()->json(FeedCategoryResource::collection($categories), JsonResponse::HTTP_CREATED);
+        return response()->json(FeedCategoryResource::collection($categories), JsonResponse::HTTP_OK);
     }
 }

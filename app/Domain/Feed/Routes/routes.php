@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/api/v1')->name('api-v1.')->group(function () {
 
     Route::prefix('/feed')->name('feed.')->group(function () {
-        Route::get('/reports', [FeedController::class, 'reportsTypes'])->name('report-types');
+        Route::get('/reports/types', [FeedController::class, 'reportsTypes'])->name('report-types');
         Route::get('/categories', [FeedController::class, 'categories'])->name('categories');
 
         Route::get('/posts', [FeedPostController::class, 'posts'])->name('posts');
