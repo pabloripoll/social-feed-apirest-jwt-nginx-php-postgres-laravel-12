@@ -13,16 +13,16 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
         Route::get('/categories', [FeedController::class, 'categories'])->name('categories');
 
         Route::get('/posts', [FeedPostController::class, 'posts'])->name('posts');
-        Route::get('/posts/{post_id}', [FeedPostController::class, 'readPost'])->name('post-read');
-        Route::get('/posts/{post_id}/thumbs', [FeedPostController::class, 'listPostThumbs'])->name('post-thumbs-read');
+        Route::get('/posts/{uid}', [FeedPostController::class, 'readPost'])->name('post-read');
 
         Route::middleware(['jwt', 'member'])->group(function () {
-            Route::post('/posts/{post_id}/reports', [FeedReportController::class, 'createReport'])->name('report-create');
+            Route::post('/posts/{uid}/reports', [FeedReportController::class, 'createReport'])->name('report-create');
 
-            Route::post('/posts/{post_id}/thumbs/up', [FeedPostThumbController::class, 'createThumbUp'])->name('post-thumbs-up-create');
-            Route::delete('/posts/{post_id}/thumbs/up', [FeedPostThumbController::class, 'deleteThumbUp'])->name('post-thumbs-up-delete');
-            Route::post('/posts/{post_id}/thumbs/down', [FeedPostThumbController::class, 'createThumbDown'])->name('post-thumbs-down-create');
-            Route::delete('/posts/{post_id}/thumbs/down', [FeedPostThumbController::class, 'deleteThumbDown'])->name('post-thumbs-down-delete');
+            Route::get('/posts/{uid}/thumbs', [FeedPostThumbController::class, 'readPostThumbs'])->name('post-thumbs-read');
+            Route::post('/posts/{uid}/thumbs/up', [FeedPostThumbController::class, 'createThumbUp'])->name('post-thumbs-up-create');
+            Route::delete('/posts/{uid}/thumbs/up', [FeedPostThumbController::class, 'deleteThumbUp'])->name('post-thumbs-up-delete');
+            Route::post('/posts/{uid}/thumbs/down', [FeedPostThumbController::class, 'createThumbDown'])->name('post-thumbs-down-create');
+            Route::delete('/posts/{uid}/thumbs/down', [FeedPostThumbController::class, 'deleteThumbDown'])->name('post-thumbs-down-delete');
         });
     });
 });
