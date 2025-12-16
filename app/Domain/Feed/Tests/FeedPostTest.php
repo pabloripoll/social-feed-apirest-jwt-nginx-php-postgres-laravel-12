@@ -2,35 +2,17 @@
 
 /** @var \Tests\TestCase $this */
 
-use App\Domain\Feed\Models\FeedCategory;
+use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Member\Models\Member;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Artisan;
-use Faker\Factory as FakerFactory;
 
 beforeEach(function () {
     Artisan::call('db:seed');
 
-    $faker = FakerFactory::create();
     $member = Member::factory()->withAuth()->create();
-    $member->load(['user.memberAccessLogs']);
-    $accessLog = $member->user->memberAccessLogs()->latest()->first();
-
-    $route = route('api-v1.member-account.feed.post-create');
-    $response = $this->withToken($accessLog->token)->post($route, []);
-
-    $post_uid = $response['post_uid'];
-    $category = FeedCategory::where('key', 'example')->first();
-
-    $payload = [
-        'status' => 'broadcast',
-        'category_id' => $category->id,
-        'title' => $faker->sentence(6),
-        'article' => $faker->paragraphs(5, true),
-    ];
-    $route = route('api-v1.member-account.feed.post-edit', ['post_uid' => $post_uid]);
-    $response = $this->withToken($accessLog->token)->put($route, $payload);
+    FeedPost::factory()->create(['user_id' => $member->user_id]);
 });
 
 describe('Feed Post - Listing - @GET /api/v1/feed/posts', function () {
