@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Domain\Feed\Database\Factories\FeedPostFactory;
 
 class FeedPost extends Model
 {
-    /** @use HasFactory<\App\Domain\Feed\Database\Factories\PostFactory> */
+    /** @use HasFactory<\App\Domain\Feed\Database\Factories\FeedPostFactory> */
     use HasFactory;
 
     /**
@@ -80,6 +81,14 @@ class FeedPost extends Model
 
             $model->uid = $uid;
         });
+    }
+
+    /**
+     * Model factory when is outside ./database/factories
+     */
+    public static function newFactory()
+    {
+        return FeedPostFactory::new();
     }
 
     /**

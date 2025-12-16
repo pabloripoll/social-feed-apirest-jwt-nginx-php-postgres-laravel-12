@@ -191,7 +191,7 @@ class FeedPostThumbController
         $response = [];
         $response['message'] = $handler['message'];
         ! isset($handler['error']) ? : $response['error'] = $handler['error'];
-        $response['post'] = $handler['post'];
+        ! isset($handler['post']) ? : $response['post'] = $handler['post'];
 
         return response()->json($response, $handler['http_code']);
     }
@@ -206,7 +206,7 @@ class FeedPostThumbController
         $response = [];
         $response['message'] = $handler['message'];
         ! isset($handler['error']) ? : $response['error'] = $handler['error'];
-        $response['post'] = $handler['post'];
+        ! isset($handler['post']) ? : $response['post'] = $handler['post'];
 
         return response()->json($response, $handler['http_code']);
     }
@@ -221,7 +221,7 @@ class FeedPostThumbController
         $response = [];
         $response['message'] = $handler['message'];
         ! isset($handler['error']) ? : $response['error'] = $handler['error'];
-        $response['post'] = $handler['post'];
+        ! isset($handler['post']) ? : $response['post'] = $handler['post'];
 
         return response()->json($response, $handler['http_code']);
     }
@@ -236,7 +236,7 @@ class FeedPostThumbController
         $response = [];
         $response['message'] = $handler['message'];
         ! isset($handler['error']) ? : $response['error'] = $handler['error'];
-        $response['post'] = $handler['post'];
+        ! isset($handler['post']) ? : $response['post'] = $handler['post'];
 
         return response()->json($response, $handler['http_code']);
     }
