@@ -25,8 +25,10 @@ class FeedPostResource extends JsonResource
         return [
             'uid'             => $this->uid,
             'user'            => [
-                'uid'      => $member->uid,
-                'nickname' => $member->profile->nickname,
+                'uid'      => ! $member ? null : $member->uid,
+                'nickname' => ! $member ? null : $member->profile->nickname,
+                'is_post_from_following' => (bool) ($this->is_post_from_following ?? false),
+                'is_post_from_follower'  => (bool) ($this->is_post_from_follower ?? false),
             ],
 
             'continent_id'    => $this->continent_id,
@@ -47,6 +49,8 @@ class FeedPostResource extends JsonResource
             'reports_count'     => (int) ($this->reports_count ?? 0),
             'thumbs_up_count'   => (int) ($this->thumbs_up_count ?? 0),
             'thumbs_down_count' => (int) ($this->thumbs_down_count ?? 0),
+            'is_thumb_up_by_me' => (bool) ($this->is_thumb_up_by_me ?? false),
+            'is_thumb_down_by_me' => (bool) ($this->is_thumb_down_by_me ?? false),
 
             'title'           => $this->title,
             'slug'            => $this->slug,

@@ -22,6 +22,8 @@ return new class extends Migration
             $table->integer('refresh_count')->default('0');
             $table->timestamps();
             $table->index('created_at');
+            $table->index(['post_id', 'user_id']);
+            $table->index(['user_id', 'post_id']);
         });
     }
 

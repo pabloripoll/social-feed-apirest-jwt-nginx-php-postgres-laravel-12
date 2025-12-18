@@ -54,12 +54,27 @@ class FeedPost extends Model
 
     /**
      * Get the attributes that should be cast.
+     * Casts for DB columns + calculated boolean flags we will select in query
      *
      * @return array<string, string>
      */
     protected function casts(): array
     {
-        return [];
+        return [
+            'is_sketch' => 'boolean',
+            'is_draft' => 'boolean',
+            'is_active' => 'boolean',
+            'is_banned' => 'boolean',
+            'reports_count' => 'integer',
+            'thumbs_up_count' => 'integer',
+            'thumbs_down_count' => 'integer',
+
+            // These attributes will be added by the SELECT subqueries in controller.
+            'is_thumb_up_by_me' => 'boolean',
+            'is_thumb_down_by_me' => 'boolean',
+            'is_post_from_following' => 'boolean', // auth user follows post owner
+            'is_post_from_follower' => 'boolean',  // post owner follows auth user
+        ];
     }
 
     /**
@@ -124,4 +139,14 @@ class FeedPost extends Model
     {
         return $this->hasMany(FeedMultimedia::class, 'post_id');
     }
+
+    // All thumbs for this post
+    public function thumbs(): HasMany
+    {
+        return $this->hasMany(FeedPostThumb::class, 'post_id');
+    }
+
+    // Convenience: to eager-load the current user's thumb, constrain in the query:
+    // FeedPost::with(['thumbs' => fn($q) => $q->where('user_id', $currentUserId)])
+    // or use the controller subselect approach shown below.
 }

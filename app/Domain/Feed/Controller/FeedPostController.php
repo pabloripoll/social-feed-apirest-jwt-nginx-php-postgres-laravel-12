@@ -4,12 +4,14 @@ namespace App\Domain\Feed\Controller;
 
 use App\Support\Paginate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Feed\Requests\FeedPostRequest;
 use App\Domain\Feed\Resources\FeedPostResource;
 use App\Domain\Feed\Service\FeedPostService;
+use Illuminate\Support\Facades\DB;
 
 class FeedPostController
 {
@@ -18,6 +20,9 @@ class FeedPostController
      */
     public function posts(Request $request): JsonResponse
     {
+        /** @var \App\Domain\User\Models\User|null $user */
+        $user = Auth::user();
+
         $filters = [];
 
         $formRequest = new FeedPostRequest;
@@ -35,8 +40,50 @@ class FeedPostController
         $validated = $validator->validated();
 
         $query = FeedPost::query()
+            ->select('feed_posts.*') // make sure the model has all its columns selected
             ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
             ->where('is_active', true);
+
+        // If user is authenticated, add boolean flags via subqueries
+        if ($user) {
+            $authUserId = (int) $user->id;
+
+            // whether auth user has thumbed up this post
+            $query->addSelect(DB::raw("EXISTS (
+                select 1 from feed_posts_thumbs
+                where feed_posts_thumbs.post_id = feed_posts.id
+                and feed_posts_thumbs.user_id = {$authUserId}
+                and feed_posts_thumbs.up = true
+            ) as is_thumb_up_by_me"));
+
+            // whether auth user has thumbed down this post
+            $query->addSelect(DB::raw("EXISTS (
+                select 1 from feed_posts_thumbs
+                where feed_posts_thumbs.post_id = feed_posts.id
+                and feed_posts_thumbs.user_id = {$authUserId}
+                and feed_posts_thumbs.down = true
+            ) as is_thumb_down_by_me"));
+
+            // whether auth user follows the post owner (auth -> following -> post owner)
+            $query->addSelect(DB::raw("EXISTS (
+                select 1 from members_following
+                where members_following.user_id = {$authUserId}
+                and members_following.following_user_id = feed_posts.user_id
+            ) as is_post_from_following"));
+
+            // whether post owner follows the auth user (post owner -> following -> auth)
+            $query->addSelect(DB::raw("EXISTS (
+                select 1 from members_following
+                where members_following.user_id = feed_posts.user_id
+                and members_following.following_user_id = {$authUserId}
+            ) as is_post_from_follower"));
+        } else {
+            // when not authenticated ensure flags exist and are false (optional)
+            $query->addSelect(DB::raw('false as is_thumb_up_by_me'));
+            $query->addSelect(DB::raw('false as is_thumb_down_by_me'));
+            $query->addSelect(DB::raw('false as is_post_from_following'));
+            $query->addSelect(DB::raw('false as is_post_from_follower'));
+        }
 
         if (isset($validated['category'])) {
             $filters['category'] = $validated['category'];
