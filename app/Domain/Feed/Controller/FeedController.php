@@ -4,7 +4,7 @@ namespace App\Domain\Feed\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\Feed\Models\FeedCategory;
-use App\Domain\Feed\Models\FeedReportType;
+use App\Domain\User\Models\UserModerationCategory;
 use App\Domain\Feed\Resources\FeedCategoryResource;
 use App\Domain\Feed\Resources\FeedReportTypeResource;
 
@@ -15,7 +15,7 @@ class FeedController
      */
     public function reportsTypes(): JsonResponse
     {
-        $reportTypes = FeedReportType::orderBy('position', 'asc')->get();
+        $reportTypes = UserModerationCategory::orderBy('position', 'asc')->get();
 
         return response()->json(FeedReportTypeResource::collection($reportTypes), JsonResponse::HTTP_OK);
     }

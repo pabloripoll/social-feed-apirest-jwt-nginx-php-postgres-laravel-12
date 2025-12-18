@@ -16,7 +16,10 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
         Route::get('/posts/{uid}', [FeedPostController::class, 'readPost'])->name('post-read');
 
         Route::middleware(['jwt', 'member'])->group(function () {
-            Route::post('/posts/{uid}/reports', [FeedReportController::class, 'createReport'])->name('report-create');
+            Route::post('/posts/{uid}/reports', [FeedReportController::class, 'createReport'])->name('post-report-create');
+            Route::get('/posts/{uid}/reports', [FeedReportController::class, 'readReport'])->name('post-report-read');
+            Route::patch('/posts/{uid}/reports', [FeedReportController::class, 'updateReport'])->name('post-report-update');
+            Route::delete('/posts/{uid}/reports', [FeedReportController::class, 'deleteReport'])->name('post-report-delete');
 
             Route::get('/posts/{uid}/thumbs', [FeedPostThumbController::class, 'readPostThumbs'])->name('post-thumbs-read');
             Route::post('/posts/{uid}/thumbs/up', [FeedPostThumbController::class, 'createThumbUp'])->name('post-thumbs-up-create');

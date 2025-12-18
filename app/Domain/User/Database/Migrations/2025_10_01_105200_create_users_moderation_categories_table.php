@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users_moderation_types', function (Blueprint $table) {
+        Schema::create('users_moderation_categories', function (Blueprint $table) {
             $table->id();
             $table->string('key', 64)->unique();
-            $table->string('title', 64);
-            $table->string('description', 256);
+            $table->smallInteger('level')->default('0');
             $table->smallInteger('position')->default('0');
+            $table->string('title', 64);
+            $table->string('description', 256)->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users_moderation_types');
+        Schema::dropIfExists('users_moderation_categories');
     }
 };

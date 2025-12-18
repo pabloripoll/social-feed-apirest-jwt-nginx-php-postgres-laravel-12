@@ -26,9 +26,9 @@ class DatabaseSeeder extends Seeder
             \App\Domain\Admin\Database\Seeders\AdminSeeder::class,
             \App\Domain\Member\Database\Seeders\MemberSeeder::class,
             \App\Domain\Member\Database\Seeders\MemberNotificationTypeSeeder::class,
-            \App\Domain\User\Database\Seeders\UserModerationTypeSeeder::class,
             \App\Domain\Feed\Database\Seeders\FeedCategorySeeder::class,
-            \App\Domain\Feed\Database\Seeders\FeedReportTypeSeeder::class,
+            \App\Domain\User\Database\Seeders\UserModerationCategorySeeder::class,
+            \App\Domain\User\Database\Seeders\UserModerationSanctionSeeder::class,
         ]);
     }
 }

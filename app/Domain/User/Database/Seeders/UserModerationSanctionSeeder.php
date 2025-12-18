@@ -2,10 +2,10 @@
 
 namespace App\Domain\User\Database\Seeders;
 
-use App\Domain\User\Models\UserModerationType;
+use App\Domain\User\Models\UserModerationSanction;
 use Illuminate\Database\Seeder;
 
-class UserModerationTypeSeeder extends Seeder
+class UserModerationSanctionSeeder extends Seeder
 {
     protected function types(): array
     {
@@ -19,6 +19,11 @@ class UserModerationTypeSeeder extends Seeder
                 'key' => 'user-suspended',
                 'title' => 'User Suspended',
                 'description' => 'User access suspended for a determined period of time.',
+            ],
+            [
+                'key' => 'user-feed-restriction',
+                'title' => 'User Feed Restriction',
+                'description' => 'User feed actions restricted for a determined period of time.',
             ],
             [
                 'key' => 'feed-post-banned',
@@ -35,14 +40,13 @@ class UserModerationTypeSeeder extends Seeder
 
     /**
      * $ php artisan db:seed
-     * $ php artisan db:seed app\\Domain\\Member\\Database\\Seeders\\MemberModerationTypeSeeder.php
      */
     public function run(): void
     {
         $pos = 0;
         foreach ($this->types() as $type) {
             $pos++;
-            UserModerationType::updateOrCreate(
+            UserModerationSanction::updateOrCreate(
                 ['key' => $type['key']],
                 [
                     'title' => $type['title'],

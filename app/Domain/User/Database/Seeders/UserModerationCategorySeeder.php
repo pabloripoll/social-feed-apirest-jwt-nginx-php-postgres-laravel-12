@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Domain\Feed\Database\Seeders;
+namespace App\Domain\User\Database\Seeders;
 
-use App\Domain\Feed\Models\FeedReportType;
 use Illuminate\Database\Seeder;
+use App\Domain\User\Models\UserModerationCategory;
 
-class FeedReportTypeSeeder extends Seeder
+class UserModerationCategorySeeder extends Seeder
 {
     protected function types(): array
     {
@@ -13,23 +13,30 @@ class FeedReportTypeSeeder extends Seeder
             [
                 'key' => 'damaging',
                 'title' => 'Private damaging content',
-                'description' => 'Confidential information, Negative comments about people, Irrelevant or insensitive content, Irresponsible or insensitive content...',
+                'description' => 'Confidential information, Negative comments about people, Irrelevant or insensitive content, Irresponsible or insensitive content.',
                 'level' => 1,
                 'position' => 2,
             ],
             [
                 'key' => 'inappropriate',
                 'title' => 'Inappropriate content',
-                'description' => 'Explicit material, Spam, Misinformation and fake news, Profanity and vulgarity, Bullying and harassment...',
+                'description' => 'Explicit material, Spam, Misinformation and fake news, Profanity and vulgarity, Bullying and harassment.',
                 'level' => 2,
                 'position' => 1,
             ],
             [
                 'key' => 'harmful',
                 'title' => 'Harmful and illegal content',
-                'description' => 'Graphic violence, Extremism, Hate speech, Abuse material, Restricted goods, Illegal activities...',
+                'description' => 'Graphic violence, Extremism, Hate speech, Abuse material, Restricted goods, Illegal activities.',
                 'level' => 3,
                 'position' => 3,
+            ],
+            [
+                'key' => 'bullying',
+                'title' => 'Bullying behaviour',
+                'description' => 'Violent comments, Hate speech, Suspicious of illegal activities.',
+                'level' => 3,
+                'position' => 4,
             ],
         ];
     }
@@ -40,7 +47,7 @@ class FeedReportTypeSeeder extends Seeder
     public function run(): void
     {
         foreach ($this->types() as $type) {
-            FeedReportType::updateOrCreate(
+            UserModerationCategory::updateOrCreate(
                 ['key' => $type['key']],
                 [
                     'title' => $type['title'],

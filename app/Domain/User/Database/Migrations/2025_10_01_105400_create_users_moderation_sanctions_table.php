@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feed_report_types', function (Blueprint $table) {
+        Schema::create('users_moderation_sanctions', function (Blueprint $table) {
             $table->id();
             $table->string('key', 64)->unique();
-            $table->smallInteger('level')->default('0');
             $table->smallInteger('position')->default('0');
             $table->string('title', 64);
-            $table->string('description', 256)->nullable();
+            $table->string('description', 256);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feed_report_types');
+        Schema::dropIfExists('users_moderation_sanctions');
     }
 };

@@ -3,6 +3,7 @@
 namespace App\Domain\Feed\Models;
 
 use App\Domain\User\Models\User;
+use App\Domain\User\Models\UserModeration;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,7 @@ class FeedReport extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'uid',
         'type_id',
         'reporter_user_id',
         'reporter_message',
@@ -58,10 +60,52 @@ class FeedReport extends Model
     }
 
     /**
+     * On creating register auto-generated values
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // If caller already supplied a uid, keep it
+            if (! empty($model->uid)) {
+                return;
+            }
+            // Generate a unique 7-digit integer UID
+            do {
+                $uid = random_int(1000000, 9999999);
+            } while (self::where('uid', $uid)->exists());
+
+            $model->uid = $uid;
+        });
+    }
+
+    /**
      * Relations
      */
-    public function user(): BelongsTo
+
+    public function type(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(FeedReportType::class, 'type_id');
+    }
+
+    public function moderation(): BelongsTo
+    {
+        return $this->belongsTo(UserModeration::class, 'moderation_id');
+    }
+
+    public function post(): BelongsTo
+    {
+        return $this->belongsTo(FeedPost::class, 'member_feed_post_id');
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'member_user_id');
+    }
+
+    public function reporter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reporter_user_id');
     }
 }

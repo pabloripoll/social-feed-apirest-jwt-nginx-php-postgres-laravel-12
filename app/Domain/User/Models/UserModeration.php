@@ -22,13 +22,23 @@ class UserModeration extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'admin_user_id',
-        'type_id',
-        'is_applied',
-        'applied_until',
-        'is_on_user',
+        'uid',
         'user_id',
-        'is_on_feed_post',
+        'reporter_role_id',
+        'reporter_user_id',
+        'moderator_role_id',
+        'moderator_user_id',
+        'is_opened',
+        'in_review',
+        'in_review_since',
+        'is_resolved',
+        'resolved_at',
+        'is_closed',
+        'closed_at',
+        'category_id',
+        'sanction_id',
+        'is_sanction_active',
+        'sanction_expires_at',
         'feed_post_id',
     ];
 
@@ -47,17 +57,47 @@ class UserModeration extends Model
     protected function casts(): array
     {
         return [
-            'applied_until' => 'datetime',
+            'in_review_since' => 'datetime',
+            'closed_at' => 'datetime',
+            'sanction_expires_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
     }
 
     /**
+     * On creating register auto-generated values
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // Generate a unique 9-digit integer UID
+            do {
+                $uid = random_int(100000, 999999); // 6 digits
+            } while (self::where('uid', $uid)->exists());
+
+            $model->uid = $uid;
+        });
+    }
+
+    /**
      * Relations
      */
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(UserModerationCategory::class, 'category_id');
+    }
+
+    public function sanction(): BelongsTo
+    {
+        return $this->belongsTo(UserModerationSanction::class, 'sanction_id');
     }
 }

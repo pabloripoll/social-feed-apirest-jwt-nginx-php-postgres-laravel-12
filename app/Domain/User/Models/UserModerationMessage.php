@@ -5,15 +5,15 @@ namespace App\Domain\User\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserModerationType extends Model
+class UserModerationMessage extends Model
 {
-    /** @use HasFactory<\App\Domain\User\Database\Factories\UserModerationType> */
+    /** @use HasFactory<\App\Domain\User\Database\Factories\UserModerationMessage> */
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'users_moderation_types';
+    protected $table = 'users_moderation_messages';
 
     /**
      * The attributes that are mass assignable.
