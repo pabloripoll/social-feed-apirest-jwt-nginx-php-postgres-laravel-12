@@ -3,6 +3,7 @@
 namespace App\Domain\Member\Controller;
 
 use App\Domain\Feed\Models\FeedCategory;
+use App\Domain\Feed\Models\FeedMedia;
 use App\Domain\Feed\Models\FeedPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,7 @@ use App\Domain\Member\Models\Member;
 use App\Support\Paginate;
 use App\Domain\Feed\Service\FeedPostService;
 use App\Domain\Feed\Requests\FeedPostRequest;
+use App\Http\Services\Storage\Local\StorageService;
 
 class MemberFeedPostController
 {
@@ -27,10 +29,24 @@ class MemberFeedPostController
         $user = Auth::user();
         $user->load(['member']);
 
-        FeedPost::query()
+        $legacySketchPost = FeedPost::query()
             ->where('user_id', $user->id)
             ->where('is_sketch', true)
-            ->delete();
+            ->first();
+        if ($legacySketchPost) {
+            $media = FeedMedia::query()
+                ->where('user_id', $user->id)
+                ->where('post_id', $legacySketchPost->id)
+                ->get();
+            if ($media) {
+                foreach ($media as $object) {
+                    (new StorageService)->delete($object);
+                    $object->delete();
+                }
+            }
+
+            $legacySketchPost->delete();
+        }
 
         $post = new FeedPost;
         $post->user_id = $user->id;
