@@ -179,14 +179,14 @@ class MemberFeedMediaController
         $media->name = $storage->name;
         $media->title = substr($file->name, 0, strrpos($file->name, '.'));
         $media->slug = Str::slug($slug);
-        $media->url = $storage->url;
+        $media->url = '/static/'.$storage->path.'/'.$storage->name;
         $media->save();
 
         return response()->json(
             [
                 'message' => 'File successfully uploaded.',
                 'uid' => $media->uid,
-                'url' => $storage->url,
+                'url' => $media->url,
                 'total_uploads' => $total + 1
             ],
             JsonResponse::HTTP_CREATED
