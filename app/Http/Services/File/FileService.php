@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Media;
+namespace App\Http\Services\File;
 
-use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class FileController extends Controller
+class FileService extends Controller
 {
     /**
      * Files formats allowed to upload
@@ -52,7 +52,7 @@ class FileController extends Controller
             'location' => $file->getPathName(),
             'tmp_path' => $tmp_path,
             'tmp_name' => str_replace($tmp_path, '', $file->getPathName()),
-            'name' => $file->getClientOriginalName() ?? Carbon::now()->format('Y-m-d_H-i-s').'.'.$file->extension(),
+            'name' => $file->getClientOriginalName() ?? Carbon::now()->format('YmdHis').'.'.$file->extension(),
         ];
     }
 }

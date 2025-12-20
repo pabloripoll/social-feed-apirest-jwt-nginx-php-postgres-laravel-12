@@ -4,6 +4,7 @@ use App\Domain\Member\Controller\MemberAccountController;
 use App\Domain\Member\Controller\MemberAuthController;
 use App\Domain\Member\Controller\MemberProfileController;
 use App\Domain\Member\Controller\MemberFeedPostController;
+use App\Domain\Member\Controller\MemberFeedMediaController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/api/v1')->name('api-v1.')->group(function () {
@@ -33,8 +34,11 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
             Route::get('/posts/{post_uid}', [MemberFeedPostController::class, 'readPost'])->name('post-read');
             Route::patch('/posts/{post_uid}', [MemberFeedPostController::class, 'updatePost'])->name('post-update');
             Route::delete('/posts/{post_uid}', [MemberFeedPostController::class, 'deletePost'])->name('post-delete');
-            Route::post('/posts/{post_uid}/media', [MemberFeedPostController::class, 'uploadPostMedia'])->name('post-media-upload');
-            Route::delete('/posts/{post_uid}/media', [MemberFeedPostController::class, 'deletePostMedia'])->name('post-media-delete');
+            Route::get('/posts/{post_uid}/media', [MemberFeedMediaController::class, 'readPostMedia'])->name('post-media-list');
+            Route::get('/posts/{post_uid}/media/{media_uid}', [MemberFeedMediaController::class, 'readPostMedia'])->name('post-media-read');
+            Route::post('/posts/{post_uid}/media', [MemberFeedMediaController::class, 'uploadPostMedia'])->name('post-media-upload');
+            Route::delete('/posts/{post_uid}/media/all', [MemberFeedMediaController::class, 'deletePostMedia'])->name('post-media-delete-all');
+            Route::delete('/posts/{post_uid}/media/{media_uid}', [MemberFeedMediaController::class, 'deletePostMedia'])->name('post-media-delete-uid');
         });
     });
 

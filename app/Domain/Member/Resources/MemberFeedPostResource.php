@@ -60,10 +60,10 @@ class MemberFeedPostResource extends JsonResource
             'media' => $this->whenLoaded('media', function () {
                 return $this->media->map(function ($m) {
                     return [
-                        'id' => $m->id,
+                        'uid' => $m->uid,
                         'type' => $m->type ?? null,
                         'url' => $m->url ?? null,
-                        'meta' => $m->meta ?? null,
+                        'meta' => $m->meta ?? $this->title,
                     ];
                 })->all();
             }, []),

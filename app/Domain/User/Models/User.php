@@ -5,7 +5,7 @@ namespace App\Domain\User\Models;
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Admin\Models\AdminAccessLog;
 use App\Domain\Admin\Models\AdminProfile;
-use App\Domain\Feed\Models\FeedMultimedia;
+use App\Domain\Feed\Models\FeedMedia;
 use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\Member\Models\MemberProfile;
@@ -131,6 +131,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function feedMedia(): HasMany
     {
-        return $this->hasMany(FeedMultimedia::class, 'user_id');
+        return $this->hasMany(FeedMedia::class, 'user_id');
     }
 }

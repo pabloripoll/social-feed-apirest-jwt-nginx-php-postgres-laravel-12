@@ -2,20 +2,19 @@
 
 namespace App\Domain\Feed\Database\Factories;
 
-use App\Domain\Feed\Models\FeedMultimedia;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
+use App\Domain\Feed\Models\FeedMedia;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Domain\Feed\Models\FeedMultimedia>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Domain\Feed\Models\FeedMedia>
  */
-class FeedMultimediaFactory extends Factory
+class FeedMediaFactory extends Factory
 {
     /**
      * The correspond model used by the factory.
      */
-    protected $model = FeedMultimedia::class;
+    protected $model = FeedMedia::class;
 
     /**
      * JWT access expiration, smaller than JWT TTL config

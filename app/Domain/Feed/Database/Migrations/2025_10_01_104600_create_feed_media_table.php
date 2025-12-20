@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feed_multimedia', function (Blueprint $table) {
+        Schema::create('feed_media', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('uid')->unique();
             $table->foreignId('user_id')->constrained((new User)->getTable());
             $table->foreignId('post_id')->constrained((new FeedPost)->getTable());
             $table->integer('position')->default('0');
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feed_multimedia');
+        Schema::dropIfExists('feed_media');
     }
 };

@@ -2,21 +2,21 @@
 
 namespace App\Domain\Feed\Models;
 
-use App\Domain\Feed\Database\Factories\FeedMultimediaFactory;
+use Illuminate\Database\Eloquent\Model;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Domain\Feed\Database\Factories\FeedMediaFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class FeedMultimedia extends Model
+class FeedMedia extends Model
 {
-    /** @use HasFactory<\App\Domain\Feed\Database\Factories\FeedMultimedia> */
+    /** @use HasFactory<\App\Domain\Feed\Database\Factories\FeedMedia> */
     // use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'feed_multimedia';
+    protected $table = 'feed_media';
 
     /**
      * The attributes that are mass assignable.
@@ -56,11 +56,32 @@ class FeedMultimedia extends Model
     }
 
     /**
+     * On creating register auto-generated values
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // If caller already supplied a uid, keep it
+            if (! empty($model->uid)) {
+                return;
+            }
+            // Generate a unique 7-digit integer UID
+            do {
+                $uid = random_int(1000000, 9999999);
+            } while (self::where('uid', $uid)->exists());
+
+            $model->uid = $uid;
+        });
+    }
+
+    /**
      * Model factory when is outside ./database/factories
      */
     public static function newFactory()
     {
-        return FeedMultimediaFactory::new();
+        return FeedMediaFactory::new();
     }
 
     /**

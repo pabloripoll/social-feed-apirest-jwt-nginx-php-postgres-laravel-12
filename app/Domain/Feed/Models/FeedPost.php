@@ -137,7 +137,7 @@ class FeedPost extends Model
 
     public function media(): HasMany
     {
-        return $this->hasMany(FeedMultimedia::class, 'post_id');
+        return $this->hasMany(FeedMedia::class, 'post_id');
     }
 
     // All thumbs for this post

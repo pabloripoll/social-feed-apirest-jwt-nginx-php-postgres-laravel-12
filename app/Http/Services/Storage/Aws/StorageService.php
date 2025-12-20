@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Http\Services\Aws;
 
 use Illuminate\Support\Facades\Storage;
 
