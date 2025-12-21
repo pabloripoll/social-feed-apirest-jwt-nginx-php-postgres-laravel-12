@@ -29,23 +29,21 @@ class MemberFeedPostController
         $user = Auth::user();
         $user->load(['member']);
 
-        $legacySketchPost = FeedPost::query()
+        $sketchPosts = FeedPost::query()
+            ->with(['media'])
             ->where('user_id', $user->id)
             ->where('is_sketch', true)
-            ->first();
-        if ($legacySketchPost) {
-            $media = FeedMedia::query()
-                ->where('user_id', $user->id)
-                ->where('post_id', $legacySketchPost->id)
-                ->get();
-            if ($media) {
-                foreach ($media as $object) {
-                    (new StorageService)->delete($object);
-                    $object->delete();
+            ->get();
+        if ($sketchPosts->isNotEmpty()) {
+            foreach ($sketchPosts as $post) {
+                if ($post->media->isNotEmpty()) {
+                    foreach ($post->media as $media) {
+                        (new StorageService)->delete($media);
+                        $media->delete();
+                    }
                 }
+                $post->delete();
             }
-
-            $legacySketchPost->delete();
         }
 
         $post = new FeedPost;
