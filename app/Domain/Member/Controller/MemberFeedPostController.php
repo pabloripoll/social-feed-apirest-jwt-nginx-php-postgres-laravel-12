@@ -218,6 +218,7 @@ class MemberFeedPostController
         $user->load(['member', 'memberProfile']);
 
         $post = FeedPost::query()
+            ->with(['media'])
             ->where('uid', $post_uid)
             ->where('user_id', $user->id)
             ->first();
