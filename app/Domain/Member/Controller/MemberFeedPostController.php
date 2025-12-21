@@ -71,29 +71,28 @@ class MemberFeedPostController
         $user = Auth::user();
         $user->load(['member', 'memberProfile']);
 
-        $postScketched = FeedPost::query()
+        $post = FeedPost::query()
+            ->with(['media'])
             ->where('uid', $post_uid)
             ->where('user_id', $user->id)
             ->first();
-        if (! $postScketched) {
+        if (! $post) {
             return response()->json([
                     'message' => 'Feed post not found.',
-                    'error' => 'not_found',
+                    'error' => 'post_not_found',
                 ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
-        if (! $postScketched->is_sketch) {
+        if (! $post->is_sketch) {
             return response()->json([
                     'message' => 'Feed post has been already edited.',
-                    'error' => 'already_edited',
+                    'error' => 'post_already_edited',
                 ],
                 JsonResponse::HTTP_CONFLICT
             );
         }
-
-        $postScketched->delete();
 
         $formRequest = new MemberFeedPostEditRequest;
 
@@ -110,8 +109,6 @@ class MemberFeedPostController
         }
         $validated = $validator->validated();
 
-        $post = new FeedPost;
-        $post->uid          = $post_uid;
         $post->user_id      = $user->id;
         $post->category_id  = $validated['category_id'];
         $post->continent_id = $user->member->continent_id;
@@ -124,6 +121,7 @@ class MemberFeedPostController
         $post->slug         = Str::limit(Str::slug($validated['title']), 128);
         $post->summary      = Str::limit(trim(strip_tags($validated['article'])), 128);
         $post->article      = $validated['article'];
+        $post->created_at   = now();
         $post->save();
 
         // Dependencies
