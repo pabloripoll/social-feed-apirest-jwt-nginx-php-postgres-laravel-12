@@ -170,7 +170,7 @@ class MemberAvatarController
         }
 
         $bucket = (object) [
-            'path' => 'avatar', //-> /var/www/storage/app/public/avatar
+            'path' => 'member/avatars', //-> /var/www/storage/app/public/avatar
             'name' => $user->member->uid.'_'.now()->timestamp.'.'.$file->extension,
         ];
 
