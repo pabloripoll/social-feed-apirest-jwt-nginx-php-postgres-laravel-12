@@ -136,36 +136,24 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(FeedMedia::class, 'user_id');
     }
 
-    /**
-     * Get the currently selected avatar (where is_selected = true).
-     */
     public function adminAvatar(): HasOne
     {
         return $this->hasOne(AdminAvatar::class, 'user_id')
             ->where('is_selected', true);
     }
 
-    /**
-     * Get all avatars for this admin.
-     */
     public function adminAvatars(): HasMany
     {
         return $this->hasMany(AdminAvatar::class, 'user_id')
             ->orderBy('position', 'asc');
     }
 
-    /**
-     * Get the currently selected avatar (where is_selected = true).
-     */
     public function memberAvatar(): HasOne
     {
         return $this->hasOne(MemberAvatar::class, 'user_id')
             ->where('is_selected', true);
     }
 
-    /**
-     * Get all avatars for this member.
-     */
     public function memberAvatars(): HasMany
     {
         return $this->hasMany(MemberAvatar::class, 'user_id')

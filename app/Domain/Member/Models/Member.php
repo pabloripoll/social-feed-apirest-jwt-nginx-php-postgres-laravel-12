@@ -117,18 +117,12 @@ class Member extends Model
         return $this->belongsTo(GeoRegion::class, 'region_id', 'id');
     }
 
-    /**
-     * Get the currently selected avatar (where is_selected = true).
-     */
     public function avatar(): HasOne
     {
         return $this->hasOne(MemberAvatar::class, 'user_id', 'user_id')
             ->where('is_selected', true);
     }
 
-    /**
-     * Get all avatars for this member.
-     */
     public function avatars(): HasMany
     {
         return $this->hasMany(MemberAvatar::class, 'user_id', 'user_id')
