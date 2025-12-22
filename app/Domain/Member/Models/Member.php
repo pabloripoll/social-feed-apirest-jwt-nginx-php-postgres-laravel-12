@@ -9,6 +9,7 @@ use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -114,5 +115,23 @@ class Member extends Model
     public function region(): BelongsTo
     {
         return $this->belongsTo(GeoRegion::class, 'region_id', 'id');
+    }
+
+    /**
+     * Get the currently selected avatar (where is_selected = true).
+     */
+    public function avatar(): HasOne
+    {
+        return $this->hasOne(MemberAvatar::class, 'user_id', 'user_id')
+            ->where('is_selected', true);
+    }
+
+    /**
+     * Get all avatars for this member.
+     */
+    public function avatars(): HasMany
+    {
+        return $this->hasMany(MemberAvatar::class, 'user_id', 'user_id')
+            ->orderBy('position', 'asc');
     }
 }

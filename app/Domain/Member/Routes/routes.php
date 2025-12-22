@@ -2,6 +2,7 @@
 
 use App\Domain\Member\Controller\MemberAccountController;
 use App\Domain\Member\Controller\MemberAuthController;
+use App\Domain\Member\Controller\MemberAvatarController;
 use App\Domain\Member\Controller\MemberProfileController;
 use App\Domain\Member\Controller\MemberFeedPostController;
 use App\Domain\Member\Controller\MemberFeedMediaController;
@@ -17,11 +18,12 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
             Route::get('/settings', [MemberAccountController::class, 'readSettings'])->name('read-settings');
             Route::get('/access-logs', [MemberAccountController::class, 'listAccessLogs'])->name('read-access-logs');
             Route::get('/profile', [MemberProfileController::class, 'readProfile'])->name('read-profile');
-            Route::get('/avatars', [MemberAccountController::class, 'listAvatar'])->name('list-avatars');
-            Route::post('/avatars', [MemberAccountController::class, 'uploadAvatar'])->name('upload-avatar');
-            Route::delete('/avatars/{avatar_id}/select', [MemberAccountController::class, 'selectAvatarById'])->name('select-avatar');
-            Route::delete('/avatars/{avatar_id}', [MemberAccountController::class, 'deleteAvatarById'])->name('delete-avatar');
-
+            Route::get('/avatars', [MemberAvatarController::class, 'list'])->name('avatars-list');
+            Route::get('/avatars/selected', [MemberAvatarController::class, 'selected'])->name('avatars-selected');
+            Route::get('/avatars/{avatar_uid}', [MemberAvatarController::class, 'read'])->name('avatars-read');
+            Route::post('/avatars', [MemberAvatarController::class, 'upload'])->name('avatars-upload');
+            Route::put('/avatars/{avatar_uid}/select', [MemberAvatarController::class, 'select'])->name('avatars-select');
+            Route::delete('/avatars/{avatar_uid}', [MemberAvatarController::class, 'delete'])->name('avatars-delete');
             Route::get('/notifications', [MemberAccountController::class, 'listNotifications'])->name('list-notifications');
             Route::put('/notifications/{notification_id}/read', [MemberAccountController::class, 'setNotificationRead'])->name('set-notification-read');
         });

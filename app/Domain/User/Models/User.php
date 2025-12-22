@@ -8,6 +8,7 @@ use App\Domain\Admin\Models\AdminProfile;
 use App\Domain\Feed\Models\FeedMedia;
 use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberAccessLog;
+use App\Domain\Member\Models\MemberAvatar;
 use App\Domain\Member\Models\MemberProfile;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -132,5 +133,23 @@ class User extends Authenticatable implements JWTSubject
     public function feedMedia(): HasMany
     {
         return $this->hasMany(FeedMedia::class, 'user_id');
+    }
+
+    /**
+     * Get the currently selected avatar (where is_selected = true).
+     */
+    public function memberAvatar(): HasOne
+    {
+        return $this->hasOne(MemberAvatar::class, 'user_id')
+            ->where('is_selected', true);
+    }
+
+    /**
+     * Get all avatars for this member.
+     */
+    public function memberAvatars(): HasMany
+    {
+        return $this->hasMany(MemberAvatar::class, 'user_id')
+            ->orderBy('position', 'asc');
     }
 }
