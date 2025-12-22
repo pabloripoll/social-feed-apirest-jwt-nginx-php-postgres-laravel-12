@@ -14,10 +14,10 @@ return new class extends Migration
     {
         Schema::create('admins_avatars', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('uid')->unique();
             $table->foreignId('user_id')->constrained((new User)->getTable());
             $table->boolean('is_selected')->default(false);
             $table->integer('position')->default('0');
-            $table->string('type', 32)->comment('type of file');
             $table->string('extension', 16);
             $table->string('path', 128);
             $table->string('name', 128);

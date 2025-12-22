@@ -27,7 +27,6 @@ class AdminAvatar extends Model
         'user_id',
         'is_selected',
         'position',
-        'type',
         'extension',
         'path',
         'name',
@@ -56,6 +55,27 @@ class AdminAvatar extends Model
     }
 
     /**
+     * On creating register auto-generated values
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // If caller already supplied a uid, keep it
+            if (! empty($model->uid)) {
+                return;
+            }
+            // Generate a unique 7-digit integer UID
+            do {
+                $uid = random_int(1000000, 9999999);
+            } while (self::where('uid', $uid)->exists());
+
+            $model->uid = $uid;
+        });
+    }
+
+    /**
      * Model factory when is outside ./database/factories
      */
     public static function newFactory()
@@ -69,5 +89,10 @@ class AdminAvatar extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function admin(): BelongsTo
+    {
+        return $this->belongsTo(Admin::class, 'user_id', 'user_id');
     }
 }

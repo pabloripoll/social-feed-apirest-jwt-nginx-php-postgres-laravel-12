@@ -4,6 +4,7 @@ namespace App\Domain\User\Models;
 
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Admin\Models\AdminAccessLog;
+use App\Domain\Admin\Models\AdminAvatar;
 use App\Domain\Admin\Models\AdminProfile;
 use App\Domain\Feed\Models\FeedMedia;
 use App\Domain\Member\Models\Member;
@@ -133,6 +134,24 @@ class User extends Authenticatable implements JWTSubject
     public function feedMedia(): HasMany
     {
         return $this->hasMany(FeedMedia::class, 'user_id');
+    }
+
+    /**
+     * Get the currently selected avatar (where is_selected = true).
+     */
+    public function adminAvatar(): HasOne
+    {
+        return $this->hasOne(AdminAvatar::class, 'user_id')
+            ->where('is_selected', true);
+    }
+
+    /**
+     * Get all avatars for this admin.
+     */
+    public function adminAvatars(): HasMany
+    {
+        return $this->hasMany(AdminAvatar::class, 'user_id')
+            ->orderBy('position', 'asc');
     }
 
     /**
