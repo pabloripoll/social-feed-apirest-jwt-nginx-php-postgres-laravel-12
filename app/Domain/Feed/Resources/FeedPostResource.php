@@ -21,14 +21,16 @@ class FeedPostResource extends JsonResource
         $region = $this->whenLoaded('region') ? $this->region : null;
         $category = $this->whenLoaded('category') ? $this->category : null;
         $member = $this->whenLoaded('member') ? $this->member : null;
+        $avatar = $this->whenLoaded('avatar') ? $this->avatar : null;
 
         return [
             'uid'             => $this->uid,
             'user'            => [
-                'uid'      => ! $member ? null : $member->uid,
-                'nickname' => ! $member ? null : $member->profile->nickname,
+                'uid'       => ! $member ? null : $member->uid,
+                'nickname'  => ! $member ? null : $member->profile->nickname,
                 'is_post_from_following' => (bool) ($this->is_post_from_following ?? false),
                 'is_post_from_follower'  => (bool) ($this->is_post_from_follower ?? false),
+                'avatar'    => ! $avatar ? null : $avatar->url,
             ],
 
             'continent_id'    => $this->continent_id,

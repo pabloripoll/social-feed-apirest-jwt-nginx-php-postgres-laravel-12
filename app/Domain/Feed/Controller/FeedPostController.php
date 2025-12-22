@@ -41,7 +41,7 @@ class FeedPostController
 
         $query = FeedPost::query()
             ->select('feed_posts.*') // make sure the model has all its columns selected
-            ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
+            ->with(['user', 'member', 'avatar', 'category', 'continent', 'region', 'media'])
             ->where('is_active', true);
 
         // If user is authenticated, add boolean flags via subqueries
@@ -126,7 +126,7 @@ class FeedPostController
     public function readPost(int $uid): JsonResponse
     {
         $post = FeedPost::query()
-            ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
+            ->with(['user', 'member', 'avatar', 'category', 'continent', 'region', 'media'])
             ->where('uid', $uid)
             ->where('is_active', true)
             ->first();

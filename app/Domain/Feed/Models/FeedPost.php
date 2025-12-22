@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Domain\Feed\Database\Factories\FeedPostFactory;
+use App\Domain\Member\Models\MemberAvatar;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class FeedPost extends Model
 {
@@ -118,6 +120,12 @@ class FeedPost extends Model
     public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class, 'user_id', 'user_id');
+    }
+
+    public function avatar(): HasOne
+    {
+        return $this->hasOne(MemberAvatar::class, 'user_id', 'user_id')
+            ->where('is_selected', true);
     }
 
     public function category(): BelongsTo
