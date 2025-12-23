@@ -13,6 +13,7 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
         Route::get('/categories', [FeedController::class, 'categories'])->name('categories');
 
         Route::get('/posts', [FeedPostController::class, 'posts'])->name('posts');
+        Route::get('/posts/following', [FeedPostController::class, 'followingMembersPosts'])->middleware(['jwt'])->name('posts-following');
         Route::get('/posts/{uid}', [FeedPostController::class, 'readPost'])->name('post-read');
 
         Route::middleware(['jwt', 'member'])->group(function () {
