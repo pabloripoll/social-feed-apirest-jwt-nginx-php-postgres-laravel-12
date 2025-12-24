@@ -128,4 +128,16 @@ class Member extends Model
         return $this->hasMany(MemberAvatar::class, 'user_id', 'user_id')
             ->orderBy('position', 'asc');
     }
+
+    public function following(): HasMany
+    {
+        return $this->hasMany(MemberFollower::class, 'user_id', 'user_id')
+            ->orderBy('created_at', 'asc');
+    }
+
+    public function followers(): HasMany
+    {
+        return $this->hasMany(MemberFollower::class, 'user_id', 'following_user_id')
+            ->orderBy('created_at', 'asc');
+    }
 }
