@@ -16,7 +16,7 @@ class MemberFollowerController
     {
         /** @var Illuminate\Auth\AuthManager $user */
         $user = Auth::user();
-        $user->load(['member', 'memberProfile', 'avatar']);
+        $user->load(['member', 'memberProfile', 'memberAvatar']);
 
         $member = Member::query()
             ->with(['user', 'profile', 'avatar'])
@@ -52,13 +52,13 @@ class MemberFollowerController
         $userFollower = [
             'uid' => $user->member->uid,
             'nickname' => $user->memberProfile->nickname,
-            'avatar' => $user->avatar->url,
+            'avatar' => $user?->memberAvatar->url ?? null,
         ];
 
         $userFollowing = [
             'uid' => $member->uid,
             'nickname' => $member->profile->nickname,
-            'avatar' => $member->avatar->url,
+            'avatar' => $member?->avatar->url ?? null,
         ];
 
         // Dependencies
@@ -86,10 +86,10 @@ class MemberFollowerController
     {
         /** @var Illuminate\Auth\AuthManager $user */
         $user = Auth::user();
-        $user->load(['member', 'memberProfile', 'avatar']);
+        $user->load(['member', 'memberProfile', 'memberAvatar']);
 
         $member = Member::query()
-            ->with(['user', 'memberProfile'])
+            ->with(['user', 'profile', 'avatar'])
             ->where('uid', $member_uid)
             ->first();
         if (! $member) {
@@ -119,13 +119,13 @@ class MemberFollowerController
         $userFollower = [
             'uid' => $user->member->uid,
             'nickname' => $user->memberProfile->nickname,
-            'avatar' => $user->avatar->url,
+            'avatar' => $user?->memberAvatar->url ?? null,
         ];
 
         $userFollowing = [
             'uid' => $member->uid,
             'nickname' => $member->profile->nickname,
-            'avatar' => $member->avatar->url,
+            'avatar' => $member?->avatar->url ?? null,
         ];
 
         // Dependencies

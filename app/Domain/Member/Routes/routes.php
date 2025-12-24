@@ -4,7 +4,7 @@ use App\Domain\Member\Controller\MemberAccountController;
 use App\Domain\Member\Controller\MemberAuthController;
 use App\Domain\Member\Controller\MemberAvatarController;
 use App\Domain\Member\Controller\MemberProfileController;
-use App\Domain\Member\Controller\MemberFollowController;
+use App\Domain\Member\Controller\MemberFollowerController;
 use App\Domain\Member\Controller\MemberFeedPostController;
 use App\Domain\Member\Controller\MemberFeedMediaController;
 use Illuminate\Support\Facades\Route;
@@ -50,8 +50,8 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
         Route::get('/{member_uid}/posts', [MemberProfileController::class, 'posts'])->name('list-posts');
 
         Route::middleware(['jwt', 'member'])->group(function () {
-            Route::post('/{member_uid}/follow', [MemberProfileController::class, 'follow'])->name('profile-follow');
-            Route::post('/{member_uid}/unfollow', [MemberProfileController::class, 'unfollow'])->name('profile-unfollow');
+            Route::post('/{member_uid}/follow', [MemberFollowerController::class, 'follow'])->name('profile-follow');
+            Route::post('/{member_uid}/unfollow', [MemberFollowerController::class, 'unfollow'])->name('profile-unfollow');
         });
     });
 });
