@@ -18,6 +18,15 @@ class MemberFollowerController
         $user = Auth::user();
         $user->load(['member', 'memberProfile', 'memberAvatar']);
 
+        if ($member_uid == $user->member->uid) {
+            return response()->json([
+                    'message' => 'Member cannot follow itself.',
+                    'error' => 'wrong_follow',
+                ],
+                JsonResponse::HTTP_NOT_ACCEPTABLE
+            );
+        }
+
         $member = Member::query()
             ->with(['user', 'profile', 'avatar'])
             ->where('uid', $member_uid)
@@ -87,6 +96,15 @@ class MemberFollowerController
         /** @var Illuminate\Auth\AuthManager $user */
         $user = Auth::user();
         $user->load(['member', 'memberProfile', 'memberAvatar']);
+
+        if ($member_uid == $user->member->uid) {
+            return response()->json([
+                    'message' => 'Member cannot unfollow itself.',
+                    'error' => 'wrong_unfollow',
+                ],
+                JsonResponse::HTTP_NOT_ACCEPTABLE
+            );
+        }
 
         $member = Member::query()
             ->with(['user', 'profile', 'avatar'])
