@@ -1,9 +1,9 @@
 <?php
 
 use App\Domain\Feed\Models\FeedPost;
-use App\Domain\Member\Models\MemberNotificationType;
 use App\Domain\User\Models\User;
 use App\Domain\User\Models\UserModerationCategory;
+use App\Domain\User\Models\UserModerationSanction;
 use App\Domain\User\Models\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -32,7 +32,7 @@ return new class extends Migration
             $table->boolean('is_closed')->default(false);
             $table->timestamp('closed_at')->nullable();
             $table->foreignId('category_id')->constrained((new UserModerationCategory)->getTable());
-            $table->foreignId('sanction_id')->nullable()->constrained((new MemberNotificationType)->getTable());
+            $table->foreignId('sanction_id')->nullable()->constrained((new UserModerationSanction)->getTable());
             $table->boolean('is_sanction_active')->default(false);
             $table->timestamp('sanction_expires_at')->nullable();
             $table->timestamps();
