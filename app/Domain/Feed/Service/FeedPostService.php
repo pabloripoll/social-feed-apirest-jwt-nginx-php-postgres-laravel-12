@@ -48,9 +48,9 @@ class FeedPostService
             if (isset($params->following)) {
                 $query->whereExists(function ($subquery) use ($authUserId) {
                     $subquery->select(DB::raw(1))
-                        ->from('members_following')
-                        ->whereColumn('members_following.following_user_id', 'feed_posts.user_id')
-                        ->where('members_following. user_id', $authUserId);
+                        ->from('members_followers')
+                        ->whereColumn('members_followers.following_user_id', 'feed_posts.user_id')
+                        ->where('members_followers. user_id', $authUserId);
                 });
             }
 
@@ -72,23 +72,15 @@ class FeedPostService
 
             // whether auth user follows the post owner (auth -> following -> post owner)
             $query->addSelect(DB::raw("EXISTS (
-                select 1 from members_following
-                where members_following.user_id = {$authUserId}
-                and members_following.following_user_id = feed_posts.user_id
+                select 1 from members_followers
+                where members_followers.user_id = {$authUserId}
+                and members_followers.following_user_id = feed_posts.user_id
             ) as is_post_from_following"));
-
-            // whether post owner follows the auth user (post owner -> following -> auth)
-            $query->addSelect(DB::raw("EXISTS (
-                select 1 from members_following
-                where members_following.user_id = feed_posts.user_id
-                and members_following.following_user_id = {$authUserId}
-            ) as is_post_from_follower"));
         } else {
             // when not authenticated ensure flags exist and are false (optional)
             $query->addSelect(DB::raw('false as is_thumb_up_by_me'));
             $query->addSelect(DB::raw('false as is_thumb_down_by_me'));
             $query->addSelect(DB::raw('false as is_post_from_following'));
-            $query->addSelect(DB::raw('false as is_post_from_follower'));
         }
 
         if (isset($params->category)) {

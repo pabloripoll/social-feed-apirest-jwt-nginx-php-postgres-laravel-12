@@ -28,9 +28,8 @@ class FeedPostResource extends JsonResource
             'user'            => [
                 'uid'       => ! $member ? null : $member->uid,
                 'nickname'  => ! $member ? null : $member->profile->nickname,
-                'is_post_from_following' => (bool) ($this->is_post_from_following ?? false),
-                'is_post_from_follower'  => (bool) ($this->is_post_from_follower ?? false),
                 'avatar'    => ! $avatar ? null : $avatar->url,
+                'following' => (bool) ($this->is_post_from_following ?? false),
             ],
 
             'continent_id'    => $this->continent_id,
