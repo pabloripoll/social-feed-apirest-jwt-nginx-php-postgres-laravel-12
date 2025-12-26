@@ -23,11 +23,15 @@ class MemberNotification extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'uid',
         'notification_type_id',
         'user_id',
+        'communication_id',
+        'moderation_id',
+        'member_user_id',
+        'notify_count',
         'is_opened',
         'opened_at',
-        'last_member_id',
         'message',
     ];
 
@@ -53,8 +57,26 @@ class MemberNotification extends Model
     }
 
     /**
+     * On creating register auto-generated values
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // Generate a unique 6-digit integer UID
+            do {
+                $uid = random_int(100000, 999999); // 6 digits
+            } while (self::where('uid', $uid)->exists());
+
+            $model->uid = $uid;
+        });
+    }
+
+    /**
      * Relations
      */
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

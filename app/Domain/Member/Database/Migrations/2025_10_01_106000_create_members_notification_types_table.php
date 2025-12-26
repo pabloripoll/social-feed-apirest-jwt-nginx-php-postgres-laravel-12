@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('members_notification_types', function (Blueprint $table) {
             $table->id();
             $table->string('key', 64)->unique();
-            $table->string('title', 64);
-            $table->string('message_singular', 512)->nullable();
+            $table->string('title_single', 64)->nullable();
+            $table->string('title_double', 64)->nullable();
+            $table->string('title_multiple', 64)->nullable();
+            $table->string('message_single', 512)->nullable();
+            $table->string('message_double', 512)->nullable();
             $table->string('message_multiple', 512)->nullable();
             $table->timestamps();
         });

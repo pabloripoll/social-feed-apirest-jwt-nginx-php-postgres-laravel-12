@@ -10,6 +10,7 @@ use App\Domain\Feed\Models\FeedMedia;
 use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\Member\Models\MemberAvatar;
+use App\Domain\Member\Models\MemberNotification;
 use App\Domain\Member\Models\MemberProfile;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -158,5 +159,11 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(MemberAvatar::class, 'user_id')
             ->orderBy('position', 'asc');
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(MemberNotification::class, 'user_id')
+            ->orderBy('created_at', 'asc');
     }
 }

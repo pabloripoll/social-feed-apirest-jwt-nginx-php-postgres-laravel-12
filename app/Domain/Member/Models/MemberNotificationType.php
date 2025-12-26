@@ -22,7 +22,12 @@ class MemberNotificationType extends Model
      */
     protected $fillable = [
         'key',
-        'title',
+        'title_single',
+        'title_double',
+        'title_multiple',
+        'message_single',
+        'message_double',
+        'message_multiple',
     ];
 
     /**

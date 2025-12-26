@@ -9,6 +9,7 @@ use App\Domain\Member\Controller\MemberProfileController;
 use App\Domain\Member\Controller\MemberFollowerController;
 use App\Domain\Member\Controller\MemberFeedPostController;
 use App\Domain\Member\Controller\MemberFeedMediaController;
+use App\Domain\Member\Controller\MemberNotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/api/v1')->name('api-v1.')->group(function () {
@@ -29,8 +30,11 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
             Route::post('/avatars', [MemberAvatarController::class, 'upload'])->name('avatars-upload');
             Route::put('/avatars/{avatar_uid}/select', [MemberAvatarController::class, 'select'])->name('avatars-select');
             Route::delete('/avatars/{avatar_uid}', [MemberAvatarController::class, 'delete'])->name('avatars-delete');
-            Route::get('/notifications', [MemberAccountSettingController::class, 'listNotifications'])->name('list-notifications');
-            Route::put('/notifications/{notification_id}/read', [MemberAccountSettingController::class, 'setNotificationRead'])->name('set-notification-read');
+            Route::get('/notifications', [MemberNotificationController::class, 'listing'])->name('notifications-listing');
+            Route::get('/notifications/{uid}/read', [MemberNotificationController::class, 'read'])->name('notifications-read');
+            Route::post('/notifications/{uid}/mark/read', [MemberNotificationController::class, 'markAsRead'])->name('notifications-mark-as-read');
+            Route::post('/notifications/{uid}/mark/unread', [MemberNotificationController::class, 'markAsRead'])->name('notifications-mark-as-unread');
+            Route::delete('/notifications/{uid}/delete', [MemberNotificationController::class, 'read'])->name('notifications-delete');
         });
 
         Route::prefix('/feed')->middleware(['jwt', 'member'])->name('feed.')->group(function () {

@@ -140,4 +140,10 @@ class Member extends Model
         return $this->hasMany(MemberFollower::class, 'user_id', 'following_user_id')
             ->orderBy('created_at', 'asc');
     }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(MemberNotification::class, 'user_id', 'user_id')
+            ->orderBy('created_at', 'asc');
+    }
 }
