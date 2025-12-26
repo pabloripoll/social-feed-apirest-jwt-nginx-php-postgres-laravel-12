@@ -160,7 +160,7 @@ class MemberFollowerController
                 'follower' => $userFollower,
                 'following' => $userFollowing,
             ],
-            JsonResponse::HTTP_OK
+            JsonResponse::HTTP_ACCEPTED
         );
     }
 }
