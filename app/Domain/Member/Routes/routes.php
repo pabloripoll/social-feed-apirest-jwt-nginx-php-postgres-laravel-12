@@ -1,6 +1,8 @@
 <?php
 
-use App\Domain\Member\Controller\MemberAccountController;
+use App\Domain\Member\Controller\MemberAccessLogController;
+use App\Domain\Member\Controller\MemberAccountProfileController;
+use App\Domain\Member\Controller\MemberAccountSettingController;
 use App\Domain\Member\Controller\MemberAuthController;
 use App\Domain\Member\Controller\MemberAvatarController;
 use App\Domain\Member\Controller\MemberProfileController;
@@ -16,17 +18,19 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
         Route::post('/login', [MemberAuthController::class, 'login'])->name('login');
 
         Route::middleware(['jwt', 'member'])->group(function () {
-            Route::get('/settings', [MemberAccountController::class, 'readSettings'])->name('read-settings');
-            Route::get('/access-logs', [MemberAccountController::class, 'listAccessLogs'])->name('read-access-logs');
-            Route::get('/profile', [MemberProfileController::class, 'readProfile'])->name('read-profile');
+            Route::get('/access-logs', [MemberAccessLogController::class, 'listing'])->name('access-logs-listing');
+            Route::get('/settings', [MemberAccountSettingController::class, 'read'])->name('settings-read');
+            Route::patch('/settings', [MemberAccountSettingController::class, 'update'])->name('settings-update');
+            Route::get('/profile', [MemberAccountProfileController::class, 'read'])->name('profile-read');
+            Route::patch('/profile', [MemberAccountProfileController::class, 'update'])->name('profile-update');
             Route::get('/avatars', [MemberAvatarController::class, 'list'])->name('avatars-list');
             Route::get('/avatars/selected', [MemberAvatarController::class, 'selected'])->name('avatars-selected');
             Route::get('/avatars/{avatar_uid}', [MemberAvatarController::class, 'read'])->name('avatars-read');
             Route::post('/avatars', [MemberAvatarController::class, 'upload'])->name('avatars-upload');
             Route::put('/avatars/{avatar_uid}/select', [MemberAvatarController::class, 'select'])->name('avatars-select');
             Route::delete('/avatars/{avatar_uid}', [MemberAvatarController::class, 'delete'])->name('avatars-delete');
-            Route::get('/notifications', [MemberAccountController::class, 'listNotifications'])->name('list-notifications');
-            Route::put('/notifications/{notification_id}/read', [MemberAccountController::class, 'setNotificationRead'])->name('set-notification-read');
+            Route::get('/notifications', [MemberAccountSettingController::class, 'listNotifications'])->name('list-notifications');
+            Route::put('/notifications/{notification_id}/read', [MemberAccountSettingController::class, 'setNotificationRead'])->name('set-notification-read');
         });
 
         Route::prefix('/feed')->middleware(['jwt', 'member'])->name('feed.')->group(function () {
@@ -46,9 +50,8 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
     });
 
     Route::prefix('/members')->name('members.')->group(function () {
-        Route::get('/{member_uid}/profile', [MemberProfileController::class, 'readProfile'])->name('read-profile');
-        Route::get('/{member_uid}/posts', [MemberProfileController::class, 'posts'])->name('list-posts');
-
+        Route::get('/{member_uid}/profile', [MemberProfileController::class, 'read'])->name('profile-read');
+        Route::get('/{member_uid}/feed/posts', [MemberProfileController::class, 'feedPosts'])->name('profile-posts');
         Route::middleware(['jwt', 'member'])->group(function () {
             Route::post('/{member_uid}/follow', [MemberFollowerController::class, 'follow'])->name('profile-follow');
             Route::post('/{member_uid}/unfollow', [MemberFollowerController::class, 'unfollow'])->name('profile-unfollow');
