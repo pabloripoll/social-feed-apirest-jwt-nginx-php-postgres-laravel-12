@@ -3,7 +3,6 @@
 namespace App\Domain\Member\Controller;
 
 use App\Domain\Feed\Models\FeedCategory;
-use App\Domain\Feed\Models\FeedMedia;
 use App\Domain\Feed\Models\FeedPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
