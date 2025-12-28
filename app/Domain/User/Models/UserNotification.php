@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Domain\Member\Models;
+namespace App\Domain\User\Models;
 
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class MemberNotification extends Model
+class UserNotification extends Model
 {
-    /** @use HasFactory<\App\Domain\Member\Database\Factories\MemberNotification> */
+    /** @use HasFactory<\App\Domain\User\Database\Factories\UserNotification> */
     use HasFactory;
 
     /**
      * @var string
      */
-    protected $table = 'members_notifications';
+    protected $table = 'users_notifications';
 
     /**
      * The attributes that are mass assignable.
@@ -24,15 +24,15 @@ class MemberNotification extends Model
      */
     protected $fillable = [
         'uid',
-        'notification_type_id',
-        'user_id',
-        'communication_id',
+        'type_id',
+        'receiver_id',
+        'performer_id',
         'moderation_id',
-        'member_user_id',
+        'communication_id',
         'notify_count',
-        'is_opened',
+        'opened',
         'opened_at',
-        'message',
+        'payload',
     ];
 
     /**

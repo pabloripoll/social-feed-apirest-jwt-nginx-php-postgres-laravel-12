@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('members_notification_types', function (Blueprint $table) {
+        Schema::create('users_notification_types', function (Blueprint $table) {
             $table->id();
             $table->string('key', 64)->unique();
             $table->string('title_single', 64)->nullable();
-            $table->string('title_double', 64)->nullable();
             $table->string('title_multiple', 64)->nullable();
-            $table->string('message_single', 512)->nullable();
-            $table->string('message_double', 512)->nullable();
-            $table->string('message_multiple', 512)->nullable();
+            $table->string('summary_single', 512)->nullable();
+            $table->string('summary_multiple', 512)->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('members_notification_types');
+        Schema::dropIfExists('users_notification_types');
     }
 };

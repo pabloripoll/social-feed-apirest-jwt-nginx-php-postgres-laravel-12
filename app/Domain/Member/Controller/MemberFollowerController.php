@@ -4,6 +4,8 @@ namespace App\Domain\Member\Controller;
 
 use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberFollower;
+use App\Domain\User\Dto\UserNotificationDto;
+use App\Domain\User\Service\UserNotificationService;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -58,18 +60,6 @@ class MemberFollowerController
         $follower->following_user_id = $member->user->id;
         $follower->save();
 
-        $userFollower = [
-            'uid' => $user->member->uid,
-            'nickname' => $user->memberProfile->nickname,
-            'avatar' => $user?->memberAvatar->url ?? null,
-        ];
-
-        $userFollowing = [
-            'uid' => $member->uid,
-            'nickname' => $member->profile->nickname,
-            'avatar' => $member?->avatar->url ?? null,
-        ];
-
         // Dependencies
 
         $user->member->following_count = $user->member->following_count + 1;
@@ -78,11 +68,27 @@ class MemberFollowerController
         $member->followers_count = $member->followers_count + 1;
         $member->save();
 
+        $dto = new UserNotificationDto(
+            performerId: $user->id,
+            performerData: [
+                'uid' => $user->member->uid,
+                'nickname' => $user->memberProfile->nickname,
+                'avatar' => $user->memberAvatar?->url,
+            ],
+            receiverId: $member->user->id,
+            receiverData:  [
+                'uid' => $member->uid,
+                'nickname' => $member->profile->nickname,
+                'avatar' => $member->avatar?->url,
+            ],
+        );
+        (new UserNotificationService)->newFollower($dto);
+
         return response()->json(
             [
-                'message' => 'Following @'.$userFollowing['nickname'].' suscription successfully created.',
-                'follower' => $userFollower,
-                'following' => $userFollowing,
+                'message' => 'Following @'.$dto->receiverData['nickname'].' suscription successfully created.',
+                'follower' => $dto->performerData,
+                'following' => $dto->receiverData,
             ],
             JsonResponse::HTTP_CREATED
         );

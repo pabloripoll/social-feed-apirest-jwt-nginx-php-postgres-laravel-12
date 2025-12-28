@@ -15,6 +15,8 @@ use App\Domain\Member\Models\Member;
 use App\Support\Paginate;
 use App\Domain\Feed\Service\FeedPostService;
 use App\Domain\Feed\Requests\FeedPostRequest;
+use App\Domain\User\Dto\UserNotificationDto;
+use App\Domain\User\Service\UserNotificationService;
 use App\Http\Services\Storage\Local\StorageService;
 
 class MemberFeedPostController
@@ -130,7 +132,22 @@ class MemberFeedPostController
         $category->posts_count = $category->posts_count + 1;
         $category->save();
 
-        $statusText = $validated['status'] == 'broadcast' ? 'published.' : 'saved as draft.';
+        $statusText = 'saved as draft.';
+
+        if ($post->is_active === true) {
+            $statusText = 'published.';
+
+            $dto = new UserNotificationDto(
+                performerId: $user->id,
+                performerData: [
+                    'uid' => $user->member->uid,
+                    'nickname' => $user->memberProfile->nickname,
+                    'avatar' => $user->memberAvatar?->url,
+                ],
+            );
+            (new UserNotificationService)->newFeedPost($dto);
+        }
+
         $response = [
             'message' => 'Feed post has successfully ' . $statusText,
             'post' => new MemberFeedPostResource($post)

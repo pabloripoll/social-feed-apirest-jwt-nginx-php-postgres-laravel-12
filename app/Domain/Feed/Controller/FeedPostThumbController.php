@@ -5,6 +5,8 @@ namespace App\Domain\Feed\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Feed\Models\FeedPostThumb;
+use App\Domain\User\Dto\UserNotificationDto;
+use App\Domain\User\Service\UserNotificationService;
 use Illuminate\Support\Facades\Auth;
 
 class FeedPostThumbController
@@ -76,10 +78,10 @@ class FeedPostThumbController
     {
         /** @var \App\Domain\User\Models\User $user */
         $user = Auth::user();
-        $user->load(['member', 'memberProfile']);
+        $user->load(['member', 'memberProfile', 'memberAvatar']);
 
         $post = FeedPost::query()
-            ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
+            ->with(['user', 'member', 'profile', 'avatar', 'category', 'continent', 'region', 'media'])
             ->where('uid', $uid)
             ->where('is_active', true)
             ->first();
@@ -168,7 +170,28 @@ class FeedPostThumbController
         $postThumbVote->save();
 
         // sum thumb up or down voting counter on relations
-        $thumb == 'up' ? $this->thumbUpSumOnRelations($post) : $this->thumbDownSumOnRelations($post);
+        if ($thumb == 'up') {
+            $this->thumbUpSumOnRelations($post);
+
+            $dto = new UserNotificationDto(
+                performerId: $user->id,
+                performerData: [
+                    'uid' => $user->member->uid,
+                    'nickname' => $user->memberProfile->nickname,
+                    'avatar' => $user->memberAvatar?->url,
+                ],
+                receiverId: $post->user_id,
+                receiverData:  [
+                    'uid' => $post->member->uid,
+                    'nickname' => $post->profile->nickname,
+                    'avatar' => $post->avatar?->url ?? null,
+                ],
+            );
+            (new UserNotificationService)->newFeedPostThumbUp($dto);
+
+        } else {
+            $this->thumbDownSumOnRelations($post);
+        }
 
         return [
             'message' => 'Feed post thumb '. $thumb . ' vote successfully sent.',
