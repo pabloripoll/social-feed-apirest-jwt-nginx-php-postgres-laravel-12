@@ -39,10 +39,10 @@ class Paginate
 
         // pagination links
         $base = '/'.request()->route()->uri();
-        $prevPage = $page == 1 ? null : $base.'?page='.($page - 1).'&limit='.($limit).http_build_query($filters);
-        $nextPage = $page >= $pages ? null : $base.'?page='.($page + 1).'&limit='.($limit).http_build_query($filters);
-        $firstPage = $base.'?page=1&limit='.($limit).http_build_query($filters);
-        $lastPage = $base.'?page='.$pages.'&limit='.($limit).http_build_query($filters);
+        $prevPage  = $page == 1 ? null : $base.'?page=' . ($page - 1) . '&limit=' . ($limit) . (! $filters ? '' : http_build_query($filters));
+        $nextPage  = $page >= $pages ? null : $base.'?page=' . ($page + 1) . '&limit=' . ($limit) . (! $filters ? '' : http_build_query($filters));
+        $firstPage = $base.'?page=1&limit=' . ($limit) . (! $filters ? '' : http_build_query($filters));
+        $lastPage  = $base.'?page=' . $pages . '&limit=' . ($limit) . (! $filters ? '' : http_build_query($filters));
 
         // output
         $params = new \stdClass;
