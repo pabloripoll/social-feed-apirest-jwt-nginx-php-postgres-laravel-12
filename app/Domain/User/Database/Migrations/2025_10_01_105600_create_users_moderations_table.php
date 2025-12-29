@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignId('reporter_user_id')->constrained((new User)->getTable())->onDelete('set null');
             $table->tinyInteger('moderator_role_id')->nullable()->constrained((new UserRole)->getTable());
             $table->foreignId('moderator_user_id')->nullable()->constrained((new User)->getTable());
-            $table->boolean('is_opened')->default(false);
+            $table->boolean('opened')->default(false);
             $table->boolean('in_review')->default(false);
             $table->timestamp('in_review_since')->nullable();
             $table->boolean('is_resolved')->default(false);

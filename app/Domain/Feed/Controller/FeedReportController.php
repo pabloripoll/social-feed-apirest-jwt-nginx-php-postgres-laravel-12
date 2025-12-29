@@ -89,7 +89,7 @@ class FeedReportController
         $moderation->user_id = $post->user_id;
         $moderation->reporter_role_id = $role->id;
         $moderation->reporter_user_id = $user->id;
-        $moderation->is_opened = true;
+        $moderation->opened = true;
         $moderation->category_id = $modCategory->id;
         $moderation->feed_post_id = $post->id;
         $moderation->save();
@@ -135,7 +135,7 @@ class FeedReportController
 
         $moderation = UserModeration::query()
             ->with(['category'])
-            ->where('is_opened', true)
+            ->where('opened', true)
             ->where('reporter_user_id', $user->id)
             ->where('feed_post_id', $post->id)
             ->first();

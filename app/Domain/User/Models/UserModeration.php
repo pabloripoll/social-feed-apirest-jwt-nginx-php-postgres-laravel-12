@@ -28,7 +28,7 @@ class UserModeration extends Model
         'reporter_user_id',
         'moderator_role_id',
         'moderator_user_id',
-        'is_opened',
+        'opened',
         'in_review',
         'in_review_since',
         'is_resolved',
