@@ -78,8 +78,13 @@ class UserNotification extends Model
      * Relations
      */
 
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(UserNotificationType::class, 'type_id');
+    }
+
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'receiver_id');
     }
 }

@@ -31,10 +31,9 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
             Route::put('/avatars/{avatar_uid}/select', [MemberAvatarController::class, 'select'])->name('avatars-select');
             Route::delete('/avatars/{avatar_uid}', [MemberAvatarController::class, 'delete'])->name('avatars-delete');
             Route::get('/notifications', [MemberNotificationController::class, 'listing'])->name('notifications-listing');
-            Route::get('/notifications/{uid}/read', [MemberNotificationController::class, 'read'])->name('notifications-read');
-            Route::post('/notifications/{uid}/mark/read', [MemberNotificationController::class, 'markAsRead'])->name('notifications-mark-as-read');
-            Route::post('/notifications/{uid}/mark/unread', [MemberNotificationController::class, 'markAsRead'])->name('notifications-mark-as-unread');
-            Route::delete('/notifications/{uid}/delete', [MemberNotificationController::class, 'read'])->name('notifications-delete');
+            Route::get('/notifications/{uid}', [MemberNotificationController::class, 'read'])->name('notifications-read');
+            Route::post('/notifications/{uid}/opened', [MemberNotificationController::class, 'markAsOpened'])->name('notifications-mark-as-opened');
+            Route::delete('/notifications/{uid}', [MemberNotificationController::class, 'delete'])->name('notifications-delete');
         });
 
         Route::prefix('/feed')->middleware(['jwt', 'member'])->name('feed.')->group(function () {
