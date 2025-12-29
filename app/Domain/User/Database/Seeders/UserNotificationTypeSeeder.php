@@ -28,22 +28,22 @@ class UserNotificationTypeSeeder extends Seeder
                 'key' => 'new-feed-post',
                 'title_single' => 'New Feed Post',
                 'title_multiple' => 'New Feed Posts',
-                'summary_single' => '@<member> has created a new Feed Post.',
-                'summary_multiple' => '@<member> and <count> more members have created a new Feed Post.',
+                'summary_single' => '@<nickname> has created a new Feed Post.',
+                'summary_multiple' => '@<nickname> and <count> more members have created a new Feed Post.',
             ],
             [
                 'key' => 'new-feed-post-thumb-up',
                 'title_single' => 'New Thumb-Up on your Feed Post',
                 'title_multiple' => 'New Thumbs-Ups on your Feed Post',
-                'summary_single' => '@<member> has gave you a thumb up on your publication <feed-post-title>.',
-                'summary_multiple' => '@<member> and <count> more members have gave you a thumb up on your publication <feed-post-title>.',
+                'summary_single' => '@<nickname> has gave you a thumb up on your publication <feed-post-title>.',
+                'summary_multiple' => '@<nickname> and <count> more members have gave you a thumb up on your publication <feed-post-title>.',
             ],
             [
                 'key' => 'new-follower',
                 'title_single' => 'New Follower',
                 'title_multiple' => 'New Followers',
-                'summary_single' => '@<member> has started to follow you.',
-                'summary_multiple' => '@<member> and <count> more members have started to follow you.',
+                'summary_single' => '@<nickname> has started to follow you.',
+                'summary_multiple' => '@<nickname> and <count> more members have started to follow you.',
             ],
         ];
     }

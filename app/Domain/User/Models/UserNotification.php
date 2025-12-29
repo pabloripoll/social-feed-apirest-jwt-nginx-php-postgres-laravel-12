@@ -50,7 +50,8 @@ class UserNotification extends Model
     protected function casts(): array
     {
         return [
-            'opened_at' => 'datetime',
+            'payload'    => 'array',
+            'opened_at'  => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
