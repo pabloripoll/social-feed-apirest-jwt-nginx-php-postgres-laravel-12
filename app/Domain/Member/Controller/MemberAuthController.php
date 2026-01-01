@@ -181,11 +181,23 @@ class MemberAuthController extends Controller
 
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['message' => 'Invalid credentials.'], JsonResponse::HTTP_NOT_ACCEPTABLE);
+                return response()->json(
+                    [
+                        'message' => 'Invalid credentials.',
+                        'error' => 'invalid_credentials',
+                    ],
+                    JsonResponse::HTTP_NOT_ACCEPTABLE
+                );
             }
 
         } catch (JWTException $e) {
-            return response()->json(['message' => 'Could not create token.'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(
+                [
+                    'message' => 'Could not create token.',
+                    'error' => 'token_error',
+                ],
+                JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         $user = Auth::user();
@@ -196,7 +208,13 @@ class MemberAuthController extends Controller
             ->where('is_active', true)
             ->first();
         if ($configActivation && ! $userActivationCode) {
-            return response()->json(['message' => 'Access requires activation.'], JsonResponse::HTTP_UNAUTHORIZED);
+            return response()->json(
+                [
+                    'message' => 'Access requires activation.',
+                    'error' => 'pending_activation',
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
         }
 
         MemberAccessLog::create([

@@ -156,11 +156,23 @@ class AdminAuthController extends Controller
 
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['message' => 'Invalid credentials.'], JsonResponse::HTTP_NOT_ACCEPTABLE);
+                return response()->json(
+                    [
+                        'message' => 'Invalid credentials.',
+                        'error' => 'invalid_credentials',
+                    ],
+                    JsonResponse::HTTP_NOT_ACCEPTABLE
+                );
             }
 
         } catch (JWTException $e) {
-            return response()->json(['message' => 'Could not create token.'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(
+                [
+                    'message' => 'Could not create token.',
+                    'error' => 'token_error',
+                ],
+                JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         $user = Auth::user();
