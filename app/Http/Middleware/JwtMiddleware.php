@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Domain\Admin\Models\AdminAccessLog;
 use App\Domain\Member\Models\MemberAccessLog;
+use App\Domain\User\Models\Role;
 use Closure;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -27,9 +28,12 @@ class JwtMiddleware
         }
 
         $role = $jwtPayload->get('role');
-        if ($role == 'admin') {
+
+        if ($role == Role::ADMIN) {
             $accessToken = AdminAccessLog::where('token', $jwtString)->first();
-        } else {
+        }
+
+        if ($role == Role::MEMBER) {
             $accessToken = MemberAccessLog::where('token', $jwtString)->first();
         }
 
