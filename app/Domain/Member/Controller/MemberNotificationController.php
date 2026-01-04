@@ -26,7 +26,7 @@ class MemberNotificationController
 
         $listing = Paginate::listing($query->count());
 
-        $notifications = $query->paginate($listing->limit, ['*'], 'page', $listing->page);
+        $notifications = Paginate::result($query, $listing);
 
         $response = [
             'listing' => $listing,

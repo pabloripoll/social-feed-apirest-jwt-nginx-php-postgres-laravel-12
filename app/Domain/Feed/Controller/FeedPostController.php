@@ -46,7 +46,7 @@ class FeedPostController
 
         $listing = Paginate::listing($query->count(), $filters);
 
-        $posts = $query->paginate($listing->limit, ['*'], 'page', $listing->page);
+        $posts = Paginate::result($query, $listing);
 
         $response = [
             'filters' => FeedPostService::filters(),
@@ -92,7 +92,7 @@ class FeedPostController
 
         $listing = Paginate::listing($resultCount, $filters);
 
-        $posts = $query->paginate($listing->limit, ['*'], 'page', $listing->page);
+        $posts = Paginate::result($query, $listing);
 
         $response = [
             'filters' => FeedPostService::filters(),
