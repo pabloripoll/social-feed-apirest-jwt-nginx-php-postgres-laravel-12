@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Feed\Requests\FeedPostRequest;
 use App\Domain\Feed\Resources\FeedPostResource;
+use App\Domain\Feed\Repository\FeedPostRepository;
 use App\Domain\Feed\Service\FeedPostService;
 
 class FeedPostController
@@ -42,7 +43,7 @@ class FeedPostController
         ! isset($validated['category']) ? : $params->category = $validated['category'];
         ! isset($validated['sort-by']) ? : $params->sort_by = $validated['sort-by'];
 
-        $query = FeedPostService::listing($params, $user);
+        $query = FeedPostRepository::listing($params, $user);
 
         $listing = Paginate::listing($query->count(), $filters);
 
@@ -86,7 +87,7 @@ class FeedPostController
         ! isset($validated['category']) ? : $params->category = $validated['category'];
         ! isset($validated['sort-by']) ? : $params->sort_by = $validated['sort-by'];
 
-        $query = FeedPostService::listing($params, $user);
+        $query = FeedPostRepository::listing($params, $user);
 
         $resultCount = $query->count();
 
