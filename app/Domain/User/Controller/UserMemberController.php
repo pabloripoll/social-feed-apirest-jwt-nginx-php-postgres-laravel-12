@@ -46,9 +46,6 @@ class UserMemberController extends Controller
         }
         $validated = $validator->validated();
 
-        $params = new \stdClass;
-        ! isset($validated['sort-by']) ? : $params->sort_by = $validated['sort-by'];
-
         $query = Member::query()
             ->with([
                 'user',
@@ -58,16 +55,18 @@ class UserMemberController extends Controller
                 'region',
             ]);
 
+        if (isset($validated['sort-by'])) {
+            $query = $validated['sort-by'] == 'oldest' ? $query->oldest() : $query->latest();
+        }
+
         $listing = Paginate::listing($query->count(), $filters);
 
-        $usersMember = $query->skip(($listing->page - 1) * $listing->limit)
-            ->take($listing->limit)
-            ->get();
+        $members = Paginate::result($query, $listing);
 
         $response = [
             'filters' => $this->filters(),
             'listing' => $listing,
-            'result'  => $usersMember,
+            'result'  => $members,
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);

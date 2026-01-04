@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class Paginate
@@ -56,6 +58,21 @@ class Paginate
         $params->last_page  = $lastPage;
 
         return $params;
+    }
+
+    /**
+     * Execute paginated query and return results.
+     *
+     * @param Builder $query Eloquent query builder
+     * @param object $listing Pagination metadata from Paginate::listing()
+     * @return Collection
+     */
+    public static function result(Builder $query, object $listing): Collection
+    {
+        return $query
+            ->skip(($listing->page - 1) * $listing->limit)
+            ->take($listing->limit)
+            ->get();
     }
 
     /**
