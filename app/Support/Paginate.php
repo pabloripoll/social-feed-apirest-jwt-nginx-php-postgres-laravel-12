@@ -14,7 +14,7 @@ class Paginate
      * @param  $total    collection total result without filters
      * @param  $filters  filters applied to db query without page and result limit
      */
-    public static function listing(?int $total = 1, ?array $filters = null): object
+    public static function listing(?int $total = 1, ?object $filters = null): object
     {
         // defaults
         $page  = 1;

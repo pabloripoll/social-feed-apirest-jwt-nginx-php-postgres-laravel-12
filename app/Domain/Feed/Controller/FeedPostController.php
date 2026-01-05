@@ -23,8 +23,6 @@ class FeedPostController
         /** @var \App\Domain\User\Models\User|null $user */
         $user = Auth::user();
 
-        $filters = [];
-
         $formRequest = new FeedPostRequest;
         $validator = Validator::make(
             $request->all(),
@@ -39,11 +37,11 @@ class FeedPostController
         }
         $validated = $validator->validated();
 
-        $params = new \stdClass;
-        ! isset($validated['category']) ? : $params->category = $validated['category'];
-        ! isset($validated['sort-by']) ? : $params->sort_by = $validated['sort-by'];
+        $filters = new \stdClass;
+        ! isset($validated['category']) ? : $filters->category = $validated['category'];
+        ! isset($validated['sort-by']) ? : $filters->sort_by = $validated['sort-by'];
 
-        $query = FeedPostRepository::listing($params, $user);
+        $query = FeedPostRepository::listing($filters, $user);
 
         $listing = Paginate::listing($query->count(), $filters);
 
@@ -66,8 +64,6 @@ class FeedPostController
         /** @var \App\Domain\User\Models\User|null $user */
         $user = Auth::user();
 
-        $filters = [];
-
         $formRequest = new FeedPostRequest;
         $validator = Validator::make(
             $request->all(),
@@ -82,12 +78,12 @@ class FeedPostController
         }
         $validated = $validator->validated();
 
-        $params = new \stdClass;
-        $params->following = true;
-        ! isset($validated['category']) ? : $params->category = $validated['category'];
-        ! isset($validated['sort-by']) ? : $params->sort_by = $validated['sort-by'];
+        $filters = new \stdClass;
+        $filters->following = true;
+        ! isset($validated['category']) ? : $filters->category = $validated['category'];
+        ! isset($validated['sort-by']) ? : $filters->sort_by = $validated['sort-by'];
 
-        $query = FeedPostRepository::listing($params, $user);
+        $query = FeedPostRepository::listing($filters, $user);
 
         $resultCount = $query->count();
 
@@ -98,7 +94,7 @@ class FeedPostController
         $response = [
             'filters' => FeedPostService::filters(),
             'listing' => $listing,
-            'result' => FeedPostResource::collection($posts),
+            'result'  => FeedPostResource::collection($posts),
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);

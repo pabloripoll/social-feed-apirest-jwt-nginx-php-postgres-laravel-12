@@ -358,7 +358,7 @@ class MemberFeedPostController
     }
 
     /**
-     * GET /api/v1/feed/posts
+     * GET /api/v1/account/feed/posts
      */
     public function posts(Request $request): JsonResponse
     {
@@ -380,33 +380,12 @@ class MemberFeedPostController
         }
         $validated = $validator->validated();
 
-        $query = FeedPost::query()
-            ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
-            ->where('user_id', $user->id)
-            ->where('is_active', true);
+        $filters = new \stdClass;
+        $filters->user_id = $user->id;
+        ! isset($validated['category']) ? : $filters->category = $validated['category'];
+        ! isset($validated['sort-by']) ? : $filters->sort_by = $validated['sort-by'];
 
-        $filters = [];
-
-        if (isset($validated['category'])) {
-            $filters['category'] = $validated['category'];
-
-            $query->whereHas('category', function ($q) use ($validated) {
-                $q->where('key', $validated['category']);
-            });
-        }
-
-        $sortReference = 'created_at';
-        $sortDirection = 'desc';
-        if (isset($validated['sort-by'])) {
-            $ref = $validated['sort-by'];
-            $filters['sort-by'] = $validated['sort-by'];
-
-            $sortReference = $ref != 'thumbs-up' ? $sortReference : 'thumbs_up_count';
-            $sortReference = $ref != 'thumbs-down' ? $sortReference : 'thumbs_down_count';
-
-            $sortDirection = $ref == 'oldest' ? 'asc' : $sortDirection;
-        }
-        $query->orderBy($sortReference, $sortDirection);
+        $query = FeedPostRepository::listing($filters, $user);
 
         $listing = Paginate::listing($query->count(), $filters);
 
