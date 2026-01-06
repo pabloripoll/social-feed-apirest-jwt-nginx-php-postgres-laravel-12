@@ -172,3 +172,27 @@ describe('Feed Post - Read - @GET /api/v1/feed/posts/{uid}', function () {
             );
     });
 });
+
+describe('Feed Post - Listing Search - @GET /api/v1/feed/posts', function () {
+    it('succeeds an authenticated user can search through feed posts', function () {
+        $member = Member::factory()->withAuth()->create();
+        $member->load(['user.memberAccessLogs']);
+        $accessLog = $member->user->memberAccessLogs()->latest()->first();
+
+        $posts = FeedPost::factory(5)->create();
+        $sample = $posts[0];
+        $search = explode(' ', $sample['title'])[0];
+
+        $route = route('api-v1.feed.posts', ['search' => $search]);
+        $response = $this->withToken($accessLog->token)->get($route);
+        if ($response->status() === JsonResponse::HTTP_OK) {
+            $result = $response->json()['result'];
+            expect($result)->toBeArray()->not->toBeEmpty();
+
+            $item = $result[0];
+
+            expect($item)->toHaveKey('title');
+            expect(strtolower($item['title']))->toContain(strtolower($search));
+        }
+    });
+});

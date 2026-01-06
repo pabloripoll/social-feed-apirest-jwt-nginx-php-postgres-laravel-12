@@ -40,6 +40,7 @@ class FeedPostController
         $filters = new \stdClass;
         ! isset($validated['category']) ? : $filters->category = $validated['category'];
         ! isset($validated['sort-by']) ? : $filters->sort_by = $validated['sort-by'];
+        ! isset($validated['search']) ? : $filters->search = $validated['search'];
 
         $query = FeedPostRepository::listing($filters, $user);
 
@@ -82,6 +83,7 @@ class FeedPostController
         $filters->following = true;
         ! isset($validated['category']) ? : $filters->category = $validated['category'];
         ! isset($validated['sort-by']) ? : $filters->sort_by = $validated['sort-by'];
+        ! isset($validated['search']) ? : $filters->search = $validated['search'];
 
         $query = FeedPostRepository::listing($filters, $user);
 

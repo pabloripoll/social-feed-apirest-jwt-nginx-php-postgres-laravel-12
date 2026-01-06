@@ -33,6 +33,11 @@ class FeedPostRequest extends FormRequest
             $input['sort-by'] = strtolower((string) $this->input('sort-by'));
         }
 
+        // trim search terms
+        if ($this->has('search')) {
+            $input['search'] = strtolower(trim((string) $this->input('search')));
+        }
+
         $this->merge($input);
     }
 
@@ -44,6 +49,7 @@ class FeedPostRequest extends FormRequest
         return [
             'category' => ['nullable', 'string', Rule::exists('feed_categories', 'key')],
             'sort-by' => ['nullable', 'string', Rule::in(['thumbs-up', 'thumbs-down', 'recent', 'oldest'])],
+            'search' => ['nullable', 'string', 'min:2', 'max:100'],
         ];
     }
 
@@ -58,6 +64,10 @@ class FeedPostRequest extends FormRequest
 
             'sort-by.string' => 'The sort-by value must be a string.',
             'sort-by.in' => 'The sort-by option must be one of: thumbs-up, thumbs-down, recent, oldest.',
+
+            'search.string' => 'The search term must be a string.',
+            'search.min' => 'The search term must be at least 2 characters.',
+            'search.max' => 'The search term cannot exceed 100 characters.',
         ];
     }
 }

@@ -18,6 +18,18 @@ class FeedPostRepository
             ->with(['user', 'member', 'avatar', 'category', 'continent', 'region', 'media'])
             ->where('is_active', true);
 
+        // Search terms filter - Options cross db engines
+        // A) $operator = config('database.default') === 'pgsql' ? 'ILIKE' : 'LIKE';
+        // B) $q->where(DB::raw('LOWER(title)'), 'LIKE', "%{$search}%")
+        if (isset($filters->search) && ! empty($filters->search)) {
+            $search = trim($filters->search);
+
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'LIKE', "%{$search}%")
+                  ->orWhere('summary', 'LIKE', "%{$search}%");
+            });
+        }
+
         if (isset($filters->user_id)) {
             $query = $query->where('user_id', $filters->user_id);
         }
