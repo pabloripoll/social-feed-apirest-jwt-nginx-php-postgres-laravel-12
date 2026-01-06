@@ -24,9 +24,7 @@ class UserModeration extends Model
     protected $fillable = [
         'uid',
         'user_id',
-        'reporter_role_id',
         'reporter_user_id',
-        'moderator_role_id',
         'moderator_user_id',
         'opened',
         'in_review',

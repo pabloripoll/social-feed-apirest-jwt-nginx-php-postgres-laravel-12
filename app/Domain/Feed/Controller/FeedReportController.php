@@ -2,7 +2,6 @@
 
 namespace App\Domain\Feed\Controller;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -10,8 +9,6 @@ use App\Domain\Feed\Models\FeedPost;
 use App\Domain\User\Models\UserModerationCategory;
 use App\Domain\User\Models\UserModeration;
 use App\Domain\Feed\Requests\FeedReportRequest;
-use App\Domain\User\Models\Role;
-use App\Domain\User\Models\UserRole;
 use Illuminate\Support\Facades\Validator;
 
 class FeedReportController
@@ -83,11 +80,8 @@ class FeedReportController
             );
         }
 
-        $role = UserRole::where('key', Role::MEMBER)->first();
-
         $moderation = new UserModeration;
         $moderation->user_id = $post->user_id;
-        $moderation->reporter_role_id = $role->id;
         $moderation->reporter_user_id = $user->id;
         $moderation->opened = true;
         $moderation->category_id = $modCategory->id;

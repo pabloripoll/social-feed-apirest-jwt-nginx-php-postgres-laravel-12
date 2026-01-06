@@ -20,9 +20,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('uid')->unique();
             $table->foreignId('user_id')->constrained((new User)->getTable());
-            $table->tinyInteger('reporter_role_id')->constrained((new UserRole)->getTable());
             $table->foreignId('reporter_user_id')->constrained((new User)->getTable())->onDelete('set null');
-            $table->tinyInteger('moderator_role_id')->nullable()->constrained((new UserRole)->getTable());
             $table->foreignId('moderator_user_id')->nullable()->constrained((new User)->getTable());
             $table->boolean('opened')->default(false);
             $table->boolean('in_review')->default(false);
