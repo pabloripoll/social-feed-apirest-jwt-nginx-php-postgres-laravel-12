@@ -4,6 +4,7 @@ namespace App\Domain\User\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserModerationMessage extends Model
 {
@@ -21,10 +22,11 @@ class UserModerationMessage extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'key',
-        'title',
-        'description',
-        'position',
+        'moderation_id',
+        'user_id',
+        'content',
+        'is_viewed',
+        'viewed_at'
     ];
 
     /**
@@ -41,6 +43,24 @@ class UserModerationMessage extends Model
      */
     protected function casts(): array
     {
-        return [];
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'viewed_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Relations
+     */
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function moderation(): BelongsTo
+    {
+        return $this->belongsTo(UserModeration::class, 'moderation_id');
     }
 }

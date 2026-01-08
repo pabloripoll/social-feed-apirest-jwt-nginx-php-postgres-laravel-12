@@ -4,7 +4,6 @@ use App\Domain\Feed\Models\FeedPost;
 use App\Domain\User\Models\User;
 use App\Domain\User\Models\UserModerationCategory;
 use App\Domain\User\Models\UserModerationSanction;
-use App\Domain\User\Models\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,7 +21,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained((new User)->getTable());
             $table->foreignId('reporter_user_id')->constrained((new User)->getTable())->onDelete('set null');
             $table->foreignId('moderator_user_id')->nullable()->constrained((new User)->getTable());
-            $table->boolean('opened')->default(false);
+            $table->boolean('is_opened')->default(false);
             $table->boolean('in_review')->default(false);
             $table->timestamp('in_review_since')->nullable();
             $table->boolean('is_resolved')->default(false);
@@ -31,7 +30,7 @@ return new class extends Migration
             $table->timestamp('closed_at')->nullable();
             $table->foreignId('category_id')->constrained((new UserModerationCategory)->getTable());
             $table->foreignId('sanction_id')->nullable()->constrained((new UserModerationSanction)->getTable());
-            $table->boolean('is_sanction_active')->default(false);
+            $table->boolean('has_sanction_active')->default(false);
             $table->timestamp('sanction_expires_at')->nullable();
             $table->timestamps();
             $table->foreignId('feed_post_id')->nullable()->constrained((new FeedPost)->getTable());

@@ -2,6 +2,7 @@
 
 namespace App\Domain\User\Models;
 
+use App\Domain\Feed\Models\FeedPost;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,7 +27,7 @@ class UserModeration extends Model
         'user_id',
         'reporter_user_id',
         'moderator_user_id',
-        'opened',
+        'is_opened',
         'in_review',
         'in_review_since',
         'is_resolved',
@@ -35,7 +36,7 @@ class UserModeration extends Model
         'closed_at',
         'category_id',
         'sanction_id',
-        'is_sanction_active',
+        'has_sanction_active',
         'sanction_expires_at',
         'feed_post_id',
     ];
@@ -89,6 +90,16 @@ class UserModeration extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function reporter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function moderator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(UserModerationCategory::class, 'category_id');
@@ -97,5 +108,10 @@ class UserModeration extends Model
     public function sanction(): BelongsTo
     {
         return $this->belongsTo(UserModerationSanction::class, 'sanction_id');
+    }
+
+    public function feedPost(): BelongsTo
+    {
+        return $this->belongsTo(FeedPost::class, 'feed_post_id');
     }
 }

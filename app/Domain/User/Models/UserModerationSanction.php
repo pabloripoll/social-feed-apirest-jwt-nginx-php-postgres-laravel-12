@@ -4,6 +4,7 @@ namespace App\Domain\User\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class UserModerationSanction extends Model
 {
@@ -50,5 +51,14 @@ class UserModerationSanction extends Model
     public static function newFactory()
     {
         return \App\Domain\User\Database\Factories\UserModerationSanctionFactory::new();
+    }
+
+    /**
+     * Relations
+     */
+
+    public function moderations(): HasMany
+    {
+        return $this->hasMany(UserModeration::class, 'sanction_id');
     }
 }

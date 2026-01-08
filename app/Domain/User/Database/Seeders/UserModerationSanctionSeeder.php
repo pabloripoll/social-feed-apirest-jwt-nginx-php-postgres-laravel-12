@@ -11,6 +11,11 @@ class UserModerationSanctionSeeder extends Seeder
     {
         return [
             [
+                'key' => 'none',
+                'title' => 'No Sanction',
+                'description' => 'No sanction is applied on moderation.',
+            ],
+            [
                 'key' => 'user-banned',
                 'title' => 'User Banned',
                 'description' => 'User access and its content forbidden.',

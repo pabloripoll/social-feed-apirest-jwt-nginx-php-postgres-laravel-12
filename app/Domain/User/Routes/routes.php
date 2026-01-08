@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Domain\User\Controller\UserAuthController;
 use App\Domain\User\Controller\UserAdminController;
 use App\Domain\User\Controller\UserMemberController;
+use App\Domain\User\Controller\UserModerationController;
+use App\Domain\User\Controller\UserModerationSanctionController;
+use App\Domain\User\Controller\UserModerationCategoryController;
 
 Route::prefix('/api/v1')->name('api-v1.')->group(function () {
 
@@ -29,4 +32,22 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
         });
     });
 
+    Route::prefix('/moderations')->middleware(['jwt', 'admin'])->name('moderations.')->group(function () {
+        Route::get('/', [UserModerationController::class, 'listing'])->name('listing');
+        Route::get('/filters', [UserModerationController::class, 'filters'])->name('filters');
+        Route::get('/{id}', [UserModerationController::class, 'read'])->name('read');
+        Route::patch('/{id}', [UserModerationController::class, 'update'])->name('update');
+        Route::delete('/{id}', [UserModerationController::class, 'delete'])->name('delete');
+        Route::post('/{id}/message', [UserModerationController::class, 'createMessage'])->name('createMessage');
+        Route::get('/sanctions', [UserModerationSanctionController::class, 'listing'])->name('sanctions-listing');
+        Route::post('/sanctions', [UserModerationSanctionController::class, 'create'])->name('sanctions-create');
+        Route::get('/sanctions/{id}', [UserModerationSanctionController::class, 'listing'])->name('sanctions-read');
+        Route::patch('/sanctions/{id}', [UserModerationSanctionController::class, 'update'])->name('sanctions-update');
+        Route::delete('/sanctions/{id}', [UserModerationSanctionController::class, 'delete'])->name('sanctions-delete');
+        Route::get('/categories', [UserModerationCategoryController::class, 'listing'])->name('categories-listing');
+        Route::post('/categories', [UserModerationCategoryController::class, 'create'])->name('categories-create');
+        Route::get('/categories/{id}', [UserModerationCategoryController::class, 'listing'])->name('categories-read');
+        Route::patch('/categories/{id}', [UserModerationCategoryController::class, 'update'])->name('categories-update');
+        Route::delete('/categories/{id}', [UserModerationCategoryController::class, 'delete'])->name('categories-delete');
+    });
 });

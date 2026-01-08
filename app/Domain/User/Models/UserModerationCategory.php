@@ -4,6 +4,7 @@ namespace App\Domain\User\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class UserModerationCategory extends Model
 {
@@ -51,5 +52,14 @@ class UserModerationCategory extends Model
     public static function newFactory()
     {
         return \App\Domain\User\Database\Factories\UserModerationCategoryFactory::new();
+    }
+
+    /**
+     * Relations
+     */
+
+    public function moderations(): HasMany
+    {
+        return $this->hasMany(UserModeration::class, 'category_id');
     }
 }

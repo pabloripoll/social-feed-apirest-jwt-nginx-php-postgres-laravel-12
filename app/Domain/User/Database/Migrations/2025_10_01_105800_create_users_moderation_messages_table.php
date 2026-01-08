@@ -18,8 +18,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('moderation_id')->constrained((new UserModeration)->getTable());
             $table->foreignId('user_id')->constrained((new User)->getTable());
+            $table->boolean('is_viewed')->default(false);
+            $table->timestamp('viewed_at')->nullable();
             $table->timestamps();
-            $table->string('message', 256)->nullable();
+            $table->string('content', 256)->nullable();
         });
     }
 
