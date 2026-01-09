@@ -14,7 +14,12 @@ class RoleMemberMiddleware
         $user = Auth::user();
 
         if (! $user || $user->role != Role::MEMBER) {
-            return response()->json(['message' => 'Access to this resource by non-member users is forbidden.'], JsonResponse::HTTP_FORBIDDEN);
+            return response()->json([
+                    'message' => 'Access to this resource by non-member users is forbidden.',
+                    'error' => 'forbidden_access',
+                ],
+                JsonResponse::HTTP_FORBIDDEN
+            );
         }
 
         return $next($request);
