@@ -78,7 +78,7 @@ class UserModerationSanctionUpdateRequest extends FormRequest
         return [
             'key.string' => 'The sanction key must be a string.',
             'key.max' => 'The sanction key must not exceed 50 characters.',
-            'key. regex' => 'The sanction key may only contain lowercase letters, numbers, and underscores.',
+            'key.regex' => 'The sanction key may only contain lowercase letters, numbers, and underscores.',
             'key.unique' => 'This sanction key already exists.',
 
             'position. integer' => 'The display position must be a number.',
