@@ -30,8 +30,6 @@ class UserMemberController extends Controller
      */
     public function listing(Request $request): JsonResponse
     {
-        $filters = [];
-
         $formRequest = new UserMemberRequest;
         $validator = Validator::make(
             $request->all(),
@@ -44,7 +42,7 @@ class UserMemberController extends Controller
 
             return response()->json(['message' => $errors[$field][0], 'error' => $field], JsonResponse::HTTP_NOT_ACCEPTABLE);
         }
-        $validated = $validator->validated();
+        $filters = (object) $validator->validated();
 
         $query = Member::query()
             ->with([
@@ -55,8 +53,8 @@ class UserMemberController extends Controller
                 'region',
             ]);
 
-        if (isset($validated['sort-by'])) {
-            $query = $validated['sort-by'] == 'oldest' ? $query->oldest() : $query->latest();
+        if (isset($filters->sort_by)) {
+            $query = $filters->sort_by == 'oldest' ? $query->oldest() : $query->latest();
         }
 
         $listing = Paginate::listing($query->count(), $filters);

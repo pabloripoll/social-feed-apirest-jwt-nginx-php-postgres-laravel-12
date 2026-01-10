@@ -22,9 +22,9 @@ class UserMemberRequest extends FormRequest
     {
         $input = $this->all();
 
-        // normalize sort-by
-        if ($this->has('sort-by')) {
-            $input['sort-by'] = strtolower((string) $this->input('sort-by'));
+        // normalize sort_by
+        if ($this->has('sort_by')) {
+            $input['sort_by'] = strtolower((string) $this->input('sort_by'));
         }
 
         $this->merge($input);
@@ -36,7 +36,7 @@ class UserMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sort-by' => ['nullable', 'string', Rule::in(['recent', 'oldest'])],
+            'sort_by' => ['nullable', 'string', Rule::in(['recent', 'oldest'])],
         ];
     }
 
@@ -46,8 +46,8 @@ class UserMemberRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'sort-by.string' => 'The sort-by value must be a string.',
-            'sort-by.in' => 'The sort-by option must be one of: thumbs-up, thumbs-down, recent, oldest.',
+            'sort_by.string' => 'The sort_by value must be a string.',
+            'sort_by.in' => 'The sort_by option must be one of: thumbs-up, thumbs-down, recent, oldest.',
         ];
     }
 }

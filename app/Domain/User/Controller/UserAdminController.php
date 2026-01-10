@@ -30,8 +30,6 @@ class UserAdminController extends Controller
      */
     public function listing(Request $request): JsonResponse
     {
-        $filters = [];
-
         $formRequest = new UserAdminRequest;
         $validator = Validator::make(
             $request->all(),
@@ -44,7 +42,7 @@ class UserAdminController extends Controller
 
             return response()->json(['message' => $errors[$field][0], 'error' => $field], JsonResponse::HTTP_NOT_ACCEPTABLE);
         }
-        $validated = $validator->validated();
+        $filters = (object) $validator->validated();
 
         $query = Admin::query()
             ->with([
@@ -55,8 +53,8 @@ class UserAdminController extends Controller
                 'region',
             ]);
 
-         if (isset($validated['sort-by'])) {
-            $query = $validated['sort-by'] == 'oldest' ? $query->oldest() : $query->latest();
+        if (isset($filters->sort_by)) {
+            $query = $filters->sort_by == 'oldest' ? $query->oldest() : $query->latest();
         }
 
         $listing = Paginate::listing($query->count(), $filters);
