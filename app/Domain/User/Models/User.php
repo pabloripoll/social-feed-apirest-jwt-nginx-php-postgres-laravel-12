@@ -163,7 +163,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function notifications(): HasMany
     {
-        return $this->hasMany(MemberNotification::class, 'user_id')
+        return $this->hasMany(UserNotification::class, 'user_id')
             ->orderBy('created_at', 'asc');
     }
 }
