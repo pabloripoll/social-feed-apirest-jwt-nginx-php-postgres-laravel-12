@@ -81,7 +81,8 @@ class MemberProfileController
 
             return response()->json(['message' => $errors[$field][0], 'error' => $field], JsonResponse::HTTP_NOT_ACCEPTABLE);
         }
-        $validated = $validator->validated();
+
+        $filters = (object) $validator->validated();
 
         $member = Member::query()
             ->where('uid', $member_uid)
@@ -96,11 +97,7 @@ class MemberProfileController
             );
         }
 
-        $filters = new \stdClass;
         $filters->user_id = $member->user_id;
-        ! isset($validated['category']) ? : $filters->category = $validated['category'];
-        ! isset($validated['sort-by']) ? : $filters->sort_by = $validated['sort-by'];
-        ! isset($validated['search']) ? : $filters->search = $validated['search'];
 
         $query = FeedPostRepository::listing($filters, $user);
 

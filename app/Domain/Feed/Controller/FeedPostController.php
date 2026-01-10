@@ -35,12 +35,8 @@ class FeedPostController
 
             return response()->json(['message' => $errors[$field][0], 'error' => $field], JsonResponse::HTTP_NOT_ACCEPTABLE);
         }
-        $validated = $validator->validated();
 
-        $filters = new \stdClass;
-        ! isset($validated['category']) ? : $filters->category = $validated['category'];
-        ! isset($validated['sort-by']) ? : $filters->sort_by = $validated['sort-by'];
-        ! isset($validated['search']) ? : $filters->search = $validated['search'];
+        $filters = (object) $validator->validated();
 
         $query = FeedPostRepository::listing($filters, $user);
 
@@ -77,13 +73,9 @@ class FeedPostController
 
             return response()->json(['message' => $errors[$field][0], 'error' => $field], JsonResponse::HTTP_NOT_ACCEPTABLE);
         }
-        $validated = $validator->validated();
 
-        $filters = new \stdClass;
+        $filters = (object) $validator->validated();
         $filters->following = true;
-        ! isset($validated['category']) ? : $filters->category = $validated['category'];
-        ! isset($validated['sort-by']) ? : $filters->sort_by = $validated['sort-by'];
-        ! isset($validated['search']) ? : $filters->search = $validated['search'];
 
         $query = FeedPostRepository::listing($filters, $user);
 

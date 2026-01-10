@@ -28,9 +28,9 @@ class FeedPostRequest extends FormRequest
             $input['category'] = is_numeric($category) ? (int) $category : $category;
         }
 
-        // normalize sort-by
-        if ($this->has('sort-by')) {
-            $input['sort-by'] = strtolower((string) $this->input('sort-by'));
+        // normalize sort_by
+        if ($this->has('sort_by')) {
+            $input['sort_by'] = strtolower((string) $this->input('sort_by'));
         }
 
         // trim search terms
@@ -48,7 +48,7 @@ class FeedPostRequest extends FormRequest
     {
         return [
             'category' => ['nullable', 'string', Rule::exists('feed_categories', 'key')],
-            'sort-by' => ['nullable', 'string', Rule::in(['thumbs-up', 'thumbs-down', 'recent', 'oldest'])],
+            'sort_by' => ['nullable', 'string', Rule::in(['thumbs-up', 'thumbs-down', 'recent', 'oldest'])],
             'search' => ['nullable', 'string', 'min:2', 'max:100'],
         ];
     }
@@ -62,8 +62,8 @@ class FeedPostRequest extends FormRequest
             'category.string' => 'The category id must be an string.',
             'category.exists' => 'The selected category key does not exist.',
 
-            'sort-by.string' => 'The sort-by value must be a string.',
-            'sort-by.in' => 'The sort-by option must be one of: thumbs-up, thumbs-down, recent, oldest.',
+            'sort_by.string' => 'The sort_by value must be a string.',
+            'sort_by.in' => 'The sort_by option must be one of: thumbs-up, thumbs-down, recent, oldest.',
 
             'search.string' => 'The search term must be a string.',
             'search.min' => 'The search term must be at least 2 characters.',

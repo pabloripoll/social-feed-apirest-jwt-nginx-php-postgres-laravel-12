@@ -80,8 +80,6 @@ class FeedPostRepository
         }
 
         if (isset($filters->category)) {
-            $filters['category'] = $filters->category;
-
             $query->whereHas('category', function ($q) use ($filters) {
                 $q->where('key', $filters->category);
             });
@@ -91,15 +89,11 @@ class FeedPostRepository
         $sortDirection = 'desc';
         $sortReference = 'created_at';
         if (isset($filters->sort_by)) {
-            $ref = $filters->sort_by;
-            $filters['sort-by'] = $filters->sort_by;
+            $sortReference = $filters->sort_by != 'thumbs-up' ? $sortReference : 'thumbs_up_count';
+            $sortReference = $filters->sort_by != 'thumbs-down' ? $sortReference : 'thumbs_down_count';
 
-            $sortReference = $ref != 'thumbs-up' ? $sortReference : 'thumbs_up_count';
-            $sortReference = $ref != 'thumbs-down' ? $sortReference : 'thumbs_down_count';
-
-            $sortDirection = $ref == 'oldest' ? 'asc' : $sortDirection;
+            $sortDirection = $filters->sort_by == 'oldest' ? 'asc' : $sortDirection;
         }
-
         $query->orderBy($sortReference, $sortDirection);
 
         return $query;
