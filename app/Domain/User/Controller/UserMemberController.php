@@ -86,6 +86,15 @@ class UserMemberController extends Controller
             ->where('uid', $uid)
             ->first();
 
+        if (! $member) {
+            return response()->json([
+                    'message' => 'User not found.',
+                    'error' => 'user_not_found',
+                ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
         $response = [
             'email'     => $member->user->email,
             'uid'       => $member->uid,
@@ -110,6 +119,15 @@ class UserMemberController extends Controller
             ])
             ->where('uid', $uid)
             ->first();
+
+        if (! $member) {
+            return response()->json([
+                    'message' => 'User was not found.',
+                    'error' => 'user_not_found',
+                ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
 
         $response = [
             'email'     => $member->user->email,

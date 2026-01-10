@@ -87,6 +87,15 @@ class UserAdminController extends Controller
             ->where('uid', $uid)
             ->first();
 
+        if (! $admin) {
+            return response()->json([
+                    'message' => 'User not found.',
+                    'error' => 'user_not_found',
+                ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
         $response = [
             'email'     => $admin->user->email,
             'uid'       => $admin->uid,
@@ -111,6 +120,15 @@ class UserAdminController extends Controller
             ])
             ->where('uid', $uid)
             ->first();
+
+        if (! $admin) {
+            return response()->json([
+                    'message' => 'User not found.',
+                    'error' => 'user_not_found',
+                ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
 
         $response = [
             'email'     => $admin->user->email,
