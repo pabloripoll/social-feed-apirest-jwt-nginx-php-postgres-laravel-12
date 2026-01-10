@@ -24,8 +24,7 @@ class FeedPostRequest extends FormRequest
 
         // category cast to int when present
         if ($this->has('category')) {
-            $category = $this->input('category');
-            $input['category'] = is_numeric($category) ? (int) $category : $category;
+            $input['category'] = strtolower((string) $this->input('category'));
         }
 
         // normalize sort_by
