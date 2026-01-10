@@ -70,7 +70,7 @@ class UserNotificationService
             ->where('type_id', $type->id)
             ->where('receiver_id', $receiverId)
             ->where('performer_id', $dto->performerId)
-            ->where('opened', false)
+            ->where('is_opened', false)
             ->first();
 
         $notifyCount = $notification ? ($notification->notify_count + 1) : 1;
@@ -98,7 +98,7 @@ class UserNotificationService
         $notification->receiver_id    = $receiverId;
         $notification->performer_id   = $dto->performerId;
         $notification->notify_count   = $notifyCount;
-        $notification->opened         = false;
+        $notification->is_opened      = false;
         $notification->opened_at      = null;
         $notification->payload        = json_encode($payload);
         $notification->save();

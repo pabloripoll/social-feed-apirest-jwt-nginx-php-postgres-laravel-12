@@ -27,7 +27,7 @@ class MemberNotificationResource extends JsonResource
         return [
             'uid'               => $this->uid,
             'type_id'           => $this->type_id,
-            'opened'            => (bool) ($this->opened ?? false),
+            'is_opened'         => (bool) ($this->is_opened ?? false),
             'opened_at'         => $this->opened_at instanceof \DateTimeInterface
                 ? $this->opened_at->format('Y-m-d H:i:s')
                 : $this->opened_at,

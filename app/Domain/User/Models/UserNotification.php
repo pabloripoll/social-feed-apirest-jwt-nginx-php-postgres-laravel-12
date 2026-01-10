@@ -30,7 +30,7 @@ class UserNotification extends Model
         'moderation_id',
         'communication_id',
         'notify_count',
-        'opened',
+        'is_opened',
         'opened_at',
         'payload',
     ];

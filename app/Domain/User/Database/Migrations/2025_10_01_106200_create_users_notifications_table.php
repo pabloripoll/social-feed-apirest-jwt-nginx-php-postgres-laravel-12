@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreignId('moderation_id')->nullable()->constrained((new UserModeration)->getTable());
             $table->unsignedBigInteger('communication_id')->nullable();
             $table->integer('notify_count')->default('0');
-            $table->boolean('opened')->default(false);
+            $table->boolean('is_opened')->default(false);
             $table->timestamp('opened_at')->nullable()->index();
             $table->timestamps();
             $table->jsonb('payload');
