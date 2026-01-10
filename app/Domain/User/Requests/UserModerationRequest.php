@@ -30,8 +30,8 @@ class UserModerationRequest extends FormRequest
             $input['status'] = strtolower((string) $this->input('status'));
         }
 
-        if ($this->has('sort-by')) {
-            $input['sort-by'] = strtolower((string) $this->input('sort-by'));
+        if ($this->has('sort_by')) {
+            $input['sort_by'] = strtolower((string) $this->input('sort_by'));
         }
 
         if ($this->has('moderator')) {
@@ -49,7 +49,7 @@ class UserModerationRequest extends FormRequest
         return [
             'category'  => ['nullable', 'string', Rule::exists('users_moderation_categories', 'key')],
             'status'    => ['nullable', 'string', Rule::in(['opened', 'reviewing', 'resolved', 'closed'])],
-            'sort-by'   => ['nullable', 'string', Rule::in(['recent', 'oldest'])],
+            'sort_by'   => ['nullable', 'string', Rule::in(['recent', 'oldest'])],
             'moderator' => ['nullable', 'string', Rule::in(['me', 'all'])],
         ];
     }
@@ -66,8 +66,8 @@ class UserModerationRequest extends FormRequest
             'status.string' => 'The status value must be a string.',
             'status.in' => 'The status must be one of: review, resolve, close.',
 
-            'sort-by.string' => 'The sort-by value must be a string.',
-            'sort-by.in' => 'The sort-by option must be one of: recent, oldest.',
+            'sort_by.string' => 'The sort_by value must be a string.',
+            'sort_by.in' => 'The sort_by option must be one of: recent, oldest.',
 
             'moderator.string' => 'The moderator value must be a string.',
             'moderator.in' => 'The moderator must be one of: me, all.',
