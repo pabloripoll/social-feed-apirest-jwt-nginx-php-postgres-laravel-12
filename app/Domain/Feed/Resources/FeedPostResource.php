@@ -40,7 +40,7 @@ class FeedPostResource extends JsonResource
 
             'category_id'     => $this->category_id,
             'category_key'    => $category ? ($category->key ?? null) : null,
-            'category_name'   => $category ? ($category->title ?? null) : null,
+            'category_title'  => $category ? ($category->title ?? null) : null,
 
             'is_sketch'       => (bool) ($this->is_sketch ?? false),
             'is_draft'        => (bool) ($this->is_draft ?? false),
