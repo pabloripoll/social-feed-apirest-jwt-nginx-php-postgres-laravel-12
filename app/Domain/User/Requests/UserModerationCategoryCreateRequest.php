@@ -54,7 +54,7 @@ class UserModerationCategoryCreateRequest extends FormRequest
                 'required',
                 'string',
                 'max:50',
-                'regex:/^[a-z0-9_]+$/', // Only lowercase letters, numbers, and underscores
+                'regex:/^[a-z0-9_-]+$/', // Only lowercase letters, numbers, and underscores
                 Rule::unique('users_moderation_categories', 'key')->ignore($categoryId),
             ],
             'level' => [

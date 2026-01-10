@@ -2,7 +2,9 @@
 
 namespace App\Domain\User\Models;
 
+use App\Domain\Admin\Models\Admin;
 use App\Domain\Feed\Models\FeedPost;
+use App\Domain\Member\Models\Member;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -65,6 +67,14 @@ class UserModeration extends Model
     }
 
     /**
+     * Factory
+     */
+    public static function newFactory()
+    {
+        return \App\Domain\User\Database\Factories\UserModerationFactory::new();
+    }
+
+    /**
      * On creating register auto-generated values
      */
     protected static function boot()
@@ -92,12 +102,27 @@ class UserModeration extends Model
 
     public function reporter(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'reporter_user_id');
     }
 
     public function moderator(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'moderator_user_id');
+    }
+
+    public function member(): BelongsTo
+    {
+        return $this->belongsTo(Member::class, 'user_id', 'user_id');
+    }
+
+    public function reporterMember(): BelongsTo
+    {
+        return $this->belongsTo(Member:: class, 'reporter_user_id', 'user_id');
+    }
+
+    public function moderatorAdmin(): BelongsTo
+    {
+        return $this->belongsTo(Admin::class, 'moderator_user_id', 'user_id');
     }
 
     public function category(): BelongsTo

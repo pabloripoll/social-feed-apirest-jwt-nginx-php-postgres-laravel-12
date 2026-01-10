@@ -14,13 +14,11 @@ class UserModerationService
         $categories = UserModerationCategory::select(['key','title'])
             ->orderBy('position', 'asc')
             ->get()
-            ->pluck('title', 'key')
             ->toArray();
 
         $sanctions = UserModerationCategory::select(['key','title'])
             ->orderBy('position', 'asc')
             ->get()
-            ->pluck('title', 'key')
             ->toArray();
 
         return [

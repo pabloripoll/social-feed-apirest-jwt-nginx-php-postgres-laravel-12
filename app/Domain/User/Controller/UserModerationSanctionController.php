@@ -5,11 +5,11 @@ namespace App\Domain\User\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Domain\User\Models\UserModeration;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\User\Models\UserModerationSanction;
 use App\Domain\User\Requests\UserModerationSanctionCreateRequest;
 use App\Domain\User\Requests\UserModerationSanctionUpdateRequest;
+use App\Domain\User\Resources\UserModerationSanctionResource;
 
 class UserModerationSanctionController extends Controller
 {
@@ -18,13 +18,13 @@ class UserModerationSanctionController extends Controller
      */
     public function listing(Request $request): JsonResponse
     {
-        $response = UserModerationSanction::select(['key','title'])
+        $sanctions = UserModerationSanction::query()
             ->orderBy('position', 'asc')
-            ->get()
-            ->pluck('key', 'title')
-            ->toArray();
+            ->get();
 
-        return response()->json($response, JsonResponse::HTTP_CREATED);
+        $response = UserModerationSanctionResource::collection($sanctions);
+
+        return response()->json($response, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -57,21 +57,13 @@ class UserModerationSanctionController extends Controller
         }
 
         $sanction = new UserModerationSanction;
-        $sanction->level        = $validated['level'];
+        $sanction->key          = $validated['key'];
         $sanction->position     = $validated['position'];
         $sanction->title        = $validated['title'];
         $sanction->description  = $validated['description'];
         $sanction->save();
 
-        $response = [
-            'id'            => $sanction->id,
-            'key'           => $sanction->key,
-            'position'      => $sanction->position,
-            'title'         => $sanction->title,
-            'description'   => $sanction->description,
-            'created_at'    => $sanction->created_at->format('Y-m-d H:i:s'),
-            'updated_at'    => $sanction->updated_at->format('Y-m-d H:i:s'),
-        ];
+        $response = new UserModerationSanctionResource($sanction);
 
         return response()->json($response, JsonResponse::HTTP_CREATED);
     }
@@ -91,15 +83,7 @@ class UserModerationSanctionController extends Controller
             );
         }
 
-        $response = [
-            'id'            => $sanction->id,
-            'key'           => $sanction->key,
-            'position'      => $sanction->position,
-            'title'         => $sanction->title,
-            'description'   => $sanction->description,
-            'created_at'    => $sanction->created_at->format('Y-m-d H:i:s'),
-            'updated_at'    => $sanction->updated_at->format('Y-m-d H:i:s'),
-        ];
+        $response = new UserModerationSanctionResource($sanction);
 
         return response()->json($response, JsonResponse::HTTP_OK);
     }
@@ -147,15 +131,7 @@ class UserModerationSanctionController extends Controller
         ! isset($validated['description']) ? : $sanction->description = $validated['description'];
         $sanction->save();
 
-        $response = [
-            'id'            => $sanction->id,
-            'key'           => $sanction->key,
-            'position'      => $sanction->position,
-            'title'         => $sanction->title,
-            'description'   => $sanction->description,
-            'created_at'    => $sanction->created_at->format('Y-m-d H:i:s'),
-            'updated_at'    => $sanction->updated_at->format('Y-m-d H:i:s'),
-        ];
+        $response = new UserModerationSanctionResource($sanction);
 
         return response()->json($response, JsonResponse::HTTP_ACCEPTED);
     }
@@ -165,7 +141,7 @@ class UserModerationSanctionController extends Controller
      */
     public function delete(int $id): JsonResponse
     {
-        $sanction = UserModeration::query()
+        $sanction = UserModerationSanction::query()
             ->with(['moderations'])
             ->where('id', $id)
             ->first();

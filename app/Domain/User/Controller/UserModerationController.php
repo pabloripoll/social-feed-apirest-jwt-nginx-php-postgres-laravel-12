@@ -24,7 +24,7 @@ class UserModerationController extends Controller
      */
     public function filters(): JsonResponse
     {
-        return response()->json(UserModerationService::filters(), JsonResponse::HTTP_CREATED);
+        return response()->json(UserModerationService::filters(), JsonResponse::HTTP_OK);
     }
 
     /**
@@ -47,13 +47,8 @@ class UserModerationController extends Controller
 
             return response()->json(['message' => $errors[$field][0], 'error' => $field], JsonResponse::HTTP_NOT_ACCEPTABLE);
         }
-        $validated = $validator->validated();
 
-        $filters = new \stdClass;
-        $filters->following = true;
-        ! isset($validated['category']) ? : $filters->category = $validated['category'];
-        ! isset($validated['sort-by']) ? : $filters->sort_by = $validated['sort-by'];
-
+        $filters = (object) $validator->validated();
         $query = UserModeration::query()
             ->with([
                 'user',
@@ -71,21 +66,16 @@ class UserModerationController extends Controller
             ]);
 
         if (isset($filters->moderator) && $filters->moderator == 'me') {
-            $filters['moderator'] = $filters->moderator;
             $query->where('moderator_id', $admin->id);
         }
 
         if (isset($filters->category)) {
-            $filters['category'] = $filters->category;
-
             $query->whereHas('category', function ($q) use ($filters) {
                 $q->where('key', $filters->category);
             });
         }
 
         if (isset($filters->status)) {
-            $filters['status'] = $filters->status;
-
             $status = 'is_opened';
             $status = $filters->status != 'reviewing' ? $status : 'in_review';
             $status = $filters->status != 'resolved' ? $status : 'is_resolved';
@@ -95,8 +85,6 @@ class UserModerationController extends Controller
         }
 
         if (isset($filters->sanction)) {
-            $filters['sanction'] = $filters->sanction;
-
             $query->whereHas('sanction', function ($q) use ($filters) {
                 $q->where('key', $filters->sanction);
             });
@@ -104,11 +92,8 @@ class UserModerationController extends Controller
 
         // Options: recent, oldest
         $sortDirection = 'desc';
-        if (isset($filters->sort_by)) {
-            $filters['sort-by'] = $filters->sort_by;
-            $sortDirection = $filters->sort_by != 'oldest' ? $sortDirection : 'asc';
-        }
-        $query->orderBy('created_at', $sortDirection);
+        $orderDirection = ! isset($filters->sort_by) ? $sortDirection : ($filters->sort_by != 'oldest' ? $sortDirection : 'asc');
+        $query->orderBy('created_at', $orderDirection);
 
         $listing = Paginate::listing($query->count(), $filters);
 
@@ -120,7 +105,7 @@ class UserModerationController extends Controller
             'result'  => UserModerationResource::collection($moderations),
         ];
 
-        return response()->json($response, JsonResponse::HTTP_CREATED);
+        return response()->json($response, JsonResponse::HTTP_OK);
     }
 
     /**

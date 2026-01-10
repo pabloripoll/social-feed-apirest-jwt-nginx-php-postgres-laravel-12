@@ -5,11 +5,11 @@ namespace App\Domain\User\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Domain\User\Models\UserModeration;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\User\Models\UserModerationCategory;
 use App\Domain\User\Requests\UserModerationCategoryCreateRequest;
 use App\Domain\User\Requests\UserModerationCategoryUpdateRequest;
+use App\Domain\User\Resources\UserModerationCategoryResource;
 
 class UserModerationCategoryController extends Controller
 {
@@ -18,13 +18,13 @@ class UserModerationCategoryController extends Controller
      */
     public function listing(Request $request): JsonResponse
     {
-        $response = UserModerationCategory::select(['key','title'])
+        $categories = UserModerationCategory::query()
             ->orderBy('position', 'asc')
-            ->get()
-            ->pluck('key', 'title')
-            ->toArray();
+            ->get();
 
-        return response()->json($response, JsonResponse::HTTP_CREATED);
+        $response = UserModerationCategoryResource::collection($categories);
+
+        return response()->json($response, JsonResponse::HTTP_OK);
     }
 
     /**
@@ -64,16 +64,7 @@ class UserModerationCategoryController extends Controller
         $category->description  = $validated['description'];
         $category->save();
 
-        $response = [
-            'id'            => $category->id,
-            'key'           => $category->key,
-            'level'         => $category->level,
-            'position'      => $category->position,
-            'title'         => $category->title,
-            'description'   => $category->description,
-            'created_at'    => $category->created_at->format('Y-m-d H:i:s'),
-            'updated_at'    => $category->updated_at->format('Y-m-d H:i:s'),
-        ];
+        $response = new UserModerationCategoryResource($category);
 
         return response()->json($response, JsonResponse::HTTP_CREATED);
     }
@@ -93,16 +84,7 @@ class UserModerationCategoryController extends Controller
             );
         }
 
-        $response = [
-            'id'            => $category->id,
-            'key'           => $category->key,
-            'level'         => $category->level,
-            'position'      => $category->position,
-            'title'         => $category->title,
-            'description'   => $category->description,
-            'created_at'    => $category->created_at->format('Y-m-d H:i:s'),
-            'updated_at'    => $category->updated_at->format('Y-m-d H:i:s'),
-        ];
+        $response = new UserModerationCategoryResource($category);
 
         return response()->json($response, JsonResponse::HTTP_OK);
     }
@@ -151,16 +133,7 @@ class UserModerationCategoryController extends Controller
         ! isset($validated['description']) ? : $category->description = $validated['description'];
         $category->save();
 
-        $response = [
-            'id'            => $category->id,
-            'key'           => $category->key,
-            'level'         => $category->level,
-            'position'      => $category->position,
-            'title'         => $category->title,
-            'description'   => $category->description,
-            'created_at'    => $category->created_at->format('Y-m-d H:i:s'),
-            'updated_at'    => $category->updated_at->format('Y-m-d H:i:s'),
-        ];
+        $response = new UserModerationCategoryResource($category);
 
         return response()->json($response, JsonResponse::HTTP_ACCEPTED);
     }
@@ -170,7 +143,7 @@ class UserModerationCategoryController extends Controller
      */
     public function delete(int $id): JsonResponse
     {
-        $category = UserModeration::query()
+        $category = UserModerationCategory::query()
             ->with(['moderations'])
             ->where('id', $id)
             ->first();
@@ -184,12 +157,12 @@ class UserModerationCategoryController extends Controller
             );
         }
 
-        if ($category->moderations->count() >= 1) {
+        if ($category->moderations()->exists()) {
             return response()->json([
                     'message' => 'Category has related moderations.',
                     'error' => 'category_has_related_moderations',
                 ],
-                JsonResponse::HTTP_NOT_FOUND
+                JsonResponse::HTTP_CONFLICT
             );
         }
 
