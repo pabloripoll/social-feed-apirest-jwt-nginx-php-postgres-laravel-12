@@ -9,22 +9,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\User\Requests\UserMemberRequest;
+use App\Domain\User\Service\UserMemberService;
+use App\Domain\User\Resources\UserMemberResource;
 
 class UserMemberController extends Controller
 {
-    /**
-     * Feed Post Filters
-     */
-    public static function filters(): array
-    {
-        return [
-            'sorting' => [
-                'recent' => 'Recent',
-                'oldest' => 'Oldest',
-            ],
-        ];
-    }
-
     /**
      * /api/v1/users/members
      */
@@ -62,28 +51,26 @@ class UserMemberController extends Controller
         $members = Paginate::result($query, $listing);
 
         $response = [
-            'filters' => $this->filters(),
+            'filters' => UserMemberService::filters(),
             'listing' => $listing,
-            'result'  => $members,
+            'result'  => UserMemberResource::collection($members),
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
     }
 
     /**
-     * /api/v1/users/members/{uid}
+     * GET /api/v1/users/members/{id}
      */
-    public function baseData(int $uid): JsonResponse
+    public function read(int $id): JsonResponse
     {
         $member = Member::query()
             ->with([
+                'user',
                 'profile',
-                'avatar',
-                'accessLogs' => function ($query) {
-                    $query->latest()->limit(1);
-                }
+                'latestAccessLog',
             ])
-            ->where('uid', $uid)
+            ->where('user_id', $id)
             ->first();
 
         if (! $member) {
@@ -96,28 +83,33 @@ class UserMemberController extends Controller
         }
 
         $response = [
-            'email'     => $member->user->email,
-            'uid'       => $member->uid,
-            'nickname'  => $member->profile->nickname,
-            'avatar'    => $member->avatar?->url ?? null,
-            'since'     => $member->created_at->format('Y-m-d H:i:s') ?? null,
-            'last-seen' => $member->accessLogs?->updated_at->format('Y-m-d H:i:s') ?? null,
+            'id'          => $member->user_id,
+            'uid'         => $member->uid,
+            'email'       => $member->user->email,
+            'is_active'   => $member->is_active,
+            'is_banned'   => $member->is_banned,
+            'nickname'    => $member->profile->nickname,
+            'created_at'  => $member->user->created_at->format('Y-m-d H:i:s') ?? null,
+            'last_access' => $member->accessLogs ?? null,
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
     }
 
     /**
-     * /api/v1/users/members/{uid}/profile
+     * GET /api/v1/users/members/{id}/profile
      */
-    public function profile(int $uid): JsonResponse
+    public function profile(int $id): JsonResponse
     {
         $member = Member::query()
             ->with([
+                'user',
                 'profile',
                 'avatar',
+                'continent',
+                'region',
             ])
-            ->where('uid', $uid)
+            ->where('user_id', $id)
             ->first();
 
         if (! $member) {
@@ -129,13 +121,7 @@ class UserMemberController extends Controller
             );
         }
 
-        $response = [
-            'email'     => $member->user->email,
-            'uid'       => $member->uid,
-            'nickname'  => $member->profile->nickname,
-            'avatar'    => $member->avatar?->url ?? null,
-            'since'     => $member->created_at->format('Y-m-d H:i:s') ?? null,
-        ];
+        $response = new UserMemberResource($member);
 
         return response()->json($response, JsonResponse::HTTP_OK);
     }

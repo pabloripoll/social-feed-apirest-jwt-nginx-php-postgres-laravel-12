@@ -9,22 +9,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\User\Requests\UserAdminRequest;
+use App\Domain\User\Resources\UserAdminResource;
+use App\Domain\User\Service\UserAdminService;
 
 class UserAdminController extends Controller
 {
-    /**
-     * Feed Post Filters
-     */
-    public static function filters(): array
-    {
-        return [
-            'sorting' => [
-                'recent' => 'Recent',
-                'oldest' => 'Oldest',
-            ],
-        ];
-    }
-
     /**
      * /api/v1/users/admins
      */
@@ -62,29 +51,65 @@ class UserAdminController extends Controller
         $admins = Paginate::result($query, $listing);
 
         $response = [
-            'filters' => $this->filters(),
+            'filters' => UserAdminService::filters(),
             'listing' => $listing,
-            'result'  => $admins,
+            'result'  => UserAdminResource::collection($admins),
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
     }
 
     /**
-     * /api/v1/users/admins/{uid}
+     * GET /api/v1/users/admins/{id}
      */
-    public function baseData(int $uid): JsonResponse
+    public function read(int $id): JsonResponse
+    {
+        $admin = Admin::query()
+            ->with([
+                'user',
+                'profile',
+                'latestAccessLog',
+            ])
+            ->where('user_id', $id)
+            ->first();
+
+        if (! $admin) {
+            return response()->json([
+                    'message' => 'User not found.',
+                    'error' => 'user_not_found',
+                ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
+        $response = [
+            'id'          => $admin->user_id,
+            'uid'         => $admin->uid,
+            'email'       => $admin->user->email,
+            'is_active'   => $admin->is_active,
+            'is_banned'   => $admin->is_banned,
+            'nickname'    => $admin->profile->nickname,
+            'created_at'  => $admin->user->created_at->format('Y-m-d H:i:s') ?? null,
+            'last_access' => $admin->accessLogs ?? null,
+        ];
+
+        return response()->json($response, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * GET /api/v1/users/admins/{id}/profile
+     */
+    public function profile(int $id): JsonResponse
     {
         $admin = Admin::query()
             ->with([
                 'user',
                 'profile',
                 'avatar',
-                'accessLogs' => function ($query) {
-                    $query->latest()->limit(1);
-                }
+                'continent',
+                'region',
             ])
-            ->where('uid', $uid)
+            ->where('user_id', $id)
             ->first();
 
         if (! $admin) {
@@ -96,47 +121,7 @@ class UserAdminController extends Controller
             );
         }
 
-        $response = [
-            'email'     => $admin->user->email,
-            'uid'       => $admin->uid,
-            'nickname'  => $admin->profile->nickname,
-            'avatar'    => $admin->avatar?->url ?? null,
-            'since'     => $admin->created_at->format('Y-m-d H:i:s') ?? null,
-            'last-seen' => $admin->accessLogs?->updated_at->format('Y-m-d H:i:s') ?? null,
-        ];
-
-        return response()->json($response, JsonResponse::HTTP_OK);
-    }
-
-    /**
-     * /api/v1/users/admins/{uid}/profile
-     */
-    public function profile(int $uid): JsonResponse
-    {
-        $admin = Admin::query()
-            ->with([
-                'profile',
-                'avatar',
-            ])
-            ->where('uid', $uid)
-            ->first();
-
-        if (! $admin) {
-            return response()->json([
-                    'message' => 'User not found.',
-                    'error' => 'user_not_found',
-                ],
-                JsonResponse::HTTP_NOT_FOUND
-            );
-        }
-
-        $response = [
-            'email'     => $admin->user->email,
-            'uid'       => $admin->uid,
-            'nickname'  => $admin->profile->nickname,
-            'avatar'    => $admin->avatar?->url ?? null,
-            'since'     => $admin->created_at->format('Y-m-d H:i:s') ?? null,
-        ];
+        $response = new UserAdminResource($admin);
 
         return response()->json($response, JsonResponse::HTTP_OK);
     }

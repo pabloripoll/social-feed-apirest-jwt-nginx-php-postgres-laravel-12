@@ -22,13 +22,13 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
     Route::prefix('/users')->middleware(['jwt', 'admin'])->name('users.')->group(function () {
         Route::prefix('/admins')->name('admins.')->group(function () {
             Route::get('/', [UserAdminController::class, 'listing'])->name('listing');
-            Route::get('/{uid}', [UserAdminController::class, 'baseData'])->name('base-data');
-            Route::get('/{uid}/profile', [UserAdminController::class, 'profile'])->name('profile-read');
+            Route::get('/{id}', [UserAdminController::class, 'read'])->name('read');
+            Route::get('/{id}/profile', [UserAdminController::class, 'profile'])->name('profile-read');
         });
         Route::prefix('/members')->name('members.')->group(function () {
             Route::get('/', [UserMemberController::class, 'listing'])->name('listing');
-            Route::get('/{uid}', [UserMemberController::class, 'baseData'])->name('base-data');
-            Route::get('/{uid}/profile', [UserMemberController::class, 'profile'])->name('profile-read');
+            Route::get('/{id}', [UserMemberController::class, 'read'])->name('read');
+            Route::get('/{id}/profile', [UserMemberController::class, 'profile'])->name('profile-read');
         });
     });
 

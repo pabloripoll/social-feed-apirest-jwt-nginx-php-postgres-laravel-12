@@ -16,7 +16,7 @@ class AdminAccessLog extends Model
     /**
      * @var string
      */
-    protected $table = 'members_access_logs';
+    protected $table = 'admins_access_logs';
 
     /**
      * The attributes that are mass assignable.

@@ -6,12 +6,14 @@ use App\Domain\Geo\Models\GeoContinent;
 use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Admin\Database\Factories\AdminFactory;
 use App\Domain\User\Models\User;
+use App\Domain\User\Models\UserNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Admin extends Model
 {
@@ -95,13 +97,25 @@ class Admin extends Model
     public function accessLogs(): HasManyThrough
     {
         return $this->hasManyThrough(
-            \App\Domain\Admin\Models\AdminAccessLog::class,
-            \App\Domain\User\Models\User::class,
+            AdminAccessLog::class,
+            User::class,
             'id',        // Foreign key on users table...
             'user_id',   // Foreign key on member_access_logs table...
             'user_id',   // Local key on members table...
             'id'         // Local key on users table...
         );
+    }
+
+    public function latestAccessLog(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            AdminAccessLog::class,
+            User::class,
+            'id',        // Foreign key on users table...
+            'user_id',   // Foreign key on admins_access_logs table...
+            'user_id',   // Local key on admins table...
+            'id'         // Local key on users table...
+        )->orderByDesc('admins_access_logs.created_at');
     }
 
     public function continent(): BelongsTo
@@ -124,5 +138,11 @@ class Admin extends Model
     {
         return $this->hasMany(AdminAvatar::class, 'user_id', 'user_id')
             ->orderBy('position', 'asc');
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(UserNotification::class, 'user_id', 'user_id')
+            ->orderBy('created_at', 'asc');
     }
 }

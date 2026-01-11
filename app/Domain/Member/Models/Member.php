@@ -6,12 +6,14 @@ use App\Domain\Geo\Models\GeoContinent;
 use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Database\Factories\MemberFactory;
 use App\Domain\User\Models\User;
+use App\Domain\User\Models\UserNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Member extends Model
 {
@@ -98,13 +100,25 @@ class Member extends Model
     public function accessLogs(): HasManyThrough
     {
         return $this->hasManyThrough(
-            \App\Domain\Member\Models\MemberAccessLog::class,
-            \App\Domain\User\Models\User::class,
+            MemberAccessLog::class,
+            User::class,
             'id',        // Foreign key on users table...
             'user_id',   // Foreign key on member_access_logs table...
             'user_id',   // Local key on members table...
             'id'         // Local key on users table...
         );
+    }
+
+    public function latestAccessLog(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            MemberAccessLog::class,
+            User::class,
+            'id',        // Foreign key on users table...
+            'user_id',   // Foreign key on admins_access_logs table...
+            'user_id',   // Local key on admins table...
+            'id'         // Local key on users table...
+        )->orderByDesc('members_access_logs.created_at');
     }
 
     public function continent(): BelongsTo
@@ -143,7 +157,7 @@ class Member extends Model
 
     public function notifications(): HasMany
     {
-        return $this->hasMany(MemberNotification::class, 'user_id', 'user_id')
+        return $this->hasMany(UserNotification::class, 'user_id', 'user_id')
             ->orderBy('created_at', 'asc');
     }
 }
