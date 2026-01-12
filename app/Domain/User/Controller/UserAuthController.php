@@ -99,11 +99,21 @@ class UserAuthController extends Controller
             ->with('activationCode')
             ->first();
 
+        if (! $user) {
+            return response()->json(
+                [
+                    'message' => 'User not found.',
+                    'error' => 'user_not_found'
+                ],
+                JsonResponse::HTTP_NOT_ACCEPTABLE
+            );
+        }
+
         if ($user->activationCode->is_active === true) {
             return response()->json(
                 [
-                    'email' => $user->email,
-                    'status' => 'Account has been already activated.',
+                    'message' => 'Account has been already activated.',
+                    'email' => $user->email
                 ],
                 JsonResponse::HTTP_OK
             );
@@ -117,8 +127,8 @@ class UserAuthController extends Controller
 
         return response()->json(
             [
-                'email' => $user->email,
-                'status' => 'Account successfully activated.',
+                'message' => 'Account successfully activated.',
+                'email' => $user->email
             ],
             JsonResponse::HTTP_ACCEPTED
         );
