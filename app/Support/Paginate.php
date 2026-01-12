@@ -2,22 +2,22 @@
 
 namespace App\Support;
 
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class Paginate
 {
     /**
      * Paginate listing information to perform db select query
      *
-     * @param  $total    collection total result without filters
+     * @param  $total  collection total result without filters
      * @param  $filters  filters applied to db query without page and result limit
      */
     public static function listing(?int $total = 1, ?object $filters = null): object
     {
         // defaults
-        $page  = 1;
+        $page = 1;
         $limit = 30;
 
         // result rows limit and cast - allow numeric strings
@@ -41,21 +41,21 @@ class Paginate
 
         // pagination links
         $base = '/'.request()->route()->uri();
-        $prevPage  = $page == 1 ? null : $base.'?page=' . ($page - 1) . '&limit=' . ($limit) . (! $filters ? '' : http_build_query($filters));
-        $nextPage  = $page >= $pages ? null : $base.'?page=' . ($page + 1) . '&limit=' . ($limit) . (! $filters ? '' : http_build_query($filters));
-        $firstPage = $base.'?page=1&limit=' . ($limit) . (! $filters ? '' : http_build_query($filters));
-        $lastPage  = $base.'?page=' . $pages . '&limit=' . ($limit) . (! $filters ? '' : http_build_query($filters));
+        $prevPage = $page == 1 ? null : $base.'?page='.($page - 1).'&limit='.($limit).(! $filters ? '' : http_build_query($filters));
+        $nextPage = $page >= $pages ? null : $base.'?page='.($page + 1).'&limit='.($limit).(! $filters ? '' : http_build_query($filters));
+        $firstPage = $base.'?page=1&limit='.($limit).(! $filters ? '' : http_build_query($filters));
+        $lastPage = $base.'?page='.$pages.'&limit='.($limit).(! $filters ? '' : http_build_query($filters));
 
         // output
         $params = new \stdClass;
-        $params->page  = $page;
+        $params->page = $page;
         $params->limit = $limit;
         $params->total = $total;
         $params->pages = $pages;
-        $params->prev_page  = $prevPage;
-        $params->next_page  = $nextPage;
+        $params->prev_page = $prevPage;
+        $params->next_page = $nextPage;
         $params->first_page = $firstPage;
-        $params->last_page  = $lastPage;
+        $params->last_page = $lastPage;
 
         return $params;
     }
@@ -63,9 +63,8 @@ class Paginate
     /**
      * Execute paginated query and return results.
      *
-     * @param Builder $query Eloquent query builder
-     * @param object $listing Pagination metadata from Paginate::listing()
-     * @return Collection
+     * @param  Builder  $query  Eloquent query builder
+     * @param  object  $listing  Pagination metadata from Paginate::listing()
      */
     public static function result(Builder $query, object $listing): Collection
     {

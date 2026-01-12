@@ -15,9 +15,9 @@ class RoleAdminMiddleware
 
         if (! $user || $user->role != Role::ADMIN) {
             return response()->json([
-                    'message' => 'Access to this resource by non-administrator users is forbidden.',
-                    'error' => 'forbidden_access',
-                ],
+                'message' => 'Access to this resource by non-administrator users is forbidden.',
+                'error' => 'forbidden_access',
+            ],
                 JsonResponse::HTTP_FORBIDDEN
             );
         }

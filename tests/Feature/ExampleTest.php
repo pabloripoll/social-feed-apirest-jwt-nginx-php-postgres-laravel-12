@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
-
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

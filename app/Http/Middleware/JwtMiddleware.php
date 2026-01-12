@@ -19,7 +19,7 @@ class JwtMiddleware
             return response()->json(
                 [
                     'message' => 'Token not provided.',
-                    'error' => 'token_not_provided'
+                    'error' => 'token_not_provided',
                 ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
@@ -33,7 +33,7 @@ class JwtMiddleware
             return response()->json(
                 [
                     'message' => 'Token invalid.',
-                    'error' => 'token_invalid'
+                    'error' => 'token_invalid',
                 ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
@@ -53,7 +53,7 @@ class JwtMiddleware
             return response()->json(
                 [
                     'message' => 'Token not registered.',
-                    'error' => 'token_not_found'
+                    'error' => 'token_not_found',
                 ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
@@ -63,7 +63,7 @@ class JwtMiddleware
             return response()->json(
                 [
                     'message' => 'Token is terminated.',
-                    'error' => 'token_terminated'
+                    'error' => 'token_terminated',
                 ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
@@ -76,7 +76,7 @@ class JwtMiddleware
             return response()->json(
                 [
                     'message' => 'Token is expired.',
-                    'error' => 'token_expired'
+                    'error' => 'token_expired',
                 ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );

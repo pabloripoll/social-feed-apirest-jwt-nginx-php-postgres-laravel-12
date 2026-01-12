@@ -15,18 +15,13 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    /** @var object|null */
     public ?object $user = null;
 
-    /** @var object|null */
     public ?object $member = null;
 
-    /** @var object|null */
     public ?object $admin = null;
 
-    /** @var string|null */
     public ?string $accessToken = null;
 
-    /** @var object|null */
     public ?object $payload = null;
 }

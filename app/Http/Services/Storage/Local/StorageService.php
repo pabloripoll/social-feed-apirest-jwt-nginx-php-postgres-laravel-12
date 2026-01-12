@@ -2,7 +2,6 @@
 
 namespace App\Http\Services\Storage\Local;
 
-use App\Support\Debug;
 use Illuminate\Support\Facades\Storage;
 
 class StorageService
@@ -36,7 +35,7 @@ class StorageService
     public function delete(object|string $file, ?string $bucket = null): ?object
     {
         $bucket = $bucket ?? '';
-        $object = $bucket . ltrim((is_object($file) ? $file->path.'/'.$file->name : $file), '/');
+        $object = $bucket.ltrim((is_object($file) ? $file->path.'/'.$file->name : $file), '/');
         $object = preg_replace('#^static/#', '', $object);
 
         Storage::disk('public')->delete($object);

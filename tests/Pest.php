@@ -1,11 +1,12 @@
 <?php
+
 /** @var \Tests\TestCase $this */
 
-use Tests\TestCase;
-use Illuminate\Testing\TestResponse;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Domain\User\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Testing\TestResponse;
+use Tests\TestCase;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,9 +69,7 @@ afterAll(function () {
  *
  * email and password params are editables for test cases
  *
- * @param Tests\TestCase $test
- * @param array<string,mixed> $payload
- * @return \Illuminate\Testing\TestResponse
+ * @param  array<string,mixed>  $payload
  */
 function defAdminLogin(TestCase $test, array $overrides = []): TestResponse
 {
@@ -94,9 +93,7 @@ function defAdminLogin(TestCase $test, array $overrides = []): TestResponse
  *
  * email and password params are editables for test cases
  *
- * @param Tests\TestCase $test
- * @param array<string,mixed> $payload
- * @return \Illuminate\Testing\TestResponse
+ * @param  array<string,mixed>  $payload
  */
 function defMemberLogin(TestCase $test, array $overrides = []): TestResponse
 {
@@ -119,8 +116,6 @@ function defMemberLogin(TestCase $test, array $overrides = []): TestResponse
  * Fake JWT.
  *
  * *should be improved with wrong token paramenters*
- *
- * @return string
  */
 function fakeJWT(): string
 {
