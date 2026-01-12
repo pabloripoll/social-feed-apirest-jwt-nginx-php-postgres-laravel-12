@@ -182,6 +182,7 @@ class UserAuthController extends Controller
 
         $refreshedToken = JWTAuth::refresh($legacyToken);
 
+        $access->is_expired = false;
         $access->expires_at = now()->addMinutes($this->jwtTime);
         $access->refresh_count = $access->refresh_count + 1;
         $access->token = (string) $refreshedToken;

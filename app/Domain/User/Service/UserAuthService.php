@@ -17,6 +17,8 @@ class UserAuthService
 
     /**
      * Check JWT
+     *
+     * This service method does not evaluate if token is expired for giving the chance to be refreshed
      */
     public function checkToken(): AdminAccessLog|MemberAccessLog|null
     {
@@ -29,14 +31,14 @@ class UserAuthService
             $payload = JWTAuth::decode($token);
 
             if ($payload['role'] == Role::ADMIN) {
-                $accessLog = AdminAccessLog::where('token', $token)->latest()->first();
+                $accessLog = AdminAccessLog::where('token', $token)->first();
             }
 
             if ($payload['role'] == Role::MEMBER) {
-                $accessLog = MemberAccessLog::where('token', $token)->latest()->first();
+                $accessLog = MemberAccessLog::where('token', $token)->first();
             }
 
-            if (! $accessLog || $accessLog->is_terminated || $accessLog->is_expired) {
+            if (! $accessLog || $accessLog->is_terminated) {
                 return null;
             }
 
