@@ -63,9 +63,9 @@ describe('User role admin auth token refresh success - @POST /api/v1/admin/auth/
         ]);
         $response->assertStatus(JsonResponse::HTTP_ACCEPTED)
             ->assertJson(fn (AssertableJson $json) => $json
-                ->has('token')
-                ->has('token_expired')
+                ->has('token_refreshed')
                 ->has('expires_in')
+                ->has('token_expired')
                 ->etc()
             );
     });
