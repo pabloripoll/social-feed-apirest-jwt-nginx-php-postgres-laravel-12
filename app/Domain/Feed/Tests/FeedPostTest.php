@@ -192,7 +192,7 @@ describe('Feed Post - Listing Search - @GET /api/v1/feed/posts', function () {
             $item = $result[0];
 
             expect($item)->toHaveKey('title');
-            expect(strtolower($item['title']))->toContain(strtolower($search));
+            expect($item['title'])->toContain($search);
         }
     });
 });
