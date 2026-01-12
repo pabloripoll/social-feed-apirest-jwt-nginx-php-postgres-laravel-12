@@ -117,6 +117,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(MemberAccessLog::class, 'user_id');
     }
 
+    public function latestMemberAccessLog(): HasOne
+    {
+        return $this->hasOne(MemberAccessLog::class, 'user_id')
+            ->where([
+                'is_terminated' => false,
+                'is_expired' => false,
+            ])
+            ->latestOfMany('created_at');
+    }
+
     public function admin(): HasOne
     {
         return $this->hasOne(Admin::class, 'user_id');
@@ -130,6 +140,16 @@ class User extends Authenticatable implements JWTSubject
     public function adminAccessLogs(): HasMany
     {
         return $this->hasMany(AdminAccessLog::class, 'user_id');
+    }
+
+    public function latestAdminAccessLog(): HasOne
+    {
+        return $this->hasOne(AdminAccessLog::class, 'user_id')
+            ->where([
+                'is_terminated' => false,
+                'is_expired' => false,
+            ])
+            ->latestOfMany('created_at');
     }
 
     public function feedMedia(): HasMany

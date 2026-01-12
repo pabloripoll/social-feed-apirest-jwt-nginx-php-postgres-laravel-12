@@ -2,6 +2,8 @@
 
 namespace App\Domain\User\Controller;
 
+use App\Domain\Admin\Models\AdminAccessLog;
+use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
 use App\Domain\User\Requests\UserAuthActivationRequest;
@@ -277,30 +279,22 @@ class UserAuthController extends Controller
         /** @var Illuminate\Auth\AuthManager $user */
         $user = Auth::user();
 
-        $access = (new UserAuthService)->checkToken();
-        if (! $access) {
-            return response()->json(
-                [
-                    'message' => 'Token invalid or expired.',
-                    'error' => 'token_invalid'
-                ],
-                JsonResponse::HTTP_UNAUTHORIZED
-            );
-        }
-
         $userAccount = null;
         $userProfile = null;
+        $userLatestAccess = null;
 
         if ($user->role == Role::ADMIN) {
-            $user->load(['admin', 'adminProfile']);
+            $user->load(['admin', 'adminProfile', 'latestAdminAccessLog']);
             $userAccount = $user->admin;
             $userProfile = $user->adminProfile;
+            $userLatestAccess = $user->latestAdminAccessLog;
         }
 
         if ($user->role == Role::MEMBER) {
-            $user->load(['member', 'memberProfile']);
+            $user->load(['member', 'memberProfile', 'latestMemberAccessLog']);
             $userAccount = $user->member;
             $userProfile = $user->memberProfile;
+            $userLatestAccess = $user->latestMemberAccessLog;
         }
 
         return response()->json(
@@ -309,7 +303,7 @@ class UserAuthController extends Controller
                 'uid' => $userAccount->uid,
                 'nickname' => $userProfile->nickname,
                 'avatar' => $userProfile->avatar,
-                'token' => $access->token,
+                'token' => $userLatestAccess->token,
             ],
             JsonResponse::HTTP_OK
         );
