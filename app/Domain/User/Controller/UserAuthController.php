@@ -227,7 +227,7 @@ class UserAuthController extends Controller
         if (! $access) {
             return response()->json(
                 [
-                    'message' => 'Token invalid or expired.',
+                    'message' => 'Token invalid.',
                     'error' => 'token_invalid'
                 ],
                 JsonResponse::HTTP_UNAUTHORIZED
@@ -237,10 +237,11 @@ class UserAuthController extends Controller
         $access->is_terminated = true;
         $access->save();
 
-        JWTAuth::invalidate(JWTAuth::getToken());
+        JWTAuth::invalidate($access->token);
 
         return response()->json(
             [
+                'message' => 'User session successfully terminated.',
                 'token_expired' => $access->token
             ],
             JsonResponse::HTTP_ACCEPTED
