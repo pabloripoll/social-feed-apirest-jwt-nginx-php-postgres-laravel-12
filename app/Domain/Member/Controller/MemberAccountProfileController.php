@@ -49,7 +49,7 @@ class MemberAccountProfileController
     {
         return response()->json(
             [
-                'message' => 'in development'
+                'message' => 'in development',
             ],
             JsonResponse::HTTP_OK
         );

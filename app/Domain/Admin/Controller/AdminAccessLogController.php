@@ -2,8 +2,8 @@
 
 namespace App\Domain\Admin\Controller;
 
-use Illuminate\Support\Facades\Auth;
 use App\Domain\Admin\Models\AdminAccessLog;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AdminAccessLogController

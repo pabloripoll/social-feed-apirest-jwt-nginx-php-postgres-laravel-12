@@ -2,9 +2,9 @@
 
 namespace App\Domain\Feed\Database\Factories;
 
+use App\Domain\Feed\Models\FeedMedia;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Domain\Feed\Models\FeedMedia;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Domain\Feed\Models\FeedMedia>

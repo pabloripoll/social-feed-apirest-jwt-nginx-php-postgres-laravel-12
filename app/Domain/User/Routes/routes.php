@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Domain\User\Controller\UserAuthController;
 use App\Domain\User\Controller\UserAdminController;
+use App\Domain\User\Controller\UserAuthController;
 use App\Domain\User\Controller\UserMemberController;
+use App\Domain\User\Controller\UserModerationCategoryController;
 use App\Domain\User\Controller\UserModerationController;
 use App\Domain\User\Controller\UserModerationSanctionController;
-use App\Domain\User\Controller\UserModerationCategoryController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('/api/v1')->name('api-v1.')->group(function () {
 

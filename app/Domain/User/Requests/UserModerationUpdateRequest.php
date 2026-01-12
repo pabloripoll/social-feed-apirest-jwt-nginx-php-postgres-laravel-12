@@ -47,9 +47,9 @@ class UserModerationUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category'      => ['nullable', 'string', Rule::exists('users_moderation_categories', 'key')],
-            'sanction'      => ['nullable', 'string', Rule::exists('users_moderation_sanctions', 'key')],
-            'status'        => ['nullable', 'string', Rule::in(['review', 'resolve', 'close'])],
+            'category' => ['nullable', 'string', Rule::exists('users_moderation_categories', 'key')],
+            'sanction' => ['nullable', 'string', Rule::exists('users_moderation_sanctions', 'key')],
+            'status' => ['nullable', 'string', Rule::in(['review', 'resolve', 'close'])],
             'sanction_ends' => ['nullable', 'date_format:Y-m-d', 'after_or_equal:today'],
         ];
     }
@@ -86,6 +86,7 @@ class UserModerationUpdateRequest extends FormRequest
         try {
             // Try to parse the date and convert to Y-m-d
             $parsed = \Carbon\Carbon::parse($date);
+
             return $parsed->format('Y-m-d');
         } catch (\Exception $e) {
             // Return as-is if parsing fails; validation will catch invalid format

@@ -2,16 +2,16 @@
 
 namespace App\Domain\Feed\Controller;
 
+use App\Domain\Feed\Models\FeedPost;
+use App\Domain\Feed\Repository\FeedPostRepository;
+use App\Domain\Feed\Requests\FeedPostRequest;
+use App\Domain\Feed\Resources\FeedPostResource;
+use App\Domain\Feed\Service\FeedPostService;
 use App\Support\Paginate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Domain\Feed\Models\FeedPost;
-use App\Domain\Feed\Requests\FeedPostRequest;
-use App\Domain\Feed\Resources\FeedPostResource;
-use App\Domain\Feed\Repository\FeedPostRepository;
-use App\Domain\Feed\Service\FeedPostService;
 
 class FeedPostController
 {
@@ -88,7 +88,7 @@ class FeedPostController
         $response = [
             'filters' => FeedPostService::filters(),
             'listing' => $listing,
-            'result'  => FeedPostResource::collection($posts),
+            'result' => FeedPostResource::collection($posts),
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
@@ -106,18 +106,18 @@ class FeedPostController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'No feed sketch post found.',
-                    'error' => 'post_not_found',
-                ],
+                'message' => 'No feed sketch post found.',
+                'error' => 'post_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($post->is_banned) {
             return response()->json([
-                    'message' => 'Feed post cannot be edited.',
-                    'error' => 'post_banned',
-                ],
+                'message' => 'Feed post cannot be edited.',
+                'error' => 'post_banned',
+            ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
         }

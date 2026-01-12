@@ -5,11 +5,11 @@ use App\Domain\Member\Controller\MemberAccountProfileController;
 use App\Domain\Member\Controller\MemberAccountSettingController;
 use App\Domain\Member\Controller\MemberAuthController;
 use App\Domain\Member\Controller\MemberAvatarController;
-use App\Domain\Member\Controller\MemberProfileController;
-use App\Domain\Member\Controller\MemberFollowerController;
-use App\Domain\Member\Controller\MemberFeedPostController;
 use App\Domain\Member\Controller\MemberFeedMediaController;
+use App\Domain\Member\Controller\MemberFeedPostController;
+use App\Domain\Member\Controller\MemberFollowerController;
 use App\Domain\Member\Controller\MemberNotificationController;
+use App\Domain\Member\Controller\MemberProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/api/v1')->name('api-v1.')->group(function () {

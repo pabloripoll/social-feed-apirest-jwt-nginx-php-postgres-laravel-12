@@ -37,10 +37,10 @@ class AdminAvatarRequest extends FormRequest
     {
         return [
             'file.required' => 'A file is required.',
-            'file.file'     => 'The uploaded content must be a valid file.',
-            'file.image'    => 'The uploaded file must be an image.',
-            'file.mimes'    => 'Allowed types: jpeg, png, jpg, svg.',
-            'file.max'      => 'Maximum file size is 1 MB.',
+            'file.file' => 'The uploaded content must be a valid file.',
+            'file.image' => 'The uploaded file must be an image.',
+            'file.mimes' => 'Allowed types: jpeg, png, jpg, svg.',
+            'file.max' => 'Maximum file size is 1 MB.',
         ];
     }
 }

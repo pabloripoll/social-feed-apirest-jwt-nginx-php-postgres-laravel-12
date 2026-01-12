@@ -6,9 +6,9 @@ use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Member\Models\Member;
 use App\Domain\User\Models\UserModeration;
 use App\Domain\User\Models\UserModerationCategory;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function () {
     Artisan::call('db:seed');
@@ -104,12 +104,12 @@ describe('Feed Post Report - Create - @POST /api/v1/feed/posts/{uid}/reports', f
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
                 ->has('report', fn (AssertableJson $report) => $report
-                        ->whereType('uid', 'integer')
-                        ->whereType('category_key', 'string')
-                        ->whereType('category_title', 'string')
-                        ->whereType('created_at', 'string')
-                        ->etc()
-                    )
+                    ->whereType('uid', 'integer')
+                    ->whereType('category_key', 'string')
+                    ->whereType('category_title', 'string')
+                    ->whereType('created_at', 'string')
+                    ->etc()
+                )
                 ->etc()
             );
     });
@@ -140,12 +140,12 @@ describe('Feed Post Report - Read - @GET /api/v1/feed/posts/{uid}/reports', func
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
                 ->has('report', fn (AssertableJson $report) => $report
-                        ->whereType('uid', 'integer')
-                        ->whereType('category_key', 'string')
-                        ->whereType('category_title', 'string')
-                        ->whereType('created_at', 'string')
-                        ->etc()
-                    )
+                    ->whereType('uid', 'integer')
+                    ->whereType('category_key', 'string')
+                    ->whereType('category_title', 'string')
+                    ->whereType('created_at', 'string')
+                    ->etc()
+                )
                 ->etc()
             );
     });
@@ -219,13 +219,13 @@ describe('Feed Post Report - Update - @PATCH /api/v1/feed/posts/{uid}/reports', 
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
                 ->has('report', fn (AssertableJson $report) => $report
-                        ->whereType('uid', 'integer')
-                        ->whereType('category_key', 'string')
-                        ->whereType('category_title', 'string')
-                        ->whereType('created_at', 'string')
-                        ->whereType('updated_at', 'string')
-                        ->etc()
-                    )
+                    ->whereType('uid', 'integer')
+                    ->whereType('category_key', 'string')
+                    ->whereType('category_title', 'string')
+                    ->whereType('created_at', 'string')
+                    ->whereType('updated_at', 'string')
+                    ->etc()
+                )
                 ->etc()
             );
     });
@@ -257,13 +257,13 @@ describe('Feed Post Report - Delete - @DELETE /api/v1/feed/posts/{uid}/reports',
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('message')
                 ->has('report', fn (AssertableJson $report) => $report
-                        ->whereType('uid', 'integer')
-                        ->whereType('category_key', 'string')
-                        ->whereType('category_title', 'string')
-                        ->whereType('created_at', 'string')
-                        ->whereType('updated_at', 'string')
-                        ->etc()
-                    )
+                    ->whereType('uid', 'integer')
+                    ->whereType('category_key', 'string')
+                    ->whereType('category_title', 'string')
+                    ->whereType('created_at', 'string')
+                    ->whereType('updated_at', 'string')
+                    ->etc()
+                )
                 ->etc()
             );
 

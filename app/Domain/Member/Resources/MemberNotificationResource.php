@@ -22,19 +22,19 @@ class MemberNotificationResource extends JsonResource
 
         $payload = json_decode($this->payload);
 
-        $followerProfile = $this->type->key != 'new-follower' ? null : '/api/v1/members/' . $payload->performer->uid . '/profile';
+        $followerProfile = $this->type->key != 'new-follower' ? null : '/api/v1/members/'.$payload->performer->uid.'/profile';
 
         return [
-            'uid'               => $this->uid,
-            'type_id'           => $this->type_id,
-            'is_opened'         => (bool) ($this->is_opened ?? false),
-            'opened_at'         => $this->opened_at instanceof \DateTimeInterface
+            'uid' => $this->uid,
+            'type_id' => $this->type_id,
+            'is_opened' => (bool) ($this->is_opened ?? false),
+            'opened_at' => $this->opened_at instanceof \DateTimeInterface
                 ? $this->opened_at->format('Y-m-d H:i:s')
                 : $this->opened_at,
-            'notify_count'      => (int) ($this->notify_count ?? 0),
+            'notify_count' => (int) ($this->notify_count ?? 0),
 
-            'title'             => $payload->title,
-            'summary'           => $payload->summary,
+            'title' => $payload->title,
+            'summary' => $payload->summary,
 
             'created_at' => $this->created_at instanceof \DateTimeInterface
                 ? $this->created_at->format('Y-m-d H:i:s')
@@ -43,7 +43,7 @@ class MemberNotificationResource extends JsonResource
                 ? $this->updated_at->format('Y-m-d H:i:s')
                 : $this->updated_at,
 
-            'follower_profile'  => $followerProfile,
+            'follower_profile' => $followerProfile,
         ];
     }
 }

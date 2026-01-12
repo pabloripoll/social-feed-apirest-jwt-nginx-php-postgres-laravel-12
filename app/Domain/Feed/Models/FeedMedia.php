@@ -2,10 +2,10 @@
 
 namespace App\Domain\Feed\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Domain\Feed\Database\Factories\FeedMediaFactory;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Domain\Feed\Database\Factories\FeedMediaFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FeedMedia extends Model
@@ -87,7 +87,6 @@ class FeedMedia extends Model
     /**
      * Relations
      */
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

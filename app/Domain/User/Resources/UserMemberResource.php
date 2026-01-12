@@ -23,17 +23,17 @@ class UserMemberResource extends JsonResource
         $region = $this->whenLoaded('region');
 
         return [
-            'id'    => $user->id,
-            'uid'   => $this->uid,
+            'id' => $user->id,
+            'uid' => $this->uid,
             'email' => $user->email,
-            'nickname'       => $profile->nickname,
-            'avatar'         => $avatar->url ?? null,
-            'continent_id'   => $continent->id ?? null,
+            'nickname' => $profile->nickname,
+            'avatar' => $avatar->url ?? null,
+            'continent_id' => $continent->id ?? null,
             'continent_name' => $continent->name ?? null,
-            'region_id'      => $region->id ?? null,
-            'region_name'    => $region->name ?? null,
-            'is_active'      => (bool) $this->is_active,
-            'is_banned'      => (bool) $this->is_banned,
+            'region_id' => $region->id ?? null,
+            'region_name' => $region->name ?? null,
+            'is_active' => (bool) $this->is_active,
+            'is_banned' => (bool) $this->is_banned,
 
             'created_at' => $this->created_at instanceof \DateTimeInterface
                 ? $this->created_at->format('Y-m-d H:i:s')

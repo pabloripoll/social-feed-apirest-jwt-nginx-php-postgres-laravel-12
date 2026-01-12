@@ -2,13 +2,13 @@
 
 namespace App\Domain\Member\Controller;
 
+use App\Domain\Member\Resources\MemberNotificationResource;
 use App\Domain\User\Models\UserNotification;
+use App\Support\Paginate;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Support\Paginate;
-use App\Domain\Member\Resources\MemberNotificationResource;
-use Carbon\Carbon;
 
 class MemberNotificationController
 {
@@ -52,9 +52,9 @@ class MemberNotificationController
 
         if (! $notification) {
             return response()->json([
-                    'message' => 'Notification not found.',
-                    'error' => 'notification_not_found',
-                ],
+                'message' => 'Notification not found.',
+                'error' => 'notification_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -78,18 +78,18 @@ class MemberNotificationController
 
         if (! $notification) {
             return response()->json([
-                    'message' => 'Notification not found.',
-                    'error' => 'notification_not_found',
-                ],
+                'message' => 'Notification not found.',
+                'error' => 'notification_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($notification->opened === true) {
             return response()->json([
-                    'message' => 'Notification already marked as opened.',
-                    'error' => 'notification_already_opened',
-                ],
+                'message' => 'Notification already marked as opened.',
+                'error' => 'notification_already_opened',
+            ],
                 JsonResponse::HTTP_NOT_ACCEPTABLE
             );
         }
@@ -122,9 +122,9 @@ class MemberNotificationController
 
         if (! $notification) {
             return response()->json([
-                    'message' => 'Notification not found.',
-                    'error' => 'notification_not_found',
-                ],
+                'message' => 'Notification not found.',
+                'error' => 'notification_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }

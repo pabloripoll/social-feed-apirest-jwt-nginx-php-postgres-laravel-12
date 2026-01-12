@@ -12,7 +12,7 @@ class FeedPostService
     public static function filters(): array
     {
         $categories = [];
-        $feedCategories = FeedCategory::select(['key','title'])
+        $feedCategories = FeedCategory::select(['key', 'title'])
             ->orderBy('position', 'asc')
             ->get();
 

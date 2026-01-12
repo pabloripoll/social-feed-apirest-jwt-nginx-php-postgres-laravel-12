@@ -5,9 +5,9 @@
 use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Feed\Models\FeedPostThumb;
 use App\Domain\Member\Models\Member;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function () {
     Artisan::call('db:seed');
@@ -110,9 +110,9 @@ describe('Feed Post - Thumb Up - @POST /api/v1/feed/posts/{uid}/thumbs/up', func
                             ->whereType('nickname', 'string')
                             ->etc()
                         )
-                        //...
+                        // ...
                         ->whereType('title', 'string')
-                        //...
+                        // ...
                         ->etc()
                     )
                     ->etc()
@@ -188,9 +188,9 @@ describe('Feed Post - Thumb Down - @POST /api/v1/feed/posts/{uid}/thumbs/down', 
                             ->whereType('nickname', 'string')
                             ->etc()
                         )
-                        //...
+                        // ...
                         ->whereType('title', 'string')
-                        //...
+                        // ...
                         ->etc()
                     )
                     ->etc()

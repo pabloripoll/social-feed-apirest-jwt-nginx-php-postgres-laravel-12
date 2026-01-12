@@ -22,9 +22,9 @@ class MemberFollowerController
 
         if ($member_uid == $user->member->uid) {
             return response()->json([
-                    'message' => 'Member cannot follow itself.',
-                    'error' => 'wrong_follow',
-                ],
+                'message' => 'Member cannot follow itself.',
+                'error' => 'wrong_follow',
+            ],
                 JsonResponse::HTTP_NOT_ACCEPTABLE
             );
         }
@@ -35,9 +35,9 @@ class MemberFollowerController
             ->first();
         if (! $member) {
             return response()->json([
-                    'message' => 'Member not found.',
-                    'error' => 'member_not_found',
-                ],
+                'message' => 'Member not found.',
+                'error' => 'member_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -48,9 +48,9 @@ class MemberFollowerController
             ->first();
         if ($follower) {
             return response()->json([
-                    'message' => 'You are already following @'.$member->profile->nickname.'.',
-                    'error' => 'following_already_exists',
-                ],
+                'message' => 'You are already following @'.$member->profile->nickname.'.',
+                'error' => 'following_already_exists',
+            ],
                 JsonResponse::HTTP_OK
             );
         }
@@ -76,7 +76,7 @@ class MemberFollowerController
                 'avatar' => $user->memberAvatar?->url,
             ],
             receiverId: $member->user->id,
-            receiverData:  [
+            receiverData: [
                 'uid' => $member->uid,
                 'nickname' => $member->profile->nickname,
                 'avatar' => $member->avatar?->url,
@@ -105,9 +105,9 @@ class MemberFollowerController
 
         if ($member_uid == $user->member->uid) {
             return response()->json([
-                    'message' => 'Member cannot unfollow itself.',
-                    'error' => 'wrong_unfollow',
-                ],
+                'message' => 'Member cannot unfollow itself.',
+                'error' => 'wrong_unfollow',
+            ],
                 JsonResponse::HTTP_NOT_ACCEPTABLE
             );
         }
@@ -118,9 +118,9 @@ class MemberFollowerController
             ->first();
         if (! $member) {
             return response()->json([
-                    'message' => 'Member not found.',
-                    'error' => 'member_not_found',
-                ],
+                'message' => 'Member not found.',
+                'error' => 'member_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -131,9 +131,9 @@ class MemberFollowerController
             ->first();
         if (! $follower) {
             return response()->json([
-                    'message' => 'You are not following @'.$member->profile->nickname.'.',
-                    'error' => 'not_following',
-                ],
+                'message' => 'You are not following @'.$member->profile->nickname.'.',
+                'error' => 'not_following',
+            ],
                 JsonResponse::HTTP_OK
             );
         }

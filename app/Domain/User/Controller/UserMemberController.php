@@ -3,14 +3,14 @@
 namespace App\Domain\User\Controller;
 
 use App\Domain\Member\Models\Member;
-use Illuminate\Http\Request;
-use App\Support\Paginate;
+use App\Domain\User\Requests\UserMemberRequest;
+use App\Domain\User\Resources\UserMemberResource;
+use App\Domain\User\Service\UserMemberService;
 use App\Http\Controllers\Controller;
+use App\Support\Paginate;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Domain\User\Requests\UserMemberRequest;
-use App\Domain\User\Service\UserMemberService;
-use App\Domain\User\Resources\UserMemberResource;
 
 class UserMemberController extends Controller
 {
@@ -53,7 +53,7 @@ class UserMemberController extends Controller
         $response = [
             'filters' => UserMemberService::filters(),
             'listing' => $listing,
-            'result'  => UserMemberResource::collection($members),
+            'result' => UserMemberResource::collection($members),
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
@@ -75,21 +75,21 @@ class UserMemberController extends Controller
 
         if (! $member) {
             return response()->json([
-                    'message' => 'User not found.',
-                    'error' => 'user_not_found',
-                ],
+                'message' => 'User not found.',
+                'error' => 'user_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         $response = [
-            'id'          => $member->user_id,
-            'uid'         => $member->uid,
-            'email'       => $member->user->email,
-            'is_active'   => $member->is_active,
-            'is_banned'   => $member->is_banned,
-            'nickname'    => $member->profile->nickname,
-            'created_at'  => $member->user->created_at->format('Y-m-d H:i:s') ?? null,
+            'id' => $member->user_id,
+            'uid' => $member->uid,
+            'email' => $member->user->email,
+            'is_active' => $member->is_active,
+            'is_banned' => $member->is_banned,
+            'nickname' => $member->profile->nickname,
+            'created_at' => $member->user->created_at->format('Y-m-d H:i:s') ?? null,
             'last_access' => $member->accessLogs ?? null,
         ];
 
@@ -114,9 +114,9 @@ class UserMemberController extends Controller
 
         if (! $member) {
             return response()->json([
-                    'message' => 'User was not found.',
-                    'error' => 'user_not_found',
-                ],
+                'message' => 'User was not found.',
+                'error' => 'user_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }

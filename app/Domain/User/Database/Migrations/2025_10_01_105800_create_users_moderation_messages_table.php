@@ -2,7 +2,6 @@
 
 use App\Domain\User\Models\User;
 use App\Domain\User\Models\UserModeration;
-use App\Domain\User\Models\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

@@ -4,9 +4,9 @@
 
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Member\Models\Member;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function () {
     Artisan::call('db:seed');
@@ -105,9 +105,9 @@ describe('User Members - Profile - @GET /api/v1/users/members/{id}/profile', fun
                 ->whereType('email', 'string')
                 ->whereType('nickname', 'string')
                 ->where('avatar', fn ($avatar) => is_string($avatar) || is_null($avatar))
-                ->where('continent_id', fn ($continent_id) => is_integer($continent_id) || is_null($continent_id))
+                ->where('continent_id', fn ($continent_id) => is_int($continent_id) || is_null($continent_id))
                 ->where('continent_name', fn ($continent_name) => is_string($continent_name) || is_null($continent_name))
-                ->where('region_id', fn ($region_id) => is_integer($region_id) || is_null($region_id))
+                ->where('region_id', fn ($region_id) => is_int($region_id) || is_null($region_id))
                 ->where('region_name', fn ($region_name) => is_string($region_name) || is_null($region_name))
                 ->whereType('is_active', 'boolean')
                 ->whereType('is_banned', 'boolean')

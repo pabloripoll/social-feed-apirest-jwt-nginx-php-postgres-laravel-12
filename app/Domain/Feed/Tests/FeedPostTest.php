@@ -4,9 +4,9 @@
 
 use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Member\Models\Member;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function () {
     Artisan::call('db:seed');
@@ -47,9 +47,9 @@ describe('Feed Post - Listing - @GET /api/v1/feed/posts', function () {
                             ->whereType('nickname', 'string')
                             ->etc()
                         )
-                        //...
+                        // ...
                         ->whereType('title', 'string')
-                        //...
+                        // ...
                         ->etc()
                     )
                     ->etc()
@@ -97,9 +97,9 @@ describe('Feed Post - Listing - @GET /api/v1/feed/posts', function () {
                             ->whereType('nickname', 'string')
                             ->etc()
                         )
-                        //...
+                        // ...
                         ->whereType('title', 'string')
-                        //...
+                        // ...
                         ->etc()
                     )
                     ->etc()
@@ -128,9 +128,9 @@ describe('Feed Post - Read - @GET /api/v1/feed/posts/{uid}', function () {
                         ->whereType('nickname', 'string')
                         ->etc()
                     )
-                    //...
+                    // ...
                     ->whereType('title', 'string')
-                    //...
+                    // ...
                     ->etc()
                 )
                 ->etc()
@@ -163,9 +163,9 @@ describe('Feed Post - Read - @GET /api/v1/feed/posts/{uid}', function () {
                         ->whereType('nickname', 'string')
                         ->etc()
                     )
-                    //...
+                    // ...
                     ->whereType('title', 'string')
-                    //...
+                    // ...
                     ->etc()
                 )
                 ->etc()

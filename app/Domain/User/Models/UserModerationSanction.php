@@ -56,7 +56,6 @@ class UserModerationSanction extends Model
     /**
      * Relations
      */
-
     public function moderations(): HasMany
     {
         return $this->hasMany(UserModeration::class, 'sanction_id');

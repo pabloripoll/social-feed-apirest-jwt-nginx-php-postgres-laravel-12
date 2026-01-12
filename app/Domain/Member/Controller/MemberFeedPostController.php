@@ -4,21 +4,21 @@ namespace App\Domain\Member\Controller;
 
 use App\Domain\Feed\Models\FeedCategory;
 use App\Domain\Feed\Models\FeedPost;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Domain\Member\Requests\MemberFeedPostEditRequest;
-use App\Domain\Member\Resources\MemberFeedPostResource;
-use App\Domain\Member\Models\Member;
-use App\Support\Paginate;
 use App\Domain\Feed\Repository\FeedPostRepository;
 use App\Domain\Feed\Requests\FeedPostRequest;
 use App\Domain\Feed\Service\FeedPostService;
+use App\Domain\Member\Models\Member;
+use App\Domain\Member\Requests\MemberFeedPostEditRequest;
+use App\Domain\Member\Resources\MemberFeedPostResource;
 use App\Domain\User\Dto\UserNotificationDto;
 use App\Domain\User\Service\UserNotificationService;
 use App\Http\Services\Storage\Local\StorageService;
+use App\Support\Paginate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MemberFeedPostController
 {
@@ -78,18 +78,18 @@ class MemberFeedPostController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'Feed post not found.',
-                    'error' => 'post_not_found',
-                ],
+                'message' => 'Feed post not found.',
+                'error' => 'post_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if (! $post->is_sketch) {
             return response()->json([
-                    'message' => 'Feed post has been already edited.',
-                    'error' => 'post_already_edited',
-                ],
+                'message' => 'Feed post has been already edited.',
+                'error' => 'post_already_edited',
+            ],
                 JsonResponse::HTTP_CONFLICT
             );
         }
@@ -109,19 +109,19 @@ class MemberFeedPostController
         }
         $validated = $validator->validated();
 
-        $post->user_id      = $user->id;
-        $post->category_id  = $validated['category_id'];
+        $post->user_id = $user->id;
+        $post->category_id = $validated['category_id'];
         $post->continent_id = $user->member->continent_id;
-        $post->region_id    = $user->member->region_id;
-        $post->is_sketch    = false;
-        $post->is_draft     = $validated['status'] == 'draft' ? true : false;
-        $post->is_active    = $validated['status'] == 'broadcast' ? true : false;
-        $post->is_banned    = false;
-        $post->title        = $validated['title'];
-        $post->slug         = Str::limit(Str::slug($validated['title']), 128);
-        $post->summary      = Str::limit(trim(strip_tags($validated['article'])), 128);
-        $post->article      = $validated['article'];
-        $post->created_at   = now();
+        $post->region_id = $user->member->region_id;
+        $post->is_sketch = false;
+        $post->is_draft = $validated['status'] == 'draft' ? true : false;
+        $post->is_active = $validated['status'] == 'broadcast' ? true : false;
+        $post->is_banned = false;
+        $post->title = $validated['title'];
+        $post->slug = Str::limit(Str::slug($validated['title']), 128);
+        $post->summary = Str::limit(trim(strip_tags($validated['article'])), 128);
+        $post->article = $validated['article'];
+        $post->created_at = now();
         $post->save();
 
         // Dependencies
@@ -150,8 +150,8 @@ class MemberFeedPostController
         }
 
         $response = [
-            'message' => 'Feed post has successfully ' . $statusText,
-            'post' => new MemberFeedPostResource($post)
+            'message' => 'Feed post has successfully '.$statusText,
+            'post' => new MemberFeedPostResource($post),
         ];
 
         return response()->json($response, JsonResponse::HTTP_ACCEPTED);
@@ -173,9 +173,9 @@ class MemberFeedPostController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'Feed post not found.',
-                    'error' => 'not_found',
-                ],
+                'message' => 'Feed post not found.',
+                'error' => 'not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -185,8 +185,8 @@ class MemberFeedPostController
         $statusText = $post->is_draft !== true ? $statusText : 'Feed post is a draft - Only creator can access it.';
         $statusText = $post->is_banned !== true ? $statusText : 'Feed post set as deactivated because has been banned - Only creator can access it.';
         $response = [
-            'message' => 'Feed post has successfully read. ' . $statusText,
-            'post' => new MemberFeedPostResource($post)
+            'message' => 'Feed post has successfully read. '.$statusText,
+            'post' => new MemberFeedPostResource($post),
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
@@ -208,16 +208,16 @@ class MemberFeedPostController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'No feed sketch post found.',
-                    'error' => 'not_found',
-                ],
+                'message' => 'No feed sketch post found.',
+                'error' => 'not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         $response = [
             'message' => 'Feed sketch post has successfully read.',
-            'post' => new MemberFeedPostResource($post)
+            'post' => new MemberFeedPostResource($post),
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
@@ -239,18 +239,18 @@ class MemberFeedPostController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'Feed post not found.',
-                    'error' => 'not_found',
-                ],
+                'message' => 'Feed post not found.',
+                'error' => 'not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($post->is_banned) {
             return response()->json([
-                    'message' => 'Feed post cannot be edited.',
-                    'error' => 'not_editable',
-                ],
+                'message' => 'Feed post cannot be edited.',
+                'error' => 'not_editable',
+            ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
         }
@@ -270,13 +270,13 @@ class MemberFeedPostController
         }
         $validated = $validator->validated();
 
-        $post->category_id  = $validated['category_id'];
-        $post->is_draft     = $validated['status'] == 'draft' ? true : false;
-        $post->is_active    = $validated['status'] == 'broadcast' ? true : false;
-        $post->title        = $validated['title'];
-        $post->slug         = Str::limit(Str::slug($validated['title']), 128);
-        $post->summary      = Str::limit(trim(strip_tags($validated['article'])), 128);
-        $post->article      = $validated['article'];
+        $post->category_id = $validated['category_id'];
+        $post->is_draft = $validated['status'] == 'draft' ? true : false;
+        $post->is_active = $validated['status'] == 'broadcast' ? true : false;
+        $post->title = $validated['title'];
+        $post->slug = Str::limit(Str::slug($validated['title']), 128);
+        $post->summary = Str::limit(trim(strip_tags($validated['article'])), 128);
+        $post->article = $validated['article'];
         $post->save();
 
         // Dependencies
@@ -292,8 +292,8 @@ class MemberFeedPostController
 
         $statusText = $validated['status'] == 'broadcast' ? 'publish updated.' : 'updated as draft.';
         $response = [
-            'message' => 'Feed post has successfully ' . $statusText,
-            'post' => new MemberFeedPostResource($post)
+            'message' => 'Feed post has successfully '.$statusText,
+            'post' => new MemberFeedPostResource($post),
         ];
 
         return response()->json($response, JsonResponse::HTTP_ACCEPTED);
@@ -314,18 +314,18 @@ class MemberFeedPostController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'Feed post not found.',
-                    'error' => 'not_found',
-                ],
+                'message' => 'Feed post not found.',
+                'error' => 'not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($post->is_banned) {
             return response()->json([
-                    'message' => 'Feed post cannot be edited.',
-                    'error' => 'not_editable',
-                ],
+                'message' => 'Feed post cannot be edited.',
+                'error' => 'not_editable',
+            ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
         }

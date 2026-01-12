@@ -2,11 +2,11 @@
 
 namespace App\Domain\Member\Models;
 
+use App\Domain\Member\Database\Factories\MemberFollowerFactory;
 use App\Domain\User\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Domain\Member\Database\Factories\MemberFollowerFactory;
 
 class MemberFollower extends Model
 {
@@ -56,7 +56,6 @@ class MemberFollower extends Model
     /**
      * Relations
      */
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

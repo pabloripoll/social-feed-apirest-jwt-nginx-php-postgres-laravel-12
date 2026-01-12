@@ -2,15 +2,15 @@
 
 /** @var \Tests\TestCase $this */
 
-use App\Domain\Member\Models\Member;
-use Illuminate\Testing\Fluent\AssertableJson;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
 use App\Domain\Feed\Models\FeedCategory;
 use App\Domain\Feed\Models\FeedPost;
+use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberFollower;
 use App\Domain\User\Models\UserNotificationType;
 use Faker\Factory as FakerFactory;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Testing\Fluent\AssertableJson;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 beforeEach(function () {
     Artisan::call('db:seed');

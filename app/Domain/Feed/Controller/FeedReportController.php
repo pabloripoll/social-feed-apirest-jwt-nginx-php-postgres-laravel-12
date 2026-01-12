@@ -2,14 +2,14 @@
 
 namespace App\Domain\Feed\Controller;
 
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use App\Domain\Feed\Models\FeedPost;
-use App\Domain\User\Models\UserModerationCategory;
-use App\Domain\User\Models\UserModeration;
 use App\Domain\Feed\Requests\FeedReportRequest;
+use App\Domain\User\Models\UserModeration;
+use App\Domain\User\Models\UserModerationCategory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class FeedReportController
 {
@@ -38,9 +38,9 @@ class FeedReportController
         $modCategory = UserModerationCategory::where('key', $validated['key'])->first();
         if (! $modCategory) {
             return response()->json([
-                    'message' => 'Report category not found.',
-                    'error' => 'category_not_found',
-                ],
+                'message' => 'Report category not found.',
+                'error' => 'category_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -51,18 +51,18 @@ class FeedReportController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'Post not found.',
-                    'error' => 'post_not_found',
-                ],
+                'message' => 'Post not found.',
+                'error' => 'post_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($user->id == $post->user_id) {
             return response()->json([
-                    'message' => 'You cannot report your own feed post.',
-                    'error' => 'own_report',
-                ],
+                'message' => 'You cannot report your own feed post.',
+                'error' => 'own_report',
+            ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
         }
@@ -73,9 +73,9 @@ class FeedReportController
             ->first();
         if ($reported) {
             return response()->json([
-                    'message' => 'Report already sent.',
-                    'error' => 'report_already_sent',
-                ],
+                'message' => 'Report already sent.',
+                'error' => 'report_already_sent',
+            ],
                 JsonResponse::HTTP_NOT_ACCEPTABLE
             );
         }
@@ -120,9 +120,9 @@ class FeedReportController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'Feed post not available.',
-                    'error' => 'post_not_available',
-                ],
+                'message' => 'Feed post not available.',
+                'error' => 'post_not_available',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -135,9 +135,9 @@ class FeedReportController
             ->first();
         if (! $moderation) {
             return response()->json([
-                    'message' => 'Report not longer opened to be read.',
-                    'error' => 'report_is_not_opened',
-                ],
+                'message' => 'Report not longer opened to be read.',
+                'error' => 'report_is_not_opened',
+            ],
                 JsonResponse::HTTP_NO_CONTENT
             );
         }
@@ -145,7 +145,7 @@ class FeedReportController
         $status = $moderation->in_review ? 'is in review by a moderator.' : 'is going to be in review soon.';
 
         $response = [
-            'message' => 'Feed post has been reported successfully and ' . $status,
+            'message' => 'Feed post has been reported successfully and '.$status,
             'report' => [
                 'uid' => $moderation->uid,
                 'category_key' => $moderation->category->key,
@@ -184,9 +184,9 @@ class FeedReportController
         $category = UserModerationCategory::where('key', $validated['key'])->first();
         if (! $category) {
             return response()->json([
-                    'message' => 'Report category not found.',
-                    'error' => 'category_not_found',
-                ],
+                'message' => 'Report category not found.',
+                'error' => 'category_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -197,9 +197,9 @@ class FeedReportController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'Post not available.',
-                    'error' => 'post_not_available',
-                ],
+                'message' => 'Post not available.',
+                'error' => 'post_not_available',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -210,18 +210,18 @@ class FeedReportController
             ->first();
         if (! $moderation) {
             return response()->json([
-                    'message' => 'Report not found.',
-                    'error' => 'report_not_found',
-                ],
+                'message' => 'Report not found.',
+                'error' => 'report_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($moderation->in_review || $moderation->is_closed) {
             return response()->json([
-                    'message' => 'Report no longer available for update.',
-                    'error' => 'report_not_available',
-                ],
+                'message' => 'Report no longer available for update.',
+                'error' => 'report_not_available',
+            ],
                 JsonResponse::HTTP_NOT_ACCEPTABLE
             );
         }
@@ -259,9 +259,9 @@ class FeedReportController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'Feed post not available.',
-                    'error' => 'post_not_available',
-                ],
+                'message' => 'Feed post not available.',
+                'error' => 'post_not_available',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -272,28 +272,28 @@ class FeedReportController
             ->first();
         if (! $moderation) {
             return response()->json([
-                    'message' => 'Report not found.',
-                    'error' => 'report_not_found',
-                ],
+                'message' => 'Report not found.',
+                'error' => 'report_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($moderation->in_review || $moderation->is_closed) {
             return response()->json([
-                    'message' => 'Report no longer available for delete.',
-                    'error' => 'report_not_available_for_delete',
-                ],
+                'message' => 'Report no longer available for delete.',
+                'error' => 'report_not_available_for_delete',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         $legacyModeration = [
-            'uid'            => $moderation->uid,
-            'category_key'   => $moderation->category->key,
+            'uid' => $moderation->uid,
+            'category_key' => $moderation->category->key,
             'category_title' => $moderation->category->title,
-            'created_at'     => $moderation->created_at->format('Y-m-d H:i:s'),
-            'updated_at'     => $moderation->updated_at->format('Y-m-d H:i:s'),
+            'created_at' => $moderation->created_at->format('Y-m-d H:i:s'),
+            'updated_at' => $moderation->updated_at->format('Y-m-d H:i:s'),
         ];
 
         $moderation->delete();

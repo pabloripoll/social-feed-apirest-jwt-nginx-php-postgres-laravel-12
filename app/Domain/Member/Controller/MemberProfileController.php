@@ -2,17 +2,16 @@
 
 namespace App\Domain\Member\Controller;
 
-use App\Domain\Member\Models\Member;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Support\Paginate;
-use Illuminate\Support\Facades\Validator;
-use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Feed\Repository\FeedPostRepository;
 use App\Domain\Feed\Requests\FeedPostRequest;
 use App\Domain\Feed\Resources\FeedPostResource;
 use App\Domain\Feed\Service\FeedPostService;
+use App\Domain\Member\Models\Member;
+use App\Support\Paginate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MemberProfileController
 {
@@ -54,7 +53,7 @@ class MemberProfileController
                 ],
                 'feed' => [
                     'posts_count' => $member->feed_posts_count,
-                    'posts' => '/api/v1/member/'.$member->uid.'/feed/posts'
+                    'posts' => '/api/v1/member/'.$member->uid.'/feed/posts',
                 ],
             ],
             JsonResponse::HTTP_OK

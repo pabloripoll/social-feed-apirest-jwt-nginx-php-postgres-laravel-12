@@ -2,12 +2,12 @@
 
 namespace App\Domain\Feed\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Feed\Models\FeedPostThumb;
 use App\Domain\User\Dto\UserNotificationDto;
 use App\Domain\User\Service\UserNotificationService;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class FeedPostThumbController
 {
@@ -89,15 +89,15 @@ class FeedPostThumbController
             return [
                 'error' => 'post_not_found',
                 'message' => 'Feed post not found.',
-                'http_code' => JsonResponse::HTTP_NOT_FOUND
+                'http_code' => JsonResponse::HTTP_NOT_FOUND,
             ];
         }
 
         if ($post->user_id == $user->id) {
             return [
                 'error' => 'own_post',
-                'message' => 'You cannot thumb '. $thumb .' your own feed post.',
-                'http_code' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY
+                'message' => 'You cannot thumb '.$thumb.' your own feed post.',
+                'http_code' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY,
             ];
         }
 
@@ -105,7 +105,7 @@ class FeedPostThumbController
             return [
                 'error' => 'post_banned',
                 'message' => 'Feed post cannot be voted with thumb up or down.',
-                'http_code' => JsonResponse::HTTP_UNAUTHORIZED
+                'http_code' => JsonResponse::HTTP_UNAUTHORIZED,
             ];
         }
 
@@ -119,7 +119,7 @@ class FeedPostThumbController
                 return [
                     'error' => 'thumb_vote_not_found',
                     'message' => 'Feed post thumb vote register not found.',
-                    'http_code' => JsonResponse::HTTP_NOT_FOUND
+                    'http_code' => JsonResponse::HTTP_NOT_FOUND,
                 ];
             }
 
@@ -129,8 +129,8 @@ class FeedPostThumbController
             $postThumbVote->up ? $this->thumbUpDiscountOnRelations($post) : $this->thumbDownDiscountOnRelations($post);
 
             return [
-                'message' => 'Feed post thumb '. $thumb . ' deleted.',
-                'http_code' => JsonResponse::HTTP_ACCEPTED
+                'message' => 'Feed post thumb '.$thumb.' deleted.',
+                'http_code' => JsonResponse::HTTP_ACCEPTED,
             ];
         }
 
@@ -147,8 +147,8 @@ class FeedPostThumbController
 
         if (($postThumbVote->up === true && $thumb == 'up') || ($postThumbVote->down === true && $thumb == 'down')) {
             return [
-                'message' => 'Feed post thumb '. $thumb . ' already sent.',
-                'http_code' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY
+                'message' => 'Feed post thumb '.$thumb.' already sent.',
+                'http_code' => JsonResponse::HTTP_UNPROCESSABLE_ENTITY,
             ];
         }
 
@@ -181,7 +181,7 @@ class FeedPostThumbController
                     'avatar' => $user->memberAvatar?->url,
                 ],
                 receiverId: $post->user_id,
-                receiverData:  [
+                receiverData: [
                     'uid' => $post->member->uid,
                     'nickname' => $post->profile->nickname,
                     'avatar' => $post->avatar?->url ?? null,
@@ -194,13 +194,13 @@ class FeedPostThumbController
         }
 
         return [
-            'message' => 'Feed post thumb '. $thumb . ' vote successfully sent.',
+            'message' => 'Feed post thumb '.$thumb.' vote successfully sent.',
             'post' => [
                 'uid' => $post->uid,
                 'thumbs_up_count' => $post->thumbs_up_count,
                 'thumbs_down_count' => $post->thumbs_down_count,
             ],
-            'http_code' => JsonResponse::HTTP_OK
+            'http_code' => JsonResponse::HTTP_OK,
         ];
     }
 
@@ -213,8 +213,8 @@ class FeedPostThumbController
 
         $response = [];
         $response['message'] = $handler['message'];
-        ! isset($handler['error']) ? : $response['error'] = $handler['error'];
-        ! isset($handler['post']) ? : $response['post'] = $handler['post'];
+        ! isset($handler['error']) ?: $response['error'] = $handler['error'];
+        ! isset($handler['post']) ?: $response['post'] = $handler['post'];
 
         return response()->json($response, $handler['http_code']);
     }
@@ -228,8 +228,8 @@ class FeedPostThumbController
 
         $response = [];
         $response['message'] = $handler['message'];
-        ! isset($handler['error']) ? : $response['error'] = $handler['error'];
-        ! isset($handler['post']) ? : $response['post'] = $handler['post'];
+        ! isset($handler['error']) ?: $response['error'] = $handler['error'];
+        ! isset($handler['post']) ?: $response['post'] = $handler['post'];
 
         return response()->json($response, $handler['http_code']);
     }
@@ -243,8 +243,8 @@ class FeedPostThumbController
 
         $response = [];
         $response['message'] = $handler['message'];
-        ! isset($handler['error']) ? : $response['error'] = $handler['error'];
-        ! isset($handler['post']) ? : $response['post'] = $handler['post'];
+        ! isset($handler['error']) ?: $response['error'] = $handler['error'];
+        ! isset($handler['post']) ?: $response['post'] = $handler['post'];
 
         return response()->json($response, $handler['http_code']);
     }
@@ -258,8 +258,8 @@ class FeedPostThumbController
 
         $response = [];
         $response['message'] = $handler['message'];
-        ! isset($handler['error']) ? : $response['error'] = $handler['error'];
-        ! isset($handler['post']) ? : $response['post'] = $handler['post'];
+        ! isset($handler['error']) ?: $response['error'] = $handler['error'];
+        ! isset($handler['post']) ?: $response['post'] = $handler['post'];
 
         return response()->json($response, $handler['http_code']);
     }
@@ -280,18 +280,18 @@ class FeedPostThumbController
             ->first();
         if (! $post) {
             return response()->json([
-                    'error' => 'post_not_found',
-                    'message' => 'Feed post not found.',
-                ],
+                'error' => 'post_not_found',
+                'message' => 'Feed post not found.',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($post->is_banned) {
             return response()->json([
-                    'error' => 'post_banned',
-                    'message' => 'Feed post cannot be voted with thumb up or down.',
-                ],
+                'error' => 'post_banned',
+                'message' => 'Feed post cannot be voted with thumb up or down.',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -302,18 +302,18 @@ class FeedPostThumbController
             ->first();
 
         return response()->json([
-                'message' => 'Feed post successfully read.',
-                'post' => [
-                    'uid' => $post->uid,
-                    'thumbs_up_count' => $post->thumbs_up_count,
-                    'thumbs_down_count' => $post->thumbs_down_count,
-                ],
-                'user' => [
-                    'has_vote' => ! $userThumbVote ? false : true,
-                    'thumb_up' => ! $userThumbVote ? false : $userThumbVote->up,
-                    'thumb_down' => ! $userThumbVote ? false : $userThumbVote->down,
-                ],
+            'message' => 'Feed post successfully read.',
+            'post' => [
+                'uid' => $post->uid,
+                'thumbs_up_count' => $post->thumbs_up_count,
+                'thumbs_down_count' => $post->thumbs_down_count,
             ],
+            'user' => [
+                'has_vote' => ! $userThumbVote ? false : true,
+                'thumb_up' => ! $userThumbVote ? false : $userThumbVote->up,
+                'thumb_down' => ! $userThumbVote ? false : $userThumbVote->down,
+            ],
+        ],
             JsonResponse::HTTP_NOT_FOUND
         );
     }

@@ -2,15 +2,15 @@
 
 namespace App\Domain\Member\Controller;
 
-use Illuminate\Support\Str;
+use App\Domain\Member\Models\MemberAvatar;
+use App\Domain\Member\Requests\MemberAvatarRequest;
+use App\Http\Services\File\FileService;
+use App\Http\Services\Storage\Local\StorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Domain\Member\Models\MemberAvatar;
-use App\Http\Services\File\FileService;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Http\Services\Storage\Local\StorageService;
-use App\Domain\Member\Requests\MemberAvatarRequest;
 
 class MemberAvatarController
 {
@@ -26,9 +26,9 @@ class MemberAvatarController
         $avatarsCount = $user->memberAvatars->count();
 
         $response = [
-            'message' => 'Member has '. $avatarsCount. ' avatar files.',
-            'total'   => $avatarsCount,
-            'result'  => $user->memberAvatars?->toArray() ?? 0,
+            'message' => 'Member has '.$avatarsCount.' avatar files.',
+            'total' => $avatarsCount,
+            'result' => $user->memberAvatars?->toArray() ?? 0,
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
@@ -48,9 +48,9 @@ class MemberAvatarController
             ->first();
         if (! $avatar) {
             return response()->json([
-                    'message' => 'Avatar not found.',
-                    'error' => 'avatar_not_found',
-                ],
+                'message' => 'Avatar not found.',
+                'error' => 'avatar_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -71,15 +71,16 @@ class MemberAvatarController
         foreach ($user->memberAvatars as $avatar) {
             if ($avatar->uid == $avatar_uid) {
                 $exists = true;
+
                 continue;
             }
         }
 
         if (! $exists) {
             return response()->json([
-                    'message' => 'Avatar not found.',
-                    'error' => 'avatar_not_found',
-                ],
+                'message' => 'Avatar not found.',
+                'error' => 'avatar_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -111,9 +112,9 @@ class MemberAvatarController
         $avatar = $user->memberAvatar;
         if (! $avatar) {
             return response()->json([
-                    'message' => 'No avatar has been selected.',
-                    'error' => 'avatar_not_selected',
-                ],
+                'message' => 'No avatar has been selected.',
+                'error' => 'avatar_not_selected',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -128,7 +129,7 @@ class MemberAvatarController
     {
         /** @var \App\Domain\User\Models\User $user */
         $user = Auth::user();
-        $user->load(['member','memberProfile']);
+        $user->load(['member', 'memberProfile']);
 
         $formRequest = new MemberAvatarRequest;
         $validator = Validator::make(
@@ -170,7 +171,7 @@ class MemberAvatarController
         }
 
         $bucket = (object) [
-            'path' => 'member/avatars', //-> /var/www/storage/app/public/avatar
+            'path' => 'member/avatars', // -> /var/www/storage/app/public/avatar
             'name' => $user->member->uid.'_'.now()->timestamp.'.'.$file->extension,
         ];
 
@@ -201,7 +202,7 @@ class MemberAvatarController
                 'message' => 'File successfully uploaded.',
                 'uid' => $avatar->uid,
                 'url' => $avatar->url,
-                'total_uploads' => $total + 1
+                'total_uploads' => $total + 1,
             ],
             JsonResponse::HTTP_CREATED
         );

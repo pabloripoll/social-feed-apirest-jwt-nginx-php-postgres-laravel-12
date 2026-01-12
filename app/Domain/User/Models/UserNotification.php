@@ -2,7 +2,6 @@
 
 namespace App\Domain\User\Models;
 
-use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -50,8 +49,8 @@ class UserNotification extends Model
     protected function casts(): array
     {
         return [
-            'payload'    => 'array',
-            'opened_at'  => 'datetime',
+            'payload' => 'array',
+            'opened_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -77,7 +76,6 @@ class UserNotification extends Model
     /**
      * Relations
      */
-
     public function type(): BelongsTo
     {
         return $this->belongsTo(UserNotificationType::class, 'type_id');

@@ -2,8 +2,6 @@
 
 namespace App\Domain\User\Controller;
 
-use App\Domain\Admin\Models\AdminAccessLog;
-use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
 use App\Domain\User\Requests\UserAuthActivationRequest;
@@ -91,7 +89,7 @@ class UserAuthController extends Controller
             return response()->json(
                 [
                     'message' => $errors[$field][0],
-                    'error' => $field
+                    'error' => $field,
                 ],
                 JsonResponse::HTTP_NOT_ACCEPTABLE
             );
@@ -105,7 +103,7 @@ class UserAuthController extends Controller
             return response()->json(
                 [
                     'message' => 'User not found.',
-                    'error' => 'user_not_found'
+                    'error' => 'user_not_found',
                 ],
                 JsonResponse::HTTP_NOT_ACCEPTABLE
             );
@@ -115,7 +113,7 @@ class UserAuthController extends Controller
             return response()->json(
                 [
                     'message' => 'Account has been already activated.',
-                    'email' => $user->email
+                    'email' => $user->email,
                 ],
                 JsonResponse::HTTP_OK
             );
@@ -130,7 +128,7 @@ class UserAuthController extends Controller
         return response()->json(
             [
                 'message' => 'Account successfully activated.',
-                'email' => $user->email
+                'email' => $user->email,
             ],
             JsonResponse::HTTP_ACCEPTED
         );
@@ -169,7 +167,7 @@ class UserAuthController extends Controller
             return response()->json(
                 [
                     'message' => 'Token invalid.',
-                    'error' => 'token_invalid'
+                    'error' => 'token_invalid',
                 ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
@@ -190,9 +188,9 @@ class UserAuthController extends Controller
 
         return response()->json(
             [
-                'token_refreshed'   => $access->token,
-                'expires_in'        => $auth->factory()->getTTL() * $this->jwtTime,
-                'token_expired'     => $legacyToken,
+                'token_refreshed' => $access->token,
+                'expires_in' => $auth->factory()->getTTL() * $this->jwtTime,
+                'token_expired' => $legacyToken,
             ],
             JsonResponse::HTTP_ACCEPTED
         );
@@ -229,7 +227,7 @@ class UserAuthController extends Controller
             return response()->json(
                 [
                     'message' => 'Token invalid.',
-                    'error' => 'token_invalid'
+                    'error' => 'token_invalid',
                 ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
@@ -243,7 +241,7 @@ class UserAuthController extends Controller
         return response()->json(
             [
                 'message' => 'User session successfully terminated.',
-                'token_expired' => $access->token
+                'token_expired' => $access->token,
             ],
             JsonResponse::HTTP_ACCEPTED
         );

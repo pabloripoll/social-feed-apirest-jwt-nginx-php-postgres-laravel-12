@@ -2,8 +2,8 @@
 
 namespace App\Domain\Member\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MemberFeedMediaRequest extends FormRequest
 {
@@ -15,6 +15,7 @@ class MemberFeedMediaRequest extends FormRequest
 
         return parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
     }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -34,7 +35,7 @@ class MemberFeedMediaRequest extends FormRequest
     {
         return [
             'type' => ['required', 'string', Rule::in($this->allowedMedia)],
-            'media' => ['required', 'file',],
+            'media' => ['required', 'file'],
         ];
     }
 
@@ -43,11 +44,11 @@ class MemberFeedMediaRequest extends FormRequest
         return [
             'type.required' => 'A type is required.',
             'type.string' => 'The type value must be a string.',
-            'type.in' => 'The type value must be from allowed media option: ' . $this->allowedMedia,
+            'type.in' => 'The type value must be from allowed media option: '.$this->allowedMedia,
 
             'file.required' => 'A file is required.',
             'file.file' => 'The uploaded content must be a valid file.',
-            //'file.mimes' => 'Allowed types: images (jpeg, png, jpg, gif, svg, webp), videos (mp4, mov, avi, wmv, flv, mkv), audio (mp3, wav, ogg, aac, flac).',
+            // 'file.mimes' => 'Allowed types: images (jpeg, png, jpg, gif, svg, webp), videos (mp4, mov, avi, wmv, flv, mkv), audio (mp3, wav, ogg, aac, flac).',
             'file.max' => 'Maximum file size is 3 MB.',
         ];
     }

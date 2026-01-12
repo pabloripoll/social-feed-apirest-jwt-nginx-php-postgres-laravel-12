@@ -3,14 +3,14 @@
 namespace App\Domain\User\Controller;
 
 use App\Domain\Admin\Models\Admin;
-use Illuminate\Http\Request;
-use App\Support\Paginate;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\User\Requests\UserAdminRequest;
 use App\Domain\User\Resources\UserAdminResource;
 use App\Domain\User\Service\UserAdminService;
+use App\Http\Controllers\Controller;
+use App\Support\Paginate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserAdminController extends Controller
 {
@@ -53,7 +53,7 @@ class UserAdminController extends Controller
         $response = [
             'filters' => UserAdminService::filters(),
             'listing' => $listing,
-            'result'  => UserAdminResource::collection($admins),
+            'result' => UserAdminResource::collection($admins),
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
@@ -75,21 +75,21 @@ class UserAdminController extends Controller
 
         if (! $admin) {
             return response()->json([
-                    'message' => 'User not found.',
-                    'error' => 'user_not_found',
-                ],
+                'message' => 'User not found.',
+                'error' => 'user_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         $response = [
-            'id'          => $admin->user_id,
-            'uid'         => $admin->uid,
-            'email'       => $admin->user->email,
-            'is_active'   => $admin->is_active,
-            'is_banned'   => $admin->is_banned,
-            'nickname'    => $admin->profile->nickname,
-            'created_at'  => $admin->user->created_at->format('Y-m-d H:i:s') ?? null,
+            'id' => $admin->user_id,
+            'uid' => $admin->uid,
+            'email' => $admin->user->email,
+            'is_active' => $admin->is_active,
+            'is_banned' => $admin->is_banned,
+            'nickname' => $admin->profile->nickname,
+            'created_at' => $admin->user->created_at->format('Y-m-d H:i:s') ?? null,
             'last_access' => $admin->accessLogs ?? null,
         ];
 
@@ -114,9 +114,9 @@ class UserAdminController extends Controller
 
         if (! $admin) {
             return response()->json([
-                    'message' => 'User not found.',
-                    'error' => 'user_not_found',
-                ],
+                'message' => 'User not found.',
+                'error' => 'user_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }

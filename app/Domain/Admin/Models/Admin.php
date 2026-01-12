@@ -2,9 +2,9 @@
 
 namespace App\Domain\Admin\Models;
 
+use App\Domain\Admin\Database\Factories\AdminFactory;
 use App\Domain\Geo\Models\GeoContinent;
 use App\Domain\Geo\Models\GeoRegion;
-use App\Domain\Admin\Database\Factories\AdminFactory;
 use App\Domain\User\Models\User;
 use App\Domain\User\Models\UserNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

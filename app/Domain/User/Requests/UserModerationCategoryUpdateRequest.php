@@ -47,7 +47,7 @@ class UserModerationCategoryUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $categoryId = $this->route('category') ??  $this->route('id');
+        $categoryId = $this->route('category') ?? $this->route('id');
 
         return [
             'key' => [

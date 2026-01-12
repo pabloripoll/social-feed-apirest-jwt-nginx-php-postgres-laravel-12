@@ -10,7 +10,6 @@ use App\Domain\Feed\Models\FeedMedia;
 use App\Domain\Member\Models\Member;
 use App\Domain\Member\Models\MemberAccessLog;
 use App\Domain\Member\Models\MemberAvatar;
-use App\Domain\Member\Models\MemberNotification;
 use App\Domain\Member\Models\MemberProfile;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -91,7 +90,6 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Relations
      */
-
     public function role(): HasOne
     {
         return $this->hasOne(Role::class, 'role');

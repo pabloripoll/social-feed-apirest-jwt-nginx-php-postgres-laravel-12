@@ -2,8 +2,8 @@
 
 use App\Domain\Feed\Controller\FeedController;
 use App\Domain\Feed\Controller\FeedPostController;
-use App\Domain\Feed\Controller\FeedReportController;
 use App\Domain\Feed\Controller\FeedPostThumbController;
+use App\Domain\Feed\Controller\FeedReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/api/v1')->name('api-v1.')->group(function () {

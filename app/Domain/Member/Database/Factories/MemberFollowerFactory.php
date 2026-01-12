@@ -39,9 +39,6 @@ class MemberFollowerFactory extends Factory
 
     /**
      * Set a specific user being followed.
-     *
-     * @param  int|User  $user
-     * @return static
      */
     public function user(int|User $user): static
     {
@@ -52,9 +49,6 @@ class MemberFollowerFactory extends Factory
 
     /**
      * Set a specific following.
-     *
-     * @param  int|User  $following
-     * @return static
      */
     public function following(int|User $following): static
     {

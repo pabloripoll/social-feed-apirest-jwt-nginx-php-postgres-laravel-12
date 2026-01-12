@@ -26,7 +26,7 @@ class UserModerationMessage extends Model
         'user_id',
         'content',
         'is_viewed',
-        'viewed_at'
+        'viewed_at',
     ];
 
     /**
@@ -53,7 +53,6 @@ class UserModerationMessage extends Model
     /**
      * Relations
      */
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

@@ -2,14 +2,14 @@
 
 namespace App\Domain\User\Controller;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\User\Models\UserModerationCategory;
 use App\Domain\User\Requests\UserModerationCategoryCreateRequest;
 use App\Domain\User\Requests\UserModerationCategoryUpdateRequest;
 use App\Domain\User\Resources\UserModerationCategoryResource;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserModerationCategoryController extends Controller
 {
@@ -49,19 +49,19 @@ class UserModerationCategoryController extends Controller
         $category = UserModerationCategory::where('key', $validated['key'])->first();
         if ($category) {
             return response()->json([
-                    'message' => 'Category key already exists.',
-                    'error' => 'category_already_exists',
-                ],
+                'message' => 'Category key already exists.',
+                'error' => 'category_already_exists',
+            ],
                 JsonResponse::HTTP_NOT_ACCEPTABLE
             );
         }
 
         $category = new UserModerationCategory;
-        $category->key          = $validated['key'];
-        $category->level        = $validated['level'];
-        $category->position     = $validated['position'];
-        $category->title        = $validated['title'];
-        $category->description  = $validated['description'];
+        $category->key = $validated['key'];
+        $category->level = $validated['level'];
+        $category->position = $validated['position'];
+        $category->title = $validated['title'];
+        $category->description = $validated['description'];
         $category->save();
 
         $response = new UserModerationCategoryResource($category);
@@ -77,9 +77,9 @@ class UserModerationCategoryController extends Controller
         $category = UserModerationCategory::where('id', $id)->first();
         if (! $category) {
             return response()->json([
-                    'message' => 'Category not found.',
-                    'error' => 'category_not_found',
-                ],
+                'message' => 'Category not found.',
+                'error' => 'category_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -109,9 +109,9 @@ class UserModerationCategoryController extends Controller
         $validated = $validator->validated();
         if (count($validated) < 1) {
             return response()->json([
-                    'message' => 'At least one parameter must exists to update category.',
-                    'error' => 'no_category_params',
-                ],
+                'message' => 'At least one parameter must exists to update category.',
+                'error' => 'no_category_params',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -119,18 +119,18 @@ class UserModerationCategoryController extends Controller
         $category = UserModerationCategory::where('id', $id)->first();
         if (! $category) {
             return response()->json([
-                    'message' => 'Category not found.',
-                    'error' => 'category_not_found',
-                ],
+                'message' => 'Category not found.',
+                'error' => 'category_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
-        ! isset($validated['key']) ? : $category->key = $validated['key'];
-        ! isset($validated['level']) ? : $category->level = $validated['level'];
-        ! isset($validated['position']) ? : $category->position = $validated['position'];
-        ! isset($validated['title']) ? : $category->title = $validated['title'];
-        ! isset($validated['description']) ? : $category->description = $validated['description'];
+        ! isset($validated['key']) ?: $category->key = $validated['key'];
+        ! isset($validated['level']) ?: $category->level = $validated['level'];
+        ! isset($validated['position']) ?: $category->position = $validated['position'];
+        ! isset($validated['title']) ?: $category->title = $validated['title'];
+        ! isset($validated['description']) ?: $category->description = $validated['description'];
         $category->save();
 
         $response = new UserModerationCategoryResource($category);
@@ -150,18 +150,18 @@ class UserModerationCategoryController extends Controller
 
         if (! $category) {
             return response()->json([
-                    'message' => 'Category not found.',
-                    'error' => 'category_not_found',
-                ],
+                'message' => 'Category not found.',
+                'error' => 'category_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($category->moderations()->exists()) {
             return response()->json([
-                    'message' => 'Category has related moderations.',
-                    'error' => 'category_has_related_moderations',
-                ],
+                'message' => 'Category has related moderations.',
+                'error' => 'category_has_related_moderations',
+            ],
                 JsonResponse::HTTP_CONFLICT
             );
         }

@@ -4,10 +4,10 @@
 
 use App\Domain\Feed\Models\FeedCategory;
 use App\Domain\Member\Models\Member;
+use Faker\Factory as FakerFactory;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
-use Faker\Factory as FakerFactory;
 
 beforeEach(function () {
     Artisan::call('db:seed');
@@ -31,7 +31,7 @@ describe('Member Feed Post - wrong authenticated - @POST /api/v1/account/feed/po
         $route = route('api-v1.member-account.feed.post-create');
         $fakeToken = fakeJWT();
         $response = $this->post($route, [], [
-            'Authorization' => "Bearer " . $fakeToken,
+            'Authorization' => 'Bearer '.$fakeToken,
         ]);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
             ->assertJson(fn (AssertableJson $json) => $json

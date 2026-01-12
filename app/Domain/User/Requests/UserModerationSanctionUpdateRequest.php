@@ -42,7 +42,7 @@ class UserModerationSanctionUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $sanctionId = $this->route('sanction') ??  $this->route('id');
+        $sanctionId = $this->route('sanction') ?? $this->route('id');
 
         return [
             'key' => [

@@ -2,11 +2,11 @@
 
 namespace App\Domain\Feed\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\Feed\Models\FeedCategory;
-use App\Domain\User\Models\UserModerationCategory;
 use App\Domain\Feed\Resources\FeedCategoryResource;
 use App\Domain\Feed\Resources\FeedReportTypeResource;
+use App\Domain\User\Models\UserModerationCategory;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class FeedController
 {

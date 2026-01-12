@@ -94,7 +94,6 @@ class UserModeration extends Model
     /**
      * Relations
      */
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -117,7 +116,7 @@ class UserModeration extends Model
 
     public function reporterMember(): BelongsTo
     {
-        return $this->belongsTo(Member:: class, 'reporter_user_id', 'user_id');
+        return $this->belongsTo(Member::class, 'reporter_user_id', 'user_id');
     }
 
     public function moderatorAdmin(): BelongsTo

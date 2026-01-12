@@ -36,7 +36,7 @@ class FeedReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'key' => ['required', 'string', 'regex:/^[a-z-]+$/',],
+            'key' => ['required', 'string', 'regex:/^[a-z-]+$/'],
         ];
     }
 

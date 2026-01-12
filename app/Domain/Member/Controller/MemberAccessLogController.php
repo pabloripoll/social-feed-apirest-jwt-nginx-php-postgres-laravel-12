@@ -2,8 +2,8 @@
 
 namespace App\Domain\Member\Controller;
 
-use Illuminate\Support\Facades\Auth;
 use App\Domain\Member\Models\MemberAccessLog;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MemberAccessLogController

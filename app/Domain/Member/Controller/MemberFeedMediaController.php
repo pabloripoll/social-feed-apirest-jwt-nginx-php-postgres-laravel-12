@@ -2,14 +2,14 @@
 
 namespace App\Domain\Member\Controller;
 
-use Illuminate\Http\Request;
 use App\Domain\Feed\Models\FeedMedia;
 use App\Domain\Feed\Models\FeedPost;
+use App\Domain\Member\Requests\MemberFeedMediaRequest;
+use App\Http\Services\File\FileService;
+use App\Http\Services\Storage\Local\StorageService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Services\File\FileService;
-use App\Domain\Member\Requests\MemberFeedMediaRequest;
-use App\Http\Services\Storage\Local\StorageService;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -30,18 +30,18 @@ class MemberFeedMediaController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'Feed post not found.',
-                    'error' => 'post_not_found',
-                ],
+                'message' => 'Feed post not found.',
+                'error' => 'post_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($post->is_banned) {
             return response()->json([
-                    'message' => 'Feed post cannot be edited.',
-                    'error' => 'post_not_editable',
-                ],
+                'message' => 'Feed post cannot be edited.',
+                'error' => 'post_not_editable',
+            ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
         }
@@ -68,9 +68,9 @@ class MemberFeedMediaController
         $media = $query->get();
 
         $response = [
-            'message' => 'Feed post has '. $mediaCount. ' media files.',
-            'total'   => $mediaCount,
-            'result'  => $media->toArray(),
+            'message' => 'Feed post has '.$mediaCount.' media files.',
+            'total' => $mediaCount,
+            'result' => $media->toArray(),
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
@@ -129,9 +129,9 @@ class MemberFeedMediaController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'Feed post not found.',
-                    'error' => 'post_not_found',
-                ],
+                'message' => 'Feed post not found.',
+                'error' => 'post_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -152,7 +152,7 @@ class MemberFeedMediaController
         }
 
         $bucket = (object) [
-            'path' => 'feed/posts', //-> ./storage/app/public/
+            'path' => 'feed/posts', // -> ./storage/app/public/
             'name' => $user->member->uid.'_'.now()->timestamp.'.'.$file->extension,
         ];
 
@@ -187,7 +187,7 @@ class MemberFeedMediaController
                 'message' => 'File successfully uploaded.',
                 'uid' => $media->uid,
                 'url' => $media->url,
-                'total_uploads' => $total + 1
+                'total_uploads' => $total + 1,
             ],
             JsonResponse::HTTP_CREATED
         );
@@ -208,18 +208,18 @@ class MemberFeedMediaController
             ->first();
         if (! $post) {
             return response()->json([
-                    'message' => 'Feed post not found.',
-                    'error' => 'post_not_found',
-                ],
+                'message' => 'Feed post not found.',
+                'error' => 'post_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($post->is_banned) {
             return response()->json([
-                    'message' => 'Feed post cannot be edited.',
-                    'error' => 'post_not_editable',
-                ],
+                'message' => 'Feed post cannot be edited.',
+                'error' => 'post_not_editable',
+            ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
         }
@@ -250,7 +250,7 @@ class MemberFeedMediaController
         }
 
         $response = [
-            'message' => $mediaCount. ' feed post media was deleted.',
+            'message' => $mediaCount.' feed post media was deleted.',
             'storage' => $storage,
         ];
 

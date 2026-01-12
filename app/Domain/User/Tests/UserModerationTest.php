@@ -4,11 +4,11 @@
 
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Member\Models\Member;
-use App\Domain\User\Models\UserModeration;
 use App\Domain\User\Database\Factories\UserModerationFactory;
+use App\Domain\User\Models\UserModeration;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function () {
     Artisan::call('db:seed');
@@ -156,7 +156,7 @@ describe('User Moderation - Listing by Category - @GET /api/v1/moderations', fun
         UserModerationFactory::createMixedStates(); // default 1 moderation for each case
         $sample = UserModeration::query()
             ->with(['category'])
-            ->select(['id','category_id'])
+            ->select(['id', 'category_id'])
             ->first();
         $route = route('api-v1.moderations.listing', ['category' => $sample->category->key]);
         $response = $this->withToken($accessLog->token)->get($route);

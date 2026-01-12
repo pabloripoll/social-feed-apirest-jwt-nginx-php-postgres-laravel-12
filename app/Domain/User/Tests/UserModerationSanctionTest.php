@@ -5,9 +5,9 @@
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Member\Models\Member;
 use App\Domain\User\Models\UserModerationSanction;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function () {
     Artisan::call('db:seed');
@@ -68,10 +68,10 @@ describe('User Moderation Sanctions - Create - @POST /api/v1/moderations/sanctio
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
         $payload = [
-            'key'           => 'something',
-            'position'      => 123,
-            'title'         => 'Something',
-            'description'   => 'Some random text...',
+            'key' => 'something',
+            'position' => 123,
+            'title' => 'Something',
+            'description' => 'Some random text...',
         ];
         $route = route('api-v1.moderations.sanctions-create');
         $response = $this->withToken($accessLog->token)->post($route, $payload);
@@ -118,10 +118,10 @@ describe('User Moderation Sanctions - Update - @PATCH /api/v1/moderations/sancti
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
         $payload = [
-            'key'           => 'spamming',
-            'position'      => 123,
-            'title'         => 'Spamming',
-            'description'   => 'Some random text...',
+            'key' => 'spamming',
+            'position' => 123,
+            'title' => 'Spamming',
+            'description' => 'Some random text...',
         ];
         $route = route('api-v1.moderations.sanctions-update', ['id' => $sanction->id]);
         $response = $this->withToken($accessLog->token)->patch($route, $payload);

@@ -5,9 +5,9 @@
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Member\Models\Member;
 use App\Domain\User\Models\UserModerationCategory;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function () {
     Artisan::call('db:seed');
@@ -69,11 +69,11 @@ describe('User Moderation Categories - Create - @POST /api/v1/moderations/catego
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
         $payload = [
-            'key'           => 'something',
-            'level'         => 1,
-            'position'      => 123,
-            'title'         => 'Something',
-            'description'   => 'Some random text...',
+            'key' => 'something',
+            'level' => 1,
+            'position' => 123,
+            'title' => 'Something',
+            'description' => 'Some random text...',
         ];
         $route = route('api-v1.moderations.categories-create');
         $response = $this->withToken($accessLog->token)->post($route, $payload);
@@ -122,11 +122,11 @@ describe('User Moderation Categories - Update - @PATCH /api/v1/moderations/categ
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
         $payload = [
-            'key'           => 'spamming',
-            'level'         => 8,
-            'position'      => 123,
-            'title'         => 'Spamming',
-            'description'   => 'Some random text...',
+            'key' => 'spamming',
+            'level' => 8,
+            'position' => 123,
+            'title' => 'Spamming',
+            'description' => 'Some random text...',
         ];
         $route = route('api-v1.moderations.categories-update', ['id' => $category->id]);
         $response = $this->withToken($accessLog->token)->patch($route, $payload);
@@ -165,4 +165,4 @@ describe('User Moderation Categories - Delete - @DELETE /api/v1/moderations/cate
         ]);
     });
 });
-//FeedPost::factory()->create(['user_id' => $member->user_id]);
+// FeedPost::factory()->create(['user_id' => $member->user_id]);

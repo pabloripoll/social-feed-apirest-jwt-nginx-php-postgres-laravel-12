@@ -2,14 +2,14 @@
 
 namespace App\Domain\User\Controller;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\User\Models\UserModerationSanction;
 use App\Domain\User\Requests\UserModerationSanctionCreateRequest;
 use App\Domain\User\Requests\UserModerationSanctionUpdateRequest;
 use App\Domain\User\Resources\UserModerationSanctionResource;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserModerationSanctionController extends Controller
 {
@@ -49,18 +49,18 @@ class UserModerationSanctionController extends Controller
         $sanction = UserModerationSanction::where('key', $validated['key'])->first();
         if ($sanction) {
             return response()->json([
-                    'message' => 'Sanction key already exists.',
-                    'error' => 'category_already_exists',
-                ],
+                'message' => 'Sanction key already exists.',
+                'error' => 'category_already_exists',
+            ],
                 JsonResponse::HTTP_NOT_ACCEPTABLE
             );
         }
 
         $sanction = new UserModerationSanction;
-        $sanction->key          = $validated['key'];
-        $sanction->position     = $validated['position'];
-        $sanction->title        = $validated['title'];
-        $sanction->description  = $validated['description'];
+        $sanction->key = $validated['key'];
+        $sanction->position = $validated['position'];
+        $sanction->title = $validated['title'];
+        $sanction->description = $validated['description'];
         $sanction->save();
 
         $response = new UserModerationSanctionResource($sanction);
@@ -76,9 +76,9 @@ class UserModerationSanctionController extends Controller
         $sanction = UserModerationSanction::where('id', $id)->first();
         if (! $sanction) {
             return response()->json([
-                    'message' => 'Sanction not found.',
-                    'error' => 'category_not_found',
-                ],
+                'message' => 'Sanction not found.',
+                'error' => 'category_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -108,9 +108,9 @@ class UserModerationSanctionController extends Controller
         $validated = $validator->validated();
         if (count($validated) < 1) {
             return response()->json([
-                    'message' => 'At least one parameter must exists to update category.',
-                    'error' => 'no_category_params',
-                ],
+                'message' => 'At least one parameter must exists to update category.',
+                'error' => 'no_category_params',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -118,17 +118,17 @@ class UserModerationSanctionController extends Controller
         $sanction = UserModerationSanction::where('id', $id)->first();
         if (! $sanction) {
             return response()->json([
-                    'message' => 'Sanction not found.',
-                    'error' => 'category_not_found',
-                ],
+                'message' => 'Sanction not found.',
+                'error' => 'category_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
-        ! isset($validated['key']) ? : $sanction->key = $validated['key'];
-        ! isset($validated['position']) ? : $sanction->position = $validated['position'];
-        ! isset($validated['title']) ? : $sanction->title = $validated['title'];
-        ! isset($validated['description']) ? : $sanction->description = $validated['description'];
+        ! isset($validated['key']) ?: $sanction->key = $validated['key'];
+        ! isset($validated['position']) ?: $sanction->position = $validated['position'];
+        ! isset($validated['title']) ?: $sanction->title = $validated['title'];
+        ! isset($validated['description']) ?: $sanction->description = $validated['description'];
         $sanction->save();
 
         $response = new UserModerationSanctionResource($sanction);
@@ -148,18 +148,18 @@ class UserModerationSanctionController extends Controller
 
         if (! $sanction) {
             return response()->json([
-                    'message' => 'Sanction not found.',
-                    'error' => 'category_not_found',
-                ],
+                'message' => 'Sanction not found.',
+                'error' => 'category_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($sanction->moderations->count() >= 1) {
             return response()->json([
-                    'message' => 'Sanction has related moderations.',
-                    'error' => 'category_has_related_moderations',
-                ],
+                'message' => 'Sanction has related moderations.',
+                'error' => 'category_has_related_moderations',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }

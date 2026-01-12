@@ -2,17 +2,17 @@
 
 namespace App\Domain\Feed\Models;
 
+use App\Domain\Feed\Database\Factories\FeedPostFactory;
 use App\Domain\Geo\Models\GeoContinent;
 use App\Domain\Geo\Models\GeoRegion;
 use App\Domain\Member\Models\Member;
+use App\Domain\Member\Models\MemberAvatar;
+use App\Domain\Member\Models\MemberProfile;
 use App\Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Domain\Feed\Database\Factories\FeedPostFactory;
-use App\Domain\Member\Models\MemberAvatar;
-use App\Domain\Member\Models\MemberProfile;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class FeedPost extends Model
@@ -112,7 +112,6 @@ class FeedPost extends Model
     /**
      * Relations
      */
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

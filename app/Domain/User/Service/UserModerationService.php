@@ -11,12 +11,12 @@ class UserModerationService
      */
     public static function filters(): array
     {
-        $categories = UserModerationCategory::select(['key','title'])
+        $categories = UserModerationCategory::select(['key', 'title'])
             ->orderBy('position', 'asc')
             ->get()
             ->toArray();
 
-        $sanctions = UserModerationCategory::select(['key','title'])
+        $sanctions = UserModerationCategory::select(['key', 'title'])
             ->orderBy('position', 'asc')
             ->get()
             ->toArray();

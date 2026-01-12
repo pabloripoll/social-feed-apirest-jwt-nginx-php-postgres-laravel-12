@@ -29,9 +29,9 @@ class UserModerationResource extends JsonResource
         $userMemberProfile = $user && $user->relationLoaded('memberProfile') ? $user->memberProfile : null;
 
         $reporterMember = $reporter && $reporter->relationLoaded('member') ? $reporter->member : null;
-        $reporterMemberProfile = $reporter && $reporter->relationLoaded('memberProfile') ? $reporter->memberProfile :  null;
+        $reporterMemberProfile = $reporter && $reporter->relationLoaded('memberProfile') ? $reporter->memberProfile : null;
 
-        $moderatorAdmin = $moderator && $moderator->relationLoaded('admin') ? $moderator->admin :  null;
+        $moderatorAdmin = $moderator && $moderator->relationLoaded('admin') ? $moderator->admin : null;
         $moderatorAdminProfile = $moderator && $moderator->relationLoaded('adminProfile') ? $moderator->adminProfile : null;
 
         return [
@@ -39,55 +39,55 @@ class UserModerationResource extends JsonResource
             'uid' => $this->uid,
 
             'user' => [
-                'uid'       => $userMember?->uid,
-                'email'     => $user?->email,
-                'nickname'  => $userMemberProfile?->nickname,
+                'uid' => $userMember?->uid,
+                'email' => $user?->email,
+                'nickname' => $userMemberProfile?->nickname,
             ],
 
             'reporter' => [
-                'uid'       => $reporterMember?->uid,
-                'email'     => $reporter?->email,
-                'nickname'  => $reporterMemberProfile?->nickname,
+                'uid' => $reporterMember?->uid,
+                'email' => $reporter?->email,
+                'nickname' => $reporterMemberProfile?->nickname,
             ],
 
             'moderator' => [
-                'uid'       => $moderatorAdmin?->uid,
-                'email'     => $moderator?->email,
-                'nickname'  => $moderatorAdminProfile?->nickname,
+                'uid' => $moderatorAdmin?->uid,
+                'email' => $moderator?->email,
+                'nickname' => $moderatorAdminProfile?->nickname,
             ],
 
-            'is_opened'         => (bool) $this->is_opened,
+            'is_opened' => (bool) $this->is_opened,
 
-            'in_review'         => (bool) $this->in_review,
-            'in_review_since'   => $this->in_review_since instanceof \DateTimeInterface
+            'in_review' => (bool) $this->in_review,
+            'in_review_since' => $this->in_review_since instanceof \DateTimeInterface
                 ? $this->in_review_since->format('Y-m-d H:i:s')
                 : $this->in_review_since,
 
-            'is_resolved'       => (bool) $this->is_resolved,
-            'resolved_at'       => $this->resolved_at instanceof \DateTimeInterface
+            'is_resolved' => (bool) $this->is_resolved,
+            'resolved_at' => $this->resolved_at instanceof \DateTimeInterface
                 ? $this->resolved_at->format('Y-m-d H:i:s')
                 : $this->resolved_at,
 
-            'is_closed'         => (bool) $this->is_closed,
-            'closed_at'         => $this->closed_at instanceof \DateTimeInterface
+            'is_closed' => (bool) $this->is_closed,
+            'closed_at' => $this->closed_at instanceof \DateTimeInterface
                 ? $this->closed_at->format('Y-m-d H:i:s')
                 : $this->closed_at,
 
-            'category_id'       => $category?->id,
-            'category_key'      => $category?->key,
-            'category_title'    => $category?->title,
+            'category_id' => $category?->id,
+            'category_key' => $category?->key,
+            'category_title' => $category?->title,
 
-            'sanction_id'           => $sanction?->id,
-            'sanction_key'          => $sanction?->key,
-            'sanction_title'        => $sanction?->title,
-            'has_sanction_active'   => (bool) $this->has_sanction_active,
-            'sanction_expires_at'   => $this->sanction_expires_at instanceof \DateTimeInterface
+            'sanction_id' => $sanction?->id,
+            'sanction_key' => $sanction?->key,
+            'sanction_title' => $sanction?->title,
+            'has_sanction_active' => (bool) $this->has_sanction_active,
+            'sanction_expires_at' => $this->sanction_expires_at instanceof \DateTimeInterface
                 ? $this->sanction_expires_at->format('Y-m-d H:i:s')
                 : $this->sanction_expires_at,
 
-            'feed_post_id'      => $this->feed_post_id,
-            'feed_post_uid'     => $feedPost?->uid,
-            'feed_post_title'   => $feedPost?->title,
+            'feed_post_id' => $this->feed_post_id,
+            'feed_post_uid' => $feedPost?->uid,
+            'feed_post_title' => $feedPost?->title,
 
             'created_at' => $this->created_at instanceof \DateTimeInterface
                 ? $this->created_at->format('Y-m-d H:i:s')

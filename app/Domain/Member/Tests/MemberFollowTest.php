@@ -3,9 +3,9 @@
 /** @var \Tests\TestCase $this */
 
 use App\Domain\Member\Models\Member;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function () {
     Artisan::call('db:seed');
@@ -106,7 +106,6 @@ describe('Member Unfollow - @POST /api/v1/members/{member_uid}/unfollow', functi
             );
     });
 });
-
 
 describe('Member Unfollow - @POST /api/v1/members/{member_uid}/unfollow', function () {
     it('fails a member user is able to unfollow another member account if uid is invalid', function () {

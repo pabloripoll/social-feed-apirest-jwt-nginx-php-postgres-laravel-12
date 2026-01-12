@@ -2,9 +2,9 @@
 
 namespace App\Domain\Feed\Repository;
 
+use App\Domain\Feed\Models\FeedPost;
 use App\Domain\User\Models\User;
 use Illuminate\Support\Facades\DB;
-use App\Domain\Feed\Models\FeedPost;
 
 class FeedPostRepository
 {
@@ -26,7 +26,7 @@ class FeedPostRepository
 
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'LIKE', "%{$search}%")
-                  ->orWhere('summary', 'LIKE', "%{$search}%");
+                    ->orWhere('summary', 'LIKE', "%{$search}%");
             });
         }
 

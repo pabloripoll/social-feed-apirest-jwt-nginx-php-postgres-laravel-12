@@ -47,9 +47,9 @@ class UserModerationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category'  => ['nullable', 'string', Rule::exists('users_moderation_categories', 'key')],
-            'status'    => ['nullable', 'string', Rule::in(['opened', 'reviewing', 'resolved', 'closed'])],
-            'sort_by'   => ['nullable', 'string', Rule::in(['recent', 'oldest'])],
+            'category' => ['nullable', 'string', Rule::exists('users_moderation_categories', 'key')],
+            'status' => ['nullable', 'string', Rule::in(['opened', 'reviewing', 'resolved', 'closed'])],
+            'sort_by' => ['nullable', 'string', Rule::in(['recent', 'oldest'])],
             'moderator' => ['nullable', 'string', Rule::in(['me', 'all'])],
         ];
     }

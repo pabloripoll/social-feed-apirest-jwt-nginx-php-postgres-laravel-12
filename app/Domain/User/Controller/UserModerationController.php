@@ -2,13 +2,6 @@
 
 namespace App\Domain\User\Controller;
 
-use Carbon\Carbon;
-use App\Support\Paginate;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Domain\User\Models\UserModeration;
 use App\Domain\User\Models\UserModerationCategory;
 use App\Domain\User\Models\UserModerationSanction;
@@ -16,6 +9,13 @@ use App\Domain\User\Requests\UserModerationRequest;
 use App\Domain\User\Requests\UserModerationUpdateRequest;
 use App\Domain\User\Resources\UserModerationResource;
 use App\Domain\User\Service\UserModerationService;
+use App\Http\Controllers\Controller;
+use App\Support\Paginate;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserModerationController extends Controller
 {
@@ -62,7 +62,7 @@ class UserModerationController extends Controller
                 'moderator.adminProfile',
                 'category',
                 'sanction',
-                'feedPost'
+                'feedPost',
             ]);
 
         if (isset($filters->moderator) && $filters->moderator == 'me') {
@@ -102,7 +102,7 @@ class UserModerationController extends Controller
         $response = [
             'filters' => UserModerationService::filters(),
             'listing' => $listing,
-            'result'  => UserModerationResource::collection($moderations),
+            'result' => UserModerationResource::collection($moderations),
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
@@ -126,15 +126,15 @@ class UserModerationController extends Controller
                 'moderator.adminProfile',
                 'category',
                 'sanction',
-                'feedPost'
+                'feedPost',
             ])
             ->where('id', $id)
             ->first();
         if (! $moderation) {
             return response()->json([
-                    'message' => 'Moderation was not found.',
-                    'error' => 'not_found',
-                ],
+                'message' => 'Moderation was not found.',
+                'error' => 'not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -179,24 +179,24 @@ class UserModerationController extends Controller
                 'moderator.adminProfile',
                 'category',
                 'sanction',
-                'feedPost'
+                'feedPost',
             ])
             ->where('id', $id)
             ->first();
         if (! $moderation) {
             return response()->json([
-                    'message' => 'Moderation was not found.',
-                    'error' => 'moderation_not_found',
-                ],
+                'message' => 'Moderation was not found.',
+                'error' => 'moderation_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($moderation->is_closed) {
             return response()->json([
-                    'message' => 'Moderation was closed and is no longer editable.',
-                    'error' => 'moderation_not_editable',
-                ],
+                'message' => 'Moderation was closed and is no longer editable.',
+                'error' => 'moderation_not_editable',
+            ],
                 JsonResponse::HTTP_NOT_ACCEPTABLE
             );
         }
@@ -219,9 +219,9 @@ class UserModerationController extends Controller
 
         if ($status == 'review') {
             $moderation->moderator_user_id = $admin->id;
-            ! $category ? : $moderation->category_id = $category->id;
-            $moderation->in_review ? : $moderation->in_review = true;
-            $moderation->in_review ? : $moderation->in_review_since = Carbon::now();
+            ! $category ?: $moderation->category_id = $category->id;
+            $moderation->in_review ?: $moderation->in_review = true;
+            $moderation->in_review ?: $moderation->in_review_since = Carbon::now();
             $moderation->is_resolved = false;
             $moderation->resolved_at = null;
             $moderation->save();
@@ -230,9 +230,9 @@ class UserModerationController extends Controller
         if ($status == 'resolve') {
             if ($moderation->is_resolved) {
                 return response()->json([
-                        'message' => 'Moderation is already set as resolved.',
-                        'error' => 'moderation_already_resolved',
-                    ],
+                    'message' => 'Moderation is already set as resolved.',
+                    'error' => 'moderation_already_resolved',
+                ],
                     JsonResponse::HTTP_NOT_ACCEPTABLE
                 );
             } else {
@@ -247,9 +247,9 @@ class UserModerationController extends Controller
         if ($status == 'close') {
             if (! $sanction) {
                 return response()->json([
-                        'message' => 'Moderation must have a sanction in order to be closed.',
-                        'error' => 'moderation_sanction_missing',
-                    ],
+                    'message' => 'Moderation must have a sanction in order to be closed.',
+                    'error' => 'moderation_sanction_missing',
+                ],
                     JsonResponse::HTTP_NOT_ACCEPTABLE
                 );
             } else {
@@ -261,7 +261,7 @@ class UserModerationController extends Controller
                 $moderation->is_closed = true;
                 $moderation->closed_at = Carbon::now();
                 $moderation->has_sanction_active = true;
-                $moderation->sanction_expires_at = ! $validated['sanction_ends'] ? null : $validated['sanction_ends'] . date('H:i:s');
+                $moderation->sanction_expires_at = ! $validated['sanction_ends'] ? null : $validated['sanction_ends'].date('H:i:s');
                 $moderation->save();
             }
         }
@@ -281,34 +281,34 @@ class UserModerationController extends Controller
 
         $moderation = UserModeration::query()
             ->with([
-                'feedPost'
+                'feedPost',
             ])
             ->where('id', $id)
             ->first();
 
         if (! $moderation) {
             return response()->json([
-                    'message' => 'Moderation was not found.',
-                    'error' => 'moderation_not_found',
-                ],
+                'message' => 'Moderation was not found.',
+                'error' => 'moderation_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
 
         if ($moderation->moderator_id != $admin->id) {
             return response()->json([
-                    'message' => 'Moderation can only be deleted by the assignated moderator.',
-                    'error' => 'unauthorized_moderator',
-                ],
+                'message' => 'Moderation can only be deleted by the assignated moderator.',
+                'error' => 'unauthorized_moderator',
+            ],
                 JsonResponse::HTTP_UNAUTHORIZED
             );
         }
 
         if ($moderation->is_closed && $moderation->has_sanction_active && isset($moderation->feedPost) && $moderation->feedPost->is_banned) {
             return response()->json([
-                    'message' => 'Moderation cannot be deleted as it has a banned feed post.',
-                    'error' => 'moderation_has_feed_post_banned',
-                ],
+                'message' => 'Moderation cannot be deleted as it has a banned feed post.',
+                'error' => 'moderation_has_feed_post_banned',
+            ],
                 JsonResponse::HTTP_NOT_ACCEPTABLE
             );
         }

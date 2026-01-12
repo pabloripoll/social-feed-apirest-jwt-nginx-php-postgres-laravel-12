@@ -2,15 +2,15 @@
 
 namespace App\Domain\Admin\Controller;
 
-use Illuminate\Support\Str;
+use App\Domain\Admin\Models\AdminAvatar;
+use App\Domain\Admin\Requests\AdminAvatarRequest;
+use App\Http\Services\File\FileService;
+use App\Http\Services\Storage\Local\StorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Domain\Admin\Models\AdminAvatar;
-use App\Http\Services\File\FileService;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Http\Services\Storage\Local\StorageService;
-use App\Domain\Admin\Requests\AdminAvatarRequest;
 
 class AdminAvatarController
 {
@@ -26,9 +26,9 @@ class AdminAvatarController
         $avatarsCount = $user->adminAvatars->count();
 
         $response = [
-            'message' => 'Admin has '. $avatarsCount. ' avatar files.',
-            'total'   => $avatarsCount,
-            'result'  => $user->adminAvatars?->toArray() ?? 0,
+            'message' => 'Admin has '.$avatarsCount.' avatar files.',
+            'total' => $avatarsCount,
+            'result' => $user->adminAvatars?->toArray() ?? 0,
         ];
 
         return response()->json($response, JsonResponse::HTTP_OK);
@@ -48,9 +48,9 @@ class AdminAvatarController
             ->first();
         if (! $avatar) {
             return response()->json([
-                    'message' => 'Avatar not found.',
-                    'error' => 'avatar_not_found',
-                ],
+                'message' => 'Avatar not found.',
+                'error' => 'avatar_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -71,15 +71,16 @@ class AdminAvatarController
         foreach ($user->adminAvatars as $avatar) {
             if ($avatar->uid == $avatar_uid) {
                 $exists = true;
+
                 continue;
             }
         }
 
         if (! $exists) {
             return response()->json([
-                    'message' => 'Avatar not found.',
-                    'error' => 'avatar_not_found',
-                ],
+                'message' => 'Avatar not found.',
+                'error' => 'avatar_not_found',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -111,9 +112,9 @@ class AdminAvatarController
         $avatar = $user->adminAvatar;
         if (! $avatar) {
             return response()->json([
-                    'message' => 'No avatar has been selected.',
-                    'error' => 'avatar_not_selected',
-                ],
+                'message' => 'No avatar has been selected.',
+                'error' => 'avatar_not_selected',
+            ],
                 JsonResponse::HTTP_NOT_FOUND
             );
         }
@@ -170,7 +171,7 @@ class AdminAvatarController
         }
 
         $bucket = (object) [
-            'path' => 'admin/avatars', //-> /var/www/storage/app/public/avatar
+            'path' => 'admin/avatars', // -> /var/www/storage/app/public/avatar
             'name' => $user->admin->uid.'_'.now()->timestamp.'.'.$file->extension,
         ];
 
@@ -201,7 +202,7 @@ class AdminAvatarController
                 'message' => 'File successfully uploaded.',
                 'uid' => $avatar->uid,
                 'url' => $avatar->url,
-                'total_uploads' => $total + 1
+                'total_uploads' => $total + 1,
             ],
             JsonResponse::HTTP_CREATED
         );

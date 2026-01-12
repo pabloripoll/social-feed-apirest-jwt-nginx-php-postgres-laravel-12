@@ -57,10 +57,10 @@ class UserNotificationTypeSeeder extends Seeder
             UserNotificationType::updateOrCreate(
                 ['key' => $type['key']],
                 [
-                    'title_single'      => $type['title_single'],
-                    'title_multiple'    => $type['title_multiple'],
-                    'summary_single'    => $type['summary_single'],
-                    'summary_multiple'  => $type['summary_multiple'],
+                    'title_single' => $type['title_single'],
+                    'title_multiple' => $type['title_multiple'],
+                    'summary_single' => $type['summary_single'],
+                    'summary_multiple' => $type['summary_multiple'],
                 ]
             );
         }

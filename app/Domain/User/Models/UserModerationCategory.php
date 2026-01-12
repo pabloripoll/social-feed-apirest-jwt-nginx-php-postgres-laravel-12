@@ -57,7 +57,6 @@ class UserModerationCategory extends Model
     /**
      * Relations
      */
-
     public function moderations(): HasMany
     {
         return $this->hasMany(UserModeration::class, 'category_id');

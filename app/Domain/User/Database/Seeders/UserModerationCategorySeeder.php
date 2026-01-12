@@ -2,8 +2,8 @@
 
 namespace App\Domain\User\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Domain\User\Models\UserModerationCategory;
+use Illuminate\Database\Seeder;
 
 class UserModerationCategorySeeder extends Seeder
 {

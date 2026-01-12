@@ -2,8 +2,8 @@
 
 namespace App\Domain\User\Database\Factories;
 
-use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Admin\Models\Admin;
+use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Member\Models\Member;
 use App\Domain\User\Models\User;
 use App\Domain\User\Models\UserModeration;
@@ -127,7 +127,7 @@ class UserModerationFactory extends Factory
     /**
      * Indicate that the moderation has an active sanction.
      */
-    public function withActiveSanction(? UserModerationSanction $sanction = null, ?string $expiresAt = null): static
+    public function withActiveSanction(?UserModerationSanction $sanction = null, ?string $expiresAt = null): static
     {
         return $this->state(function (array $attributes) use ($sanction, $expiresAt) {
             $sanctionModel = $sanction ?? UserModerationSanction::factory()->create();
@@ -159,10 +159,10 @@ class UserModerationFactory extends Factory
     /**
      * Indicate that the moderation has a permanent sanction (no expiry).
      */
-    public function withPermanentSanction(? UserModerationSanction $sanction = null): static
+    public function withPermanentSanction(?UserModerationSanction $sanction = null): static
     {
         return $this->state(function (array $attributes) use ($sanction) {
-            $sanctionModel = $sanction ??  UserModerationSanction::factory()->create();
+            $sanctionModel = $sanction ?? UserModerationSanction::factory()->create();
 
             return [
                 'sanction_id' => $sanctionModel->id,
@@ -218,6 +218,7 @@ class UserModerationFactory extends Factory
 
             // Assume it's a key, find the category
             $categoryModel = UserModerationCategory::where('key', $category)->first();
+
             return ['category_id' => $categoryModel?->id ?? UserModerationCategory::factory()->create()->id];
         });
     }

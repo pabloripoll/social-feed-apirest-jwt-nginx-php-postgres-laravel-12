@@ -64,18 +64,18 @@ class FeedPostFactory extends Factory
 
         // uid is created by model
         return [
-            'user_id'       => $userId,
-            'category_id'   => $category->id,
-            'continent_id'  => $region->continent_id,
-            'region_id'     => $region->id,
-            'is_sketch'     => false,
-            'is_draft'      => false,
-            'is_active'     => true,
-            'is_banned'     => false,
-            'title'         => $title,
-            'slug'          => Str::limit(Str::slug($title), 128),
-            'summary'       => Str::limit(trim(strip_tags($article)), 128),
-            'article'       => $article,
+            'user_id' => $userId,
+            'category_id' => $category->id,
+            'continent_id' => $region->continent_id,
+            'region_id' => $region->id,
+            'is_sketch' => false,
+            'is_draft' => false,
+            'is_active' => true,
+            'is_banned' => false,
+            'title' => $title,
+            'slug' => Str::limit(Str::slug($title), 128),
+            'summary' => Str::limit(trim(strip_tags($article)), 128),
+            'article' => $article,
         ];
     }
 
