@@ -16,7 +16,13 @@ class JwtMiddleware
     {
         $token = JWTAuth::getToken();
         if (! $token) {
-            return response()->json(['message' => 'Token not provided.', 'error' => 'token_not_provided'], JsonResponse::HTTP_UNAUTHORIZED);
+            return response()->json(
+                [
+                    'message' => 'Token not provided.',
+                    'error' => 'token_not_provided'
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
         }
 
         try {
@@ -24,7 +30,13 @@ class JwtMiddleware
             $jwtPayload = JWTAuth::payload($token);
 
         } catch (JWTException $e) {
-            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
+            return response()->json(
+                [
+                    'message' => 'Token invalid or expired.',
+                    'error' => 'token_invalid'
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
         }
 
         $role = $jwtPayload->get('role');
@@ -38,24 +50,42 @@ class JwtMiddleware
         }
 
         if (! $accessToken) {
-            return response()->json(['message' => 'Token not registered.', 'error' => 'token_not_found'], JsonResponse::HTTP_UNAUTHORIZED);
+            return response()->json(
+                [
+                    'message' => 'Token not registered.',
+                    'error' => 'token_not_found'
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
         }
 
         if ($accessToken->is_terminated) {
-            return response()->json(['message' => 'Token is terminated.', 'error' => 'token_terminated'], JsonResponse::HTTP_UNAUTHORIZED);
+            return response()->json(
+                [
+                    'message' => 'Token is terminated.',
+                    'error' => 'token_terminated'
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
         }
 
         if ($accessToken->is_expired || now()->greaterThan($accessToken->expires_at)) {
             $accessToken->is_expired = true;
             $accessToken->save();
 
-            return response()->json(['message' => 'Token is expired.', 'error' => 'token_expired'], JsonResponse::HTTP_UNAUTHORIZED);
+            return response()->json(
+                [
+                    'message' => 'Token is expired.',
+                    'error' => 'token_expired'
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
         }
 
         $accessToken->requests_count = $accessToken->requests_count + 1;
         $accessToken->save();
 
-        JWTAuth::parseToken()->authenticate(); // authenticate user
+        JWTAuth::parseToken()->authenticate();
 
         return $next($request);
     }
