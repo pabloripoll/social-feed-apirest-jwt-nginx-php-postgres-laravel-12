@@ -32,7 +32,7 @@ class JwtMiddleware
         } catch (JWTException $e) {
             return response()->json(
                 [
-                    'message' => 'Token invalid or expired.',
+                    'message' => 'Token invalid.',
                     'error' => 'token_invalid'
                 ],
                 JsonResponse::HTTP_UNAUTHORIZED
