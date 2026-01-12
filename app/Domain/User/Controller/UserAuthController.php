@@ -168,7 +168,7 @@ class UserAuthController extends Controller
         if (! $access) {
             return response()->json(
                 [
-                    'message' => 'Token invalid or expired.',
+                    'message' => 'Token invalid.',
                     'error' => 'token_invalid'
                 ],
                 JsonResponse::HTTP_UNAUTHORIZED
@@ -180,7 +180,7 @@ class UserAuthController extends Controller
         /** @var Illuminate\Auth\AuthManager */
         $auth = auth('api');
 
-        $refreshedToken = JWTAuth::refresh(JWTAuth::getToken());
+        $refreshedToken = JWTAuth::refresh($legacyToken);
 
         $access->expires_at = now()->addMinutes($this->jwtTime);
         $access->refresh_count = $access->refresh_count + 1;
@@ -189,9 +189,9 @@ class UserAuthController extends Controller
 
         return response()->json(
             [
-                'token' => $access->token,
-                'token_expired' => $legacyToken,
-                'expires_in' => $auth->factory()->getTTL() * $this->jwtTime,
+                'token_refreshed'   => $access->token,
+                'expires_in'        => $auth->factory()->getTTL() * $this->jwtTime,
+                'token_expired'     => $legacyToken,
             ],
             JsonResponse::HTTP_ACCEPTED
         );
