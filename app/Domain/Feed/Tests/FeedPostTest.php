@@ -174,6 +174,25 @@ describe('Feed Post - Read - @GET /api/v1/feed/posts/{uid}', function () {
 });
 
 describe('Feed Post - Listing Search - @GET /api/v1/feed/posts', function () {
+    it('succeeds a not authenticated user can search through feed posts', function () {
+        $posts = FeedPost::factory(5)->create();
+        $sample = $posts[0];
+        $search = explode(' ', $sample['title'])[0];
+
+        $route = route('api-v1.feed.posts', ['search' => $search]);
+        $response = $this->get($route);
+        if ($response->status() === JsonResponse::HTTP_OK) {
+            $result = $response->json()['result'];
+            expect($result)->toBeArray()->not->toBeEmpty();
+
+            $item = $result[0];
+            expect($item)->toHaveKey('title');
+            expect($item['title'])->toContain($search);
+        }
+    });
+});
+
+describe('Feed Post - Listing Search - @GET /api/v1/feed/posts', function () {
     it('succeeds an authenticated user can search through feed posts', function () {
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -190,7 +209,6 @@ describe('Feed Post - Listing Search - @GET /api/v1/feed/posts', function () {
             expect($result)->toBeArray()->not->toBeEmpty();
 
             $item = $result[0];
-
             expect($item)->toHaveKey('title');
             expect($item['title'])->toContain($search);
         }
