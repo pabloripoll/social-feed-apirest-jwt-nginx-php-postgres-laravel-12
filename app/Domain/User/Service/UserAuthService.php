@@ -29,22 +29,18 @@ class UserAuthService
             $payload = JWTAuth::decode($token);
 
             if ($payload['role'] == Role::ADMIN) {
-                $accessToken = AdminAccessLog::where('token', $token)->latest()->first();
+                $accessLog = AdminAccessLog::where('token', $token)->latest()->first();
             }
 
             if ($payload['role'] == Role::MEMBER) {
-                $accessToken = MemberAccessLog::where('token', $token)->latest()->first();
+                $accessLog = MemberAccessLog::where('token', $token)->latest()->first();
             }
 
-            if (! $accessToken) {
+            if (! $accessLog || $accessLog->is_terminated || $accessLog->is_expired) {
                 return null;
             }
 
-            if ($accessToken->is_terminated) {
-                return null;
-            }
-
-            return $accessToken;
+            return $accessLog;
 
         } catch (JWTException $e) {
             return null;
