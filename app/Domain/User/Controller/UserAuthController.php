@@ -86,7 +86,13 @@ class UserAuthController extends Controller
             $errors = (array) $validator->errors()->messages();
             $field = array_key_first($errors);
 
-            return response()->json(['message' => $errors[$field][0], 'error' => $field], JsonResponse::HTTP_NOT_ACCEPTABLE);
+            return response()->json(
+                [
+                    'message' => $errors[$field][0],
+                    'error' => $field
+                ],
+                JsonResponse::HTTP_NOT_ACCEPTABLE
+            );
         }
 
         $user = User::where('email', $request->email)
@@ -148,7 +154,13 @@ class UserAuthController extends Controller
     {
         $access = (new UserAuthService)->checkToken();
         if (! $access) {
-            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
+            return response()->json(
+                [
+                    'message' => 'Token invalid or expired.',
+                    'error' => 'token_invalid'
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
         }
 
         $legacyToken = $access->token;
@@ -201,7 +213,13 @@ class UserAuthController extends Controller
     {
         $access = (new UserAuthService)->checkToken();
         if (! $access) {
-            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
+            return response()->json(
+                [
+                    'message' => 'Token invalid or expired.',
+                    'error' => 'token_invalid'
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
         }
 
         $access->is_terminated = true;
@@ -209,7 +227,12 @@ class UserAuthController extends Controller
 
         JWTAuth::invalidate(JWTAuth::getToken());
 
-        return response()->json(['token_expired' => $access->token], JsonResponse::HTTP_ACCEPTED);
+        return response()->json(
+            [
+                'token_expired' => $access->token
+            ],
+            JsonResponse::HTTP_ACCEPTED
+        );
     }
 
     /**
@@ -246,7 +269,13 @@ class UserAuthController extends Controller
 
         $access = (new UserAuthService)->checkToken();
         if (! $access) {
-            return response()->json(['message' => 'Token invalid or expired.', 'error' => 'token_invalid'], JsonResponse::HTTP_UNAUTHORIZED);
+            return response()->json(
+                [
+                    'message' => 'Token invalid or expired.',
+                    'error' => 'token_invalid'
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
         }
 
         $userAccount = null;
