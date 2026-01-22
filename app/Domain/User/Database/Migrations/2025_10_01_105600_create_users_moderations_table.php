@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('uid')->unique();
             $table->foreignId('user_id')->constrained((new User)->getTable());
-            $table->foreignId('reporter_user_id')->constrained((new User)->getTable())->onDelete('set null');
+            $table->foreignId('reporter_user_id')->nullable()->constrained((new User)->getTable())->onDelete('set null');
             $table->foreignId('moderator_user_id')->nullable()->constrained((new User)->getTable());
             $table->boolean('is_opened')->default(false);
             $table->boolean('in_review')->default(false);
