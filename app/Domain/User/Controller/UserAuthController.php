@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -39,6 +38,7 @@ class UserAuthController extends Controller
      *         in="path",
      *         required=true,
      *         description="The 32-character activation code",
+     *
      *         @OA\Schema(type="string", example="a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6")
      *     ),
      *
@@ -47,6 +47,7 @@ class UserAuthController extends Controller
      *         description="Account has been already activated",
      *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="status", type="string", example="Account has been already activated."),
      *             @OA\Property(property="code", type="string", example="a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6")
      *         )
@@ -57,6 +58,7 @@ class UserAuthController extends Controller
      *         description="Account successfully activated",
      *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="status", type="string", example="Account successfully activated."),
      *             @OA\Property(property="code", type="string", example="a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6")
      *         )
@@ -67,6 +69,7 @@ class UserAuthController extends Controller
      *         description="Invalid activation code",
      *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="Invalid or expired activation code."),
      *             @OA\Property(property="error", type="string", example="code")
      *         )
@@ -77,6 +80,7 @@ class UserAuthController extends Controller
      *         description="Validation error",
      *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="The code field is required."),
      *             @OA\Property(property="error", type="string", example="code")
      *         )

@@ -20,7 +20,7 @@ class UserAuthActivationRequest extends FormRequest
     public function validationData(): array
     {
         return array_merge($this->all(), [
-            'code' => $this->route('code')
+            'code' => $this->route('code'),
         ]);
     }
 

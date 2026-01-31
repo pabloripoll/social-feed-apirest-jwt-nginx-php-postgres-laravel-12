@@ -1,7 +1,6 @@
 <?php
 
 use App\Domain\Member\Models\Member;
-use App\Domain\User\Models\UserActivationCode;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
