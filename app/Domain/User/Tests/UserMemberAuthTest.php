@@ -1,8 +1,7 @@
 <?php
 
-/** @var \Tests\TestCase $this */
-
 use App\Domain\Member\Models\Member;
+use App\Domain\User\Models\UserActivationCode;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -12,6 +11,9 @@ beforeEach(function () {
     Artisan::call('db:seed');
 
     $email = fake()->unique()->safeEmail();
+
+    /** @disregard P1014 */
+    // @phpstan-ignore-next-line see: https://github.com/phpstan/phpstan/issues/10302
     $this->payload = (object) [
         'email' => $email,
         'nickname' => preg_replace('/[^A-Za-z0-9]/', '', strstr($email, '@', true)),
@@ -19,8 +21,9 @@ beforeEach(function () {
     ];
 });
 
-describe('User role member activation - @POST /api/v1/auth/activation', function () {
+describe('User role member activation - @GET /api/v1/auth/activate/{code}', function () {
     it('succeeds that a user can activate its account access', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.member-account.register');
         $payload = [
             'nickname' => $this->payload->nickname,
@@ -32,21 +35,17 @@ describe('User role member activation - @POST /api/v1/auth/activation', function
         $response->assertStatus(JsonResponse::HTTP_CREATED);
 
         $data = $response->json();
-        $email = $data['email'];
         $activationCode = $data['activation_code'];
 
-        $route = route('api-v1.auth.activation');
-        $payload = [
-            'code' => $activationCode,
-            'email' => $email,
-        ];
-        $response = $this->post($route, $payload);
+        $route = route('api-v1.auth.activate', ['code' => $activationCode]);
+        $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_ACCEPTED);
     });
 });
 
 describe('User role member auth token refresh fail - @POST /api/v1/auth/refresh', function () {
     it('fails because authentication token is not found on access logs', function () {
+        /** @var \Tests\TestCase $this */
         Member::factory()->withAuth()->create();
         $wrongJwt = Str::random(64);
         $route = route('api-v1.auth.refresh');
@@ -64,6 +63,7 @@ describe('User role member auth token refresh fail - @POST /api/v1/auth/refresh'
 
 describe('User role member auth token refresh fail - @POST /api/v1/auth/refresh', function () {
     it('fails because authentication token is terminated and cannot be refreshed', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load('user.memberAccessLogs');
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -84,6 +84,7 @@ describe('User role member auth token refresh fail - @POST /api/v1/auth/refresh'
 
 describe('User role member auth token refresh success - @POST /api/v1/auth/refresh', function () {
     it('succeeds authentication token can be refreshed', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load('user.memberAccessLogs');
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -106,6 +107,7 @@ describe('User role member auth token refresh success - @POST /api/v1/auth/refre
 
 describe('User role member logout success - @POST /api/v1/auth/logout', function () {
     it('succeeds user authentication can logout', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load('user.memberAccessLogs');
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -126,6 +128,7 @@ describe('User role member logout success - @POST /api/v1/auth/logout', function
 
 describe('User role member whoami fail - @GET /api/v1/auth/whoami', function () {
     it('fails user cannot see its account main properties if there is no JWT', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.auth.whoami');
         $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
@@ -139,6 +142,7 @@ describe('User role member whoami fail - @GET /api/v1/auth/whoami', function () 
 
 describe('User role member whoami fail - @GET /api/v1/auth/whoami', function () {
     it('fails user cannot see its account main properties JWT is terminated by authentication logout', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load('user.memberAccessLogs');
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -159,6 +163,7 @@ describe('User role member whoami fail - @GET /api/v1/auth/whoami', function () 
 
 describe('User role member whoami success - @GET /api/v1/auth/whoami', function () {
     it('succeeds user authenticated can see itself', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['profile', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();

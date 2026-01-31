@@ -24,9 +24,9 @@ class UserActivationCode extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'code',
         'user_id',
         'is_active',
+        'code',
     ];
 
     /**
@@ -56,10 +56,9 @@ class UserActivationCode extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            // Generate a unique 9-digit integer code
+            // Generate a unique 32 alphanumeric code
             do {
-                // $code = random_int(100000000, 999999999); // 9 digits
-                $code = Str::random(9); // 9 alphanumeric
+                $code = Str::random(32);
             } while (self::where('code', $code)->exists());
 
             $model->code = $code;

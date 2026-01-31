@@ -2,20 +2,61 @@
 
 namespace App\Domain\User\Requests;
 
+use App\Domain\User\Models\UserActivationCode;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserAuthActivationRequest extends FormRequest
 {
+    protected ?UserActivationCode $activationCode = null;
+
     public function authorize(): bool
     {
-        return false;
+        return true;
+    }
+
+    /**
+     * Merge route parameters into validation data
+     */
+    public function validationData(): array
+    {
+        return array_merge($this->all(), [
+            'code' => $this->route('code')
+        ]);
     }
 
     public function rules(): array
     {
         return [
-            'email' => 'required|string|email|max:64|exists:users',
-            'code' => 'required|string|exists:users_activation_codes',
+            'code' => 'required|string|size:32|exists:users_activation_codes,code',
         ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'code.required' => 'The activation code is required.',
+            'code.string' => 'The activation code must be a valid string.',
+            'code.size' => 'The activation code must be exactly 32 characters.',
+            'code.exists' => 'Invalid or expired activation code.',
+        ];
+    }
+
+    /**
+     * Called after validation passes
+     */
+    protected function passedValidation(): void
+    {
+        // Load the entity once validation passes
+        $this->activationCode = UserActivationCode::where('code', $this->validated('code'))
+            ->with('user')
+            ->first();
+    }
+
+    /**
+     * Get the UserActivationCode entity (already loaded after validation)
+     */
+    public function getActivationCode(): ?UserActivationCode
+    {
+        return $this->activationCode;
     }
 }

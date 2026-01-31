@@ -28,21 +28,18 @@ class UserAuthController extends Controller
     protected $jwtTime = 60;
 
     /**
-     * @OA\Post(
-     *     path="/api/v1/auth/activation",
+     * @OA\Get(
+     *     path="/activate/{code}",
      *     summary="Activate user account",
      *     tags={"User Authentication"},
-     *     description="Activates a user account using the activation code.",
+     *     description="Activates a user account using the activation code from URL.",
      *
-     *     @OA\RequestBody(
+     *     @OA\Parameter(
+     *         name="code",
+     *         in="path",
      *         required=true,
-     *
-     *         @OA\JsonContent(
-     *             required={"email","activation_code"},
-     *
-     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
-     *             @OA\Property(property="activation_code", type="string", example="A1B2C3")
-     *         )
+     *         description="The 32-character activation code",
+     *         @OA\Schema(type="string", example="a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6")
      *     ),
      *
      *     @OA\Response(
@@ -50,9 +47,8 @@ class UserAuthController extends Controller
      *         description="Account has been already activated",
      *
      *         @OA\JsonContent(
-     *
-     *             @OA\Property(property="email", type="string", example="john@example.com"),
      *             @OA\Property(property="status", type="string", example="Account has been already activated."),
+     *             @OA\Property(property="code", type="string", example="a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6")
      *         )
      *     ),
      *
@@ -61,74 +57,68 @@ class UserAuthController extends Controller
      *         description="Account successfully activated",
      *
      *         @OA\JsonContent(
-     *
-     *             @OA\Property(property="email", type="string", example="john@example.com"),
      *             @OA\Property(property="status", type="string", example="Account successfully activated."),
+     *             @OA\Property(property="code", type="string", example="a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=404,
+     *         description="Invalid activation code",
+     *
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Invalid or expired activation code."),
+     *             @OA\Property(property="error", type="string", example="code")
      *         )
      *     ),
      *
      *     @OA\Response(
      *         response=406,
-     *         description="Validation error"
+     *         description="Validation error",
+     *
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The code field is required."),
+     *             @OA\Property(property="error", type="string", example="code")
+     *         )
      *     )
      * )
      */
-    public function activation(Request $request): JsonResponse
+    public function activate(UserAuthActivationRequest $request): JsonResponse
     {
-        $formRequest = new UserAuthActivationRequest;
+        // Get the entity from the request
+        $activation = $request->getActivationCode();
 
-        $validator = Validator::make(
-            $request->all(),
-            $formRequest->rules(),
-            $formRequest->messages()
-        );
-        if ($validator->fails()) {
-            $errors = (array) $validator->errors()->messages();
-            $field = array_key_first($errors);
-
+        if (! $activation) {
             return response()->json(
                 [
-                    'message' => $errors[$field][0],
-                    'error' => $field,
+                    'message' => 'Invalid or expired activation code.',
+                    'error' => 'not_found',
                 ],
-                JsonResponse::HTTP_NOT_ACCEPTABLE
+                JsonResponse::HTTP_NOT_FOUND
             );
         }
 
-        $user = User::where('email', $request->email)
-            ->with('activationCode')
-            ->first();
-
-        if (! $user) {
-            return response()->json(
-                [
-                    'message' => 'User not found.',
-                    'error' => 'user_not_found',
-                ],
-                JsonResponse::HTTP_NOT_ACCEPTABLE
-            );
-        }
-
-        if ($user->activationCode->is_active === true) {
+        // Check if already activated
+        if ($activation->is_active) {
             return response()->json(
                 [
                     'message' => 'Account has been already activated.',
-                    'email' => $user->email,
+                    'code' => $activation->code,
                 ],
                 JsonResponse::HTTP_OK
             );
         }
 
-        $user->email_verified_at = Carbon::now();
-        $user->save();
+        $activation->user->email_verified_at = Carbon::now();
+        $activation->user->save();
 
-        $user->activationCode->is_active = true;
-        $user->activationCode->save();
+        $activation->is_active = true;
+        $activation->save();
 
         return response()->json(
             [
                 'message' => 'Account successfully activated.',
-                'email' => $user->email,
+                'email' => $activation->user->email,
             ],
             JsonResponse::HTTP_ACCEPTED
         );

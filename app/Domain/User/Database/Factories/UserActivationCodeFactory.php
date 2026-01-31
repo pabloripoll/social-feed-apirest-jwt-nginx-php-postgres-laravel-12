@@ -24,9 +24,9 @@ class UserActivationCodeFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => $this->faker->unique()->numberBetween(100000, 999999),
             'user_id' => User::factory(), // or null if you want sometimes unassigned
             'is_active' => true,
+            // 'code' is auto-generated in the model's boot() method
         ];
     }
 
