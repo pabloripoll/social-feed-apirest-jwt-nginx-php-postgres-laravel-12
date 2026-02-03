@@ -46,6 +46,7 @@ The API supports a registry of platform "members," enabling users to create post
 - **Authentication:** [Tymon JWT](https://packagist.org/packages/tymon/jwt-auth)
 - **Testing:** [PEST PHP](https://pestphp.com/docs/installation)
 - **Static Analysis:** [PHPStan](https://phpstan.org/) / [Larastan](https://laravel-news.com/package/nunomaduro-larastan)
+- **PHPDocs:** [Barry vd. Heuvel - IDE Helper for Laravel](https://github.com/barryvdh/laravel-ide-helper)
 - **Database:** [PostgreSQL](https://www.postgresql.org/)
 <br><br>
 
@@ -112,17 +113,15 @@ Set up environment
 Access container to install the project
 ```bash
 $ make apirest-ssh
-
-/var/www $
 ```
 
-Once accessed into the container, you will placed into root proyect directory at `/var/www`
+Once accessed into the container, you will placed into root proyect directory at `/var/www`. Install the project
 ```bash
 /var/www $ composer install
 ```
 <br>
 
-Generate app key and JWT secret
+Generate Laravel app key and JWT secret
 ```bash
 /var/www $ php artisan key:generate
 /var/www $ php artisan jwt:secret
@@ -132,6 +131,12 @@ Generate app key and JWT secret
 Run database models migrations
 ```bash
 /var/www $ php artisan migrate
+```
+<br>
+
+Run base data seed
+```bash
+/var/www $ php artisan db:seed
 ```
 <br>
 
@@ -224,37 +229,44 @@ There are several approaches to structuring a DDD project. In this project, each
 .
 ├── apirest (Laravel)
 │   ├── app
-│   │   ├── Domain
-│   │   │   ├── Admin
-│   │   │   ├── Member
+│   │   ├── Console
+│   │   ├── Domain (Module)
+│   │   │   ├── User
 │   │   │   │   ├── Controller
 │   │   │   │   ├── Database
+│   │   │   │   ├── Dto
 │   │   │   │   ├── Models
 │   │   │   │   ├── Requests
+│   │   │   │   ├── Resources
 │   │   │   │   ├── Routes
 │   │   │   │   ├── Service
-│   │   │   │   ├── Tests
-│   │   │   │   └── MemberServiceProvider.php
-│   │   │   ├── Post
-│   │   │   └── Shared
+│   │   │   │   └── Tests
+│   │   │   ├── Admin
+│   │   │   ├── Member
+│   │   │   └── ...
+│   │   │
 │   │   ├── Http
-│   │   ├── Models
-│   │   └── Providers
+│   │   ├── Providers
+│   │   └── ...
+│   │
+│   ├── bootstrap
 │   ├── bootstrap
 │   ├── config
 │   ├── database
 │   ├── public
 │   ├── Makefile
+│   ├── vendor
+│   └── ...
 ```
 <br>
 
-## <a id="apirest-testing"></a>REST API testing
+## <a id="apirest-test-automated"></a>REST API Automated Tests
 
 There are some tests on each Domain. There are some unit and integration tests. To run the tests, first you need to create the testing database. There is a GNU Make recipe to do so. The name of the testing database will be created automatically adding to the database name set on the [Platform Repository Environment file](https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-16.4/blob/main/.env.example): *[DATABASE_NAME]_testing*
 
-Remember to have set the [./.env.testing](./.env.testing). The name
+Remember to have set the [./.env.testing](./.env.testing) file to perform the tests
 ```bash
-$ make postgres-test-up
+$ make db-test-up
 ```
 
 Once created, access to container terminal an run the tests
@@ -264,6 +276,36 @@ $ make apirest-ssh
 /var/www $ php artisan test
 ```
 <br>
+
+Also you can run specific tests
+```bash
+/var/www $ php artisan test ./app/Domain/User/Tests/UserMemberAuthTest.php
+```
+<br>
+
+## <a id="apirest-test-static"></a>REST API Static Tests
+
+Access to REST API container terminal an run the static analisys test with PHPStan
+```bash
+/var/www $ composer phpstan ./app/Domain/User/
+```
+
+***It's recommended to run static tests on specific locations intead of the whole framework***
+<br>
+
+Also you can run static test on a specific script
+```bash
+/var/www $ composer phpstan ./app/Domain/User/Tests/UserAdminAuthTest.php
+```
+<br>
+
+## <a id="apirest-phpdocs"></a>PHPDocs
+
+Keep updated PHPDocs for models that will help static tests
+```bash
+/var/www $ php artisan ide-helper:models
+```
+<br><br>
 
 ## Contributing
 
