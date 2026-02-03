@@ -15,6 +15,7 @@ beforeEach(function () {
 
 describe('Member Feed Post - Not authenticated - @POST /api/v1/account/feed/posts', function () {
     it('succeeds a not authenticated user cannot access to protected route without header token', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.member-account.feed.post-create');
         $response = $this->post($route, []);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
@@ -28,6 +29,7 @@ describe('Member Feed Post - Not authenticated - @POST /api/v1/account/feed/post
 
 describe('Member Feed Post - wrong authenticated - @POST /api/v1/account/feed/posts', function () {
     it('succeeds a user cannot access to protected route with an invalid token', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.member-account.feed.post-create');
         $fakeToken = fakeJWT();
         $response = $this->post($route, [], [
@@ -44,6 +46,7 @@ describe('Member Feed Post - wrong authenticated - @POST /api/v1/account/feed/po
 
 describe('Member Feed Post - create - @POST /api/v1/account/feed/posts', function () {
     it('succeeds authenticated member user can create a feed post', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -62,6 +65,7 @@ describe('Member Feed Post - create - @POST /api/v1/account/feed/posts', functio
 
 describe('Member Feed Post - edit fail - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
     it('fails when member send wrong request params to edit a feed post', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -108,6 +112,7 @@ describe('Member Feed Post - edit fail - @PUT /api/v1/account/feed/posts/{post_u
 
 describe('Member Feed Post - edit as draft - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member edit a feed post for saving it as a draft', function () {
+        /** @var \Tests\TestCase $this */
         $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -152,6 +157,7 @@ describe('Member Feed Post - edit as draft - @PUT /api/v1/account/feed/posts/{po
 
 describe('Member Feed Post - edit for active broadcasting - @PUT /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member edit a feed post for broadcasting', function () {
+        /** @var \Tests\TestCase $this */
         $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -196,6 +202,7 @@ describe('Member Feed Post - edit for active broadcasting - @PUT /api/v1/account
 
 describe('Member Feed Post - read - @GET /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds member can read its own feed post', function () {
+        /** @var \Tests\TestCase $this */
         $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -251,6 +258,7 @@ describe('Member Feed Post - read - @GET /api/v1/account/feed/posts/{post_uid}',
 
 describe('Member Feed Post - read sketch - @GET /api/v1/account/feed/posts/sketch', function () {
     it('succeeds member can read its own latest feed sketched post', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -287,6 +295,7 @@ describe('Member Feed Post - read sketch - @GET /api/v1/account/feed/posts/sketc
 
 describe('Member Feed Post - update fail - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
     it('fails when member send wrong request params to update a feed post', function () {
+        /** @var \Tests\TestCase $this */
         $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -334,6 +343,7 @@ describe('Member Feed Post - update fail - @PATCH /api/v1/account/feed/posts/{po
 
 describe('Member Feed Post - update to draft - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member update a feed post from active to draft', function () {
+        /** @var \Tests\TestCase $this */
         $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -382,6 +392,7 @@ describe('Member Feed Post - update to draft - @PATCH /api/v1/account/feed/posts
 
 describe('Member Feed Post - update to broadcast - @PATCH /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member update a feed post from draft to active', function () {
+        /** @var \Tests\TestCase $this */
         $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
@@ -430,6 +441,7 @@ describe('Member Feed Post - update to broadcast - @PATCH /api/v1/account/feed/p
 
 describe('Member Feed Post - delete - @DELETE /api/v1/account/feed/posts/{post_uid}', function () {
     it('succeeds when member delete a feed post', function () {
+        /** @var \Tests\TestCase $this */
         $faker = FakerFactory::create();
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);

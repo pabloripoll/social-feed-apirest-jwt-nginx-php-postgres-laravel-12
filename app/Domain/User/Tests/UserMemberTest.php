@@ -14,6 +14,7 @@ beforeEach(function () {
 
 describe('User Members - Listing - @GET /api/v1/users/members', function () {
     it('fails a not authenticated user nor any member can access to any of admin users management routes', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.users.members.listing');
         $response = $this->getJson($route);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
@@ -38,6 +39,7 @@ describe('User Members - Listing - @GET /api/v1/users/members', function () {
 
 describe('User Members - Listing - @GET /api/v1/users/members', function () {
     it('succeeds admin users can list admin users', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -71,6 +73,7 @@ describe('User Members - Listing - @GET /api/v1/users/members', function () {
 
 describe('User Members - Read - @GET /api/v1/users/members/{id}', function () {
     it('succeeds admin users can read any member base data', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -92,6 +95,7 @@ describe('User Members - Read - @GET /api/v1/users/members/{id}', function () {
 
 describe('User Members - Profile - @GET /api/v1/users/members/{id}/profile', function () {
     it('succeeds admin users can read any member profile', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();

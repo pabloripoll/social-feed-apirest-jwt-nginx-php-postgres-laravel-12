@@ -15,6 +15,7 @@ beforeEach(function () {
 
 describe('User Moderation Sanctions - Listing - @GET /api/v1/moderations/sanctions', function () {
     it('fails a not authenticated user nor any member can access to any of user moderation sanctions management routes', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.moderations.sanctions-listing');
         $response = $this->getJson($route);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
@@ -40,6 +41,7 @@ describe('User Moderation Sanctions - Listing - @GET /api/v1/moderations/sanctio
 
 describe('User Moderation Sanctions - Listing - @GET /api/v1/moderations/sanctions', function () {
     it('succeeds user admin can access and listing sanctions', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -64,6 +66,7 @@ describe('User Moderation Sanctions - Listing - @GET /api/v1/moderations/sanctio
 
 describe('User Moderation Sanctions - Create - @POST /api/v1/moderations/sanctions', function () {
     it('succeeds user admin can create a new sanction', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -91,6 +94,7 @@ describe('User Moderation Sanctions - Create - @POST /api/v1/moderations/sanctio
 
 describe('User Moderation Sanctions - Read - @GET /api/v1/moderations/sanctions', function () {
     it('succeeds user admin can read a sanction', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -113,6 +117,7 @@ describe('User Moderation Sanctions - Read - @GET /api/v1/moderations/sanctions'
 
 describe('User Moderation Sanctions - Update - @PATCH /api/v1/moderations/sanctions', function () {
     it('succeeds user admin can update an existing sanction', function () {
+        /** @var \Tests\TestCase $this */
         $sanction = UserModerationSanction::factory()->create(['key' => 'spam']);
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
@@ -141,6 +146,7 @@ describe('User Moderation Sanctions - Update - @PATCH /api/v1/moderations/sancti
 
 describe('User Moderation Sanctions - Delete - @DELETE /api/v1/moderations/sanctions', function () {
     it('succeeds user admin can delete an existing sanction', function () {
+        /** @var \Tests\TestCase $this */
         $sanction = UserModerationSanction::factory()->create();
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
@@ -154,6 +160,7 @@ describe('User Moderation Sanctions - Delete - @DELETE /api/v1/moderations/sanct
                 ->where('key', fn ($key) => $key === $sanction->key)
                 ->etc()
             );
+        // @phpstan-ignore-next-line
         $this->assertDatabaseMissing('users_moderation_categories', [
             'id' => $sanction->id,
         ]);

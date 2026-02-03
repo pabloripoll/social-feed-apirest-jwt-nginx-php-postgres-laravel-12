@@ -1,7 +1,5 @@
 <?php
 
-/** @var \Tests\TestCase $this */
-
 use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Member\Models\Member;
 use Illuminate\Support\Facades\Artisan;
@@ -17,6 +15,7 @@ beforeEach(function () {
 
 describe('Feed Post - Listing - @GET /api/v1/feed/posts', function () {
     it('succeeds a not authenticated user can list feed posts', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.feed.posts');
         $response = $this->get($route, []);
         $response->assertStatus(JsonResponse::HTTP_OK)
@@ -61,12 +60,13 @@ describe('Feed Post - Listing - @GET /api/v1/feed/posts', function () {
 
 describe('Feed Post - Listing - @GET /api/v1/feed/posts', function () {
     it('succeeds an authenticated user can list feed posts', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
         $route = route('api-v1.feed.posts');
-        $response = $this->get($route, [], [
+        $response = $this->get($route, [
             'Authorization' => "Bearer $accessLog->token",
         ]);
         $response->assertStatus(JsonResponse::HTTP_OK)
@@ -111,6 +111,7 @@ describe('Feed Post - Listing - @GET /api/v1/feed/posts', function () {
 
 describe('Feed Post - Read - @GET /api/v1/feed/posts/{uid}', function () {
     it('succeeds a not authenticated user can read a feed post', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.feed.posts');
         $response = $this->get($route, []);
 
@@ -140,12 +141,13 @@ describe('Feed Post - Read - @GET /api/v1/feed/posts/{uid}', function () {
 
 describe('Feed Post - Read - @GET /api/v1/feed/posts/{uid}', function () {
     it('succeeds an authenticated user can read a feed post', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
 
         $route = route('api-v1.feed.posts');
-        $response = $this->get($route, [], [
+        $response = $this->get($route, [
             'Authorization' => "Bearer $accessLog->token",
         ]);
 
@@ -175,6 +177,7 @@ describe('Feed Post - Read - @GET /api/v1/feed/posts/{uid}', function () {
 
 describe('Feed Post - Listing Search - @GET /api/v1/feed/posts', function () {
     it('succeeds a not authenticated user can search through feed posts', function () {
+        /** @var \Tests\TestCase $this */
         $posts = FeedPost::factory(5)->create();
         $sample = $posts[0];
         $search = explode(' ', $sample['title'])[0];
@@ -183,6 +186,7 @@ describe('Feed Post - Listing Search - @GET /api/v1/feed/posts', function () {
         $response = $this->get($route);
         if ($response->status() === JsonResponse::HTTP_OK) {
             $result = $response->json()['result'];
+            // @phpstan-ignore-next-line
             expect($result)->toBeArray()->not->toBeEmpty();
 
             $item = $result[0];
@@ -194,6 +198,7 @@ describe('Feed Post - Listing Search - @GET /api/v1/feed/posts', function () {
 
 describe('Feed Post - Listing Search - @GET /api/v1/feed/posts', function () {
     it('succeeds an authenticated user can search through feed posts', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -206,6 +211,7 @@ describe('Feed Post - Listing Search - @GET /api/v1/feed/posts', function () {
         $response = $this->withToken($accessLog->token)->get($route);
         if ($response->status() === JsonResponse::HTTP_OK) {
             $result = $response->json()['result'];
+            // @phpstan-ignore-next-line
             expect($result)->toBeArray()->not->toBeEmpty();
 
             $item = $result[0];

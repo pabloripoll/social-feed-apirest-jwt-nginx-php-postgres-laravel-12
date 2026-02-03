@@ -1,13 +1,13 @@
 <?php
 
-/** @var \Tests\TestCase $this */
-
 use App\Domain\Member\Models\Member;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 beforeEach(function () {
+    /** @var \Tests\TestCase $this */
+
     Artisan::call('db:seed');
 
     $email = fake()->unique()->safeEmail();
@@ -20,6 +20,7 @@ beforeEach(function () {
 
 describe('Member user registration fail - @POST /api/v1/account/register', function () {
     it('fails that a user can register because of wrong nickname', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.member-account.register');
         $payload = [
             'email' => $this->payload->email,
@@ -51,6 +52,7 @@ describe('Member user registration fail - @POST /api/v1/account/register', funct
 
 describe('Member user registration fail - @POST /api/v1/account/register', function () {
     it('fails that a user can register because of wrong email', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.member-account.register');
         $payload = [
             'nickname' => $this->payload->nickname,
@@ -82,6 +84,7 @@ describe('Member user registration fail - @POST /api/v1/account/register', funct
 
 describe('Member user registration fail - @POST /api/v1/account/register', function () {
     it('fails that a user can register because of wrong password', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.member-account.register');
         // missing password field
         $payload = [
@@ -128,7 +131,6 @@ describe('Member user registration fail - @POST /api/v1/account/register', funct
             'nickname' => $this->payload->nickname,
             'email' => $this->payload->email,
             'password' => '1234aZ!',
-            'password' => '1234aZ!',
         ];
         $response = $this->post($route, $payload);
         $response->assertStatus(JsonResponse::HTTP_NOT_ACCEPTABLE)
@@ -142,6 +144,7 @@ describe('Member user registration fail - @POST /api/v1/account/register', funct
 
 describe('Member user registration success - @POST /api/v1/account/register', function () {
     it('succeeds that a user can register by itself as a member', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.member-account.register');
         $payload = [
             'nickname' => $this->payload->nickname,
@@ -162,6 +165,7 @@ describe('Member user registration success - @POST /api/v1/account/register', fu
 
 describe('Member user login fail - @POST /api/v1/account/login', function () {
     it('fails when user login input is a wrong password', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->create();
         $route = route('api-v1.member-account.login');
         $payload = [
@@ -179,6 +183,7 @@ describe('Member user login fail - @POST /api/v1/account/login', function () {
 
 describe('Member user login success- @POST /api/v1/account/login', function () {
     it('succeeds that a user can log into its account', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->create();
         $route = route('api-v1.member-account.login');
         $payload = [

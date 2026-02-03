@@ -1,7 +1,5 @@
 <?php
 
-/** @var \Tests\TestCase $this */
-
 use App\Domain\Admin\Models\Admin;
 use App\Domain\Member\Models\Member;
 use Illuminate\Support\Facades\Artisan;
@@ -14,6 +12,7 @@ beforeEach(function () {
 
 describe('User Admins - Listing - @GET /api/v1/users/admins', function () {
     it('fails a not authenticated user nor any member can access to any of admin users management routes', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.users.admins.listing');
         $response = $this->getJson($route);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
@@ -38,6 +37,7 @@ describe('User Admins - Listing - @GET /api/v1/users/admins', function () {
 
 describe('User Admins - Listing - @GET /api/v1/users/admins', function () {
     it('succeeds admin users can list admin users', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -71,6 +71,7 @@ describe('User Admins - Listing - @GET /api/v1/users/admins', function () {
 
 describe('User Admins - Read - @GET /api/v1/users/admins/{id}', function () {
     it('succeeds admin users can read any admin base data', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -92,6 +93,7 @@ describe('User Admins - Read - @GET /api/v1/users/admins/{id}', function () {
 
 describe('User Admins - Profile - @GET /api/v1/users/admins/{id}/profile', function () {
     it('succeeds admin users can read any admin profile', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();

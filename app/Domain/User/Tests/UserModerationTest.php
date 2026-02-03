@@ -16,6 +16,7 @@ beforeEach(function () {
 
 describe('User Moderation - Listing - @GET /api/v1/moderations', function () {
     it('fails a not authenticated user nor any member can access to any of user moderation management routes', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.moderations.listing');
         $response = $this->getJson($route);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
@@ -48,6 +49,7 @@ describe('User Moderation - Listing - @GET /api/v1/moderations', function () {
 
 describe('User Moderation - Listing Filters - @GET /api/v1/moderations/filters', function () {
     it('succeeds user admin can request listing filters', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -91,6 +93,7 @@ describe('User Moderation - Listing Filters - @GET /api/v1/moderations/filters',
 
 describe('User Moderation - Listing - @GET /api/v1/moderations', function () {
     it('succeeds any user admin can list moderations', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -150,6 +153,7 @@ describe('User Moderation - Listing - @GET /api/v1/moderations', function () {
 
 describe('User Moderation - Listing by Category - @GET /api/v1/moderations', function () {
     it('succeeds any user admin can list moderations by category', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();

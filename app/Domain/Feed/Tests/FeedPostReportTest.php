@@ -1,7 +1,5 @@
 <?php
 
-/** @var \Tests\TestCase $this */
-
 use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Member\Models\Member;
 use App\Domain\User\Models\UserModeration;
@@ -19,6 +17,7 @@ beforeEach(function () {
 
 describe('Feed Post Report - Create - @POST /api/v1/feed/posts/{uid}/reports', function () {
     it('fails a not authenticated can report a feed post', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.feed.posts');
         $response = $this->getJson($route);
         $post = $response->json()['result'][0];
@@ -36,6 +35,7 @@ describe('Feed Post Report - Create - @POST /api/v1/feed/posts/{uid}/reports', f
 
 describe('Feed Post Report - Create - @POST /api/v1/feed/posts/{uid}/reports', function () {
     it('fails a user cannot report a feed post with a unsafe report key', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -60,6 +60,7 @@ describe('Feed Post Report - Create - @POST /api/v1/feed/posts/{uid}/reports', f
 
 describe('Feed Post Report - Create - @POST /api/v1/feed/posts/{uid}/reports', function () {
     it('fails a user cannot report a feed post with a wrong report key', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -84,6 +85,7 @@ describe('Feed Post Report - Create - @POST /api/v1/feed/posts/{uid}/reports', f
 
 describe('Feed Post Report - Create - @POST /api/v1/feed/posts/{uid}/reports', function () {
     it('succeeds an authenticated user can report a feed post with a correct report key', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -117,6 +119,7 @@ describe('Feed Post Report - Create - @POST /api/v1/feed/posts/{uid}/reports', f
 
 describe('Feed Post Report - Read - @GET /api/v1/feed/posts/{uid}/reports', function () {
     it('succeeds a user can report a feed post and then read it if available', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -153,6 +156,7 @@ describe('Feed Post Report - Read - @GET /api/v1/feed/posts/{uid}/reports', func
 
 describe('Feed Post Report - Update - @PATCH /api/v1/feed/posts/{uid}/reports', function () {
     it('fails a user cannot update a report because is no available to make changes for it', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -193,6 +197,7 @@ describe('Feed Post Report - Update - @PATCH /api/v1/feed/posts/{uid}/reports', 
 
 describe('Feed Post Report - Update - @PATCH /api/v1/feed/posts/{uid}/reports', function () {
     it('succeeds a user can report a feed post and then update it if available', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -233,6 +238,7 @@ describe('Feed Post Report - Update - @PATCH /api/v1/feed/posts/{uid}/reports', 
 
 describe('Feed Post Report - Delete - @DELETE /api/v1/feed/posts/{uid}/reports', function () {
     it('fails a user can delete its own report', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();

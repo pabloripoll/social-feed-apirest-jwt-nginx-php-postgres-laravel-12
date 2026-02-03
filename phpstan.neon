@@ -25,7 +25,6 @@ parameters:
 
     # Ignore test-specific issues
     #ignoreErrors:
-        #- '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model::#'
         #- '#Property ([a-zA-Z0-9_]+) does not exist on ([a-zA-Z0-9_\\\\]+)\\.#'
 
 includes:

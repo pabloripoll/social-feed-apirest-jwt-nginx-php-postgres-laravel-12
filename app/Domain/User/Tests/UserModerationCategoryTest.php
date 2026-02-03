@@ -15,6 +15,7 @@ beforeEach(function () {
 
 describe('User Moderation Categories - Listing - @GET /api/v1/moderations/categories', function () {
     it('fails a not authenticated user nor any member can access to any of user moderation categories management routes', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.moderations.categories-listing');
         $response = $this->getJson($route);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
@@ -40,6 +41,7 @@ describe('User Moderation Categories - Listing - @GET /api/v1/moderations/catego
 
 describe('User Moderation Categories - Listing - @GET /api/v1/moderations/categories', function () {
     it('succeeds user admin can access and list categories', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -65,6 +67,7 @@ describe('User Moderation Categories - Listing - @GET /api/v1/moderations/catego
 
 describe('User Moderation Categories - Create - @POST /api/v1/moderations/categories', function () {
     it('succeeds user admin can create a new category', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -94,6 +97,7 @@ describe('User Moderation Categories - Create - @POST /api/v1/moderations/catego
 
 describe('User Moderation Categories - Read - @GET /api/v1/moderations/categories', function () {
     it('succeeds user admin can read a category', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
         $accessLog = $admin->user->adminAccessLogs()->latest()->first();
@@ -117,6 +121,7 @@ describe('User Moderation Categories - Read - @GET /api/v1/moderations/categorie
 
 describe('User Moderation Categories - Update - @PATCH /api/v1/moderations/categories', function () {
     it('succeeds user admin can update an existing category', function () {
+        /** @var \Tests\TestCase $this */
         $category = UserModerationCategory::factory()->create(['key' => 'spam']);
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
@@ -147,6 +152,7 @@ describe('User Moderation Categories - Update - @PATCH /api/v1/moderations/categ
 
 describe('User Moderation Categories - Delete - @DELETE /api/v1/moderations/categories', function () {
     it('succeeds user admin can delete an existing category', function () {
+        /** @var \Tests\TestCase $this */
         $category = UserModerationCategory::factory()->create();
         $admin = Admin::factory()->withAuth()->create();
         $admin->load(['user', 'user.adminAccessLogs']);
@@ -160,9 +166,9 @@ describe('User Moderation Categories - Delete - @DELETE /api/v1/moderations/cate
                 ->where('key', fn ($key) => $key === $category->key)
                 ->etc()
             );
+        // @phpstan-ignore-next-line
         $this->assertDatabaseMissing('users_moderation_categories', [
             'id' => $category->id,
         ]);
     });
 });
-// FeedPost::factory()->create(['user_id' => $member->user_id]);

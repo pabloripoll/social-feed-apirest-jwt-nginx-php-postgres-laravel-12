@@ -8,6 +8,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $nickname
+ * @property string|null $name
+ * @property int $age
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read User $user
+ * @method static \App\Domain\Member\Database\Factories\MemberProfileFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberProfile newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberProfile newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberProfile query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberProfile whereAge($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberProfile whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberProfile whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberProfile whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberProfile whereNickname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberProfile whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberProfile whereUserId($value)
+ * @mixin \Eloquent
+ */
 class MemberProfile extends Model
 {
     /** @use HasFactory<\App\Domain\Member\Database\Factories\MemberProfileFactory> */

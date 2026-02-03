@@ -15,6 +15,43 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
+/**
+ * @property int $id
+ * @property int $uid
+ * @property int $user_id
+ * @property int|null $continent_id
+ * @property int|null $region_id
+ * @property bool $is_active
+ * @property bool $is_banned
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Domain\Admin\Models\AdminAccessLog> $accessLogs
+ * @property-read int|null $access_logs_count
+ * @property-read \App\Domain\Admin\Models\AdminAvatar|null $avatar
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Domain\Admin\Models\AdminAvatar> $avatars
+ * @property-read int|null $avatars_count
+ * @property-read GeoContinent|null $continent
+ * @property-read \App\Domain\Admin\Models\AdminAccessLog|null $latestAccessLog
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, UserNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \App\Domain\Admin\Models\AdminProfile|null $profile
+ * @property-read GeoRegion|null $region
+ * @property-read User $user
+ * @method static \App\Domain\Admin\Database\Factories\AdminFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin whereContinentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin whereIsBanned($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin whereRegionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin whereUid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Admin whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Admin extends Model
 {
     /** @use HasFactory<\App\Domain\Admin\Models\AdminFactory> */
@@ -31,7 +68,7 @@ class Admin extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'uid',
+        'uid'.
         'user_id',
         'continent_id',
         'region_id',

@@ -1,13 +1,13 @@
 <?php
 
-/** @var \Tests\TestCase $this */
-
 use App\Domain\Admin\Models\Admin;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 beforeEach(function () {
+    /** @var \Tests\TestCase $this */
+
     Artisan::call('db:seed');
 
     $email = fake()->unique()->safeEmail();
@@ -43,6 +43,7 @@ describe('Default admin login failed - @POST /api/v1/admin/account/login', funct
 
 describe('Admin user registration fail - @POST /api/v1/admin/account/register', function () {
     it('fails that an admin user can register another admin user because of wrong nickname', function () {
+        /** @var \Tests\TestCase $this */
         $defAdmin = defAdminLogin($this);
         $route = route('api-v1.admin-account.register');
 
@@ -81,6 +82,7 @@ describe('Admin user registration fail - @POST /api/v1/admin/account/register', 
 
 describe('Admin user registration fail - @POST /api/v1/admin/account/register', function () {
     it('fails that an admin user can register another admin user because of wrong email', function () {
+        /** @var \Tests\TestCase $this */
         $defAdmin = defAdminLogin($this);
         $route = route('api-v1.admin-account.register');
 
@@ -119,6 +121,7 @@ describe('Admin user registration fail - @POST /api/v1/admin/account/register', 
 
 describe('Admin user registration fail - @POST /api/v1/admin/account/register', function () {
     it('fails that an admin user can register another admin user because of wrong password', function () {
+        /** @var \Tests\TestCase $this */
         $defAdmin = defAdminLogin($this);
         $route = route('api-v1.admin-account.register');
         // missing password field
@@ -188,6 +191,7 @@ describe('Admin user registration fail - @POST /api/v1/admin/account/register', 
 
 describe('Admin user login fail - @POST /api/v1/admin/account/login', function () {
     it('fails when user login input is a wrong password', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->create();
         $route = route('api-v1.admin-account.login');
         $payload = [
@@ -205,6 +209,7 @@ describe('Admin user login fail - @POST /api/v1/admin/account/login', function (
 
 describe('Admin user login success- @POST /api/v1/admin/account/login', function () {
     it('succeeds that a user can log into its account', function () {
+        /** @var \Tests\TestCase $this */
         $admin = Admin::factory()->create();
         $route = route('api-v1.admin-account.login');
         $payload = [

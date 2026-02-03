@@ -8,6 +8,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $following_user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Domain\Member\Models\Member $member
+ * @property-read User $user
+ * @method static \App\Domain\Member\Database\Factories\MemberFollowerFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberFollower newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberFollower newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberFollower query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberFollower whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberFollower whereFollowingUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberFollower whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberFollower whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberFollower whereUserId($value)
+ * @mixin \Eloquent
+ */
 class MemberFollower extends Model
 {
     /** @use HasFactory<\App\Domain\Member\Database\Factories\MemberFollowerFactory> */

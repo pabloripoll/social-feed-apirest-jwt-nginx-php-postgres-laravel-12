@@ -8,6 +8,42 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $uid
+ * @property int $user_id
+ * @property int $post_id
+ * @property int $position
+ * @property string $type type of file
+ * @property string $extension
+ * @property string $path
+ * @property string $name
+ * @property string $title
+ * @property string $slug
+ * @property string $url
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Domain\Feed\Models\FeedPost $post
+ * @property-read User $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia whereExtension($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia wherePosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia wherePostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia whereUid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia whereUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|FeedMedia whereUserId($value)
+ * @mixin \Eloquent
+ */
 class FeedMedia extends Model
 {
     /** @use HasFactory<\App\Domain\Feed\Database\Factories\FeedMedia> */

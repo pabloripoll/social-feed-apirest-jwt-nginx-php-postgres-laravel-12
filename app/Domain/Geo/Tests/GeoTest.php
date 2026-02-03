@@ -1,7 +1,5 @@
 <?php
 
-/** @var \Tests\TestCase $this */
-
 use App\Domain\Geo\Models\GeoContinent;
 use App\Domain\Geo\Models\GeoRegion;
 use Illuminate\Support\Facades\Artisan;
@@ -14,6 +12,7 @@ beforeEach(function () {
 
 describe('Visit GEO index route - @GET /api/v1/geo', function () {
     it('succeeds every visitor can access to endpoint', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.geo.index');
         $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_OK)
@@ -56,6 +55,7 @@ describe('Visit GEO index route - @GET /api/v1/geo', function () {
 
 describe('List continents - @GET /api/v1/geo/continents', function () {
     it('succeeds every visitor can access and list all continents', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.geo.continents-listing');
         $response = $this->get($route);
         $response->assertStatus(JsonResponse::HTTP_OK)
@@ -70,6 +70,7 @@ describe('List continents - @GET /api/v1/geo/continents', function () {
 
 describe('Read continent - @GET /api/v1/geo/continents/{continent_id}', function () {
     it('fails to read a continent by its id as it does not exist', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.geo.continent-read', [
             'continent_id' => 123456,
         ]);
@@ -84,6 +85,7 @@ describe('Read continent - @GET /api/v1/geo/continents/{continent_id}', function
 
 describe('Read continent - @GET /api/v1/geo/continents/{continent_id}', function () {
     it('succeeds every visitor can access and read a continent by its id', function () {
+        /** @var \Tests\TestCase $this */
         $continent = GeoContinent::first();
         $route = route('api-v1.geo.continent-read', [
             'continent_id' => $continent->id,
@@ -101,6 +103,7 @@ describe('Read continent - @GET /api/v1/geo/continents/{continent_id}', function
 
 describe('List continent regions - @GET /api/v1/geo/continents/{continent_id}/regions', function () {
     it('fails to read a continent by its id as it does not exist', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.geo.regions-listing', [
             'continent_id' => 123456,
         ]);
@@ -115,6 +118,7 @@ describe('List continent regions - @GET /api/v1/geo/continents/{continent_id}/re
 
 describe('List continent regions - @GET /api/v1/geo/continents/{continent_id}/regions', function () {
     it('succeeds every visitor can access and list all continent regionss', function () {
+        /** @var \Tests\TestCase $this */
         $continent = GeoContinent::first();
         $route = route('api-v1.geo.regions-listing', [
             'continent_id' => $continent->id,
@@ -143,6 +147,7 @@ describe('List continent regions - @GET /api/v1/geo/continents/{continent_id}/re
 
 describe('Read continent region - @GET /api/v1/geo/continents/{continent_id}/regions/{region_id}', function () {
     it('fails to read a continent by its id as it does not exist', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.geo.region-read', [
             'continent_id' => 123456,
             'region_id' => 123456,
@@ -158,6 +163,7 @@ describe('Read continent region - @GET /api/v1/geo/continents/{continent_id}/reg
 
 describe('Read continent region - @GET /api/v1/geo/continents/{continent_id}/regions/{region_id}', function () {
     it('fails to read a continent region by its id as it does not exist', function () {
+        /** @var \Tests\TestCase $this */
         $region = GeoRegion::first();
         $route = route('api-v1.geo.region-read', [
             'continent_id' => $region->continent_id,
@@ -174,6 +180,7 @@ describe('Read continent region - @GET /api/v1/geo/continents/{continent_id}/reg
 
 describe('Read continent region - @GET /api/v1/geo/continents/{continent_id}/regions/{region_id}', function () {
     it('succeeds every visitor can access and read continent region', function () {
+        /** @var \Tests\TestCase $this */
         $region = GeoRegion::first();
         $route = route('api-v1.geo.region-read', [
             'continent_id' => $region->continent_id,

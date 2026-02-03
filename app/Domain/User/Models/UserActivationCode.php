@@ -8,9 +8,29 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $id
+ * @property int|null $user_id
+ * @property bool $is_active
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $code
+ * @property-read \App\Domain\User\Models\User|null $user
+ * @method static \App\Domain\User\Database\Factories\UserActivationCodeFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserActivationCode newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserActivationCode newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserActivationCode query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserActivationCode whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserActivationCode whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserActivationCode whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserActivationCode whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserActivationCode whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserActivationCode whereUserId($value)
+ * @mixin \Eloquent
+ */
 class UserActivationCode extends Model
 {
-    /** @use HasFactory<\App\Domain\User\Database\Factories\UserFactory> */
+    /** @use HasFactory<\App\Domain\User\Database\Factories\UserActivationCodeFactory> */
     use HasFactory;
 
     /**

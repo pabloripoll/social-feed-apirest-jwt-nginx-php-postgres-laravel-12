@@ -15,6 +15,55 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
+/**
+ * @property int $id
+ * @property int $uid
+ * @property int $user_id
+ * @property int|null $continent_id
+ * @property int|null $region_id
+ * @property bool $is_active
+ * @property bool $is_banned
+ * @property-read int|null $following_count
+ * @property-read int|null $followers_count
+ * @property int $feed_posts_count
+ * @property int $feed_posts_thumbs_up_count
+ * @property int $feed_posts_thumbs_down_count
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Domain\Member\Models\MemberAccessLog> $accessLogs
+ * @property-read int|null $access_logs_count
+ * @property-read \App\Domain\Member\Models\MemberAvatar|null $avatar
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Domain\Member\Models\MemberAvatar> $avatars
+ * @property-read int|null $avatars_count
+ * @property-read GeoContinent|null $continent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Domain\Member\Models\MemberFollower> $followers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Domain\Member\Models\MemberFollower> $following
+ * @property-read \App\Domain\Member\Models\MemberAccessLog|null $latestAccessLog
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, UserNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \App\Domain\Member\Models\MemberProfile|null $profile
+ * @property-read GeoRegion|null $region
+ * @property-read User $user
+ * @method static \App\Domain\Member\Database\Factories\MemberFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereContinentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereFeedPostsCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereFeedPostsThumbsDownCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereFeedPostsThumbsUpCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereFollowersCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereFollowingCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereIsBanned($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereRegionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereUid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Member whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Member extends Model
 {
     /** @use HasFactory<\App\Domain\Member\Models\MemberFactory> */

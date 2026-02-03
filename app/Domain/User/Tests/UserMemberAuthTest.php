@@ -7,12 +7,12 @@ use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 beforeEach(function () {
+    /** @var \Tests\TestCase $this */
     Artisan::call('db:seed');
 
     $email = fake()->unique()->safeEmail();
 
     /** @disregard P1014 */
-    // @phpstan-ignore-next-line see: https://github.com/phpstan/phpstan/issues/10302
     $this->payload = (object) [
         'email' => $email,
         'nickname' => preg_replace('/[^A-Za-z0-9]/', '', strstr($email, '@', true)),

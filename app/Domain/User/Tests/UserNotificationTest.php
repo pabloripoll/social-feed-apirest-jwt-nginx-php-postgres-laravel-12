@@ -18,6 +18,7 @@ beforeEach(function () {
 
 describe('Member Notification - New Follower - @GET /api/v1/account/notifications', function () {
     it('succeeds a member receives the notification of the following action from another member', function () {
+        /** @var \Tests\TestCase $this */
         $memberOne = Member::factory()->withAuth()->create();
         $memberOne->load(['user', 'profile', 'user.memberAccessLogs']);
         $memberOneAccess = $memberOne->user->memberAccessLogs()->latest()->first();
@@ -65,6 +66,7 @@ describe('Member Notification - New Follower - @GET /api/v1/account/notification
 
 describe('Member Notification - New Feed Post - @GET /api/v1/account/notifications', function () {
     it('succeeds a member receives the notification when a new feed post has been from broadcasted from a following member', function () {
+        /** @var \Tests\TestCase $this */
         $memberOne = Member::factory()->withAuth()->create();
         $memberOne->load(['user', 'profile', 'user.memberAccessLogs']);
         $memberOneAccess = $memberOne->user->memberAccessLogs()->latest()->first();
@@ -128,6 +130,7 @@ describe('Member Notification - New Feed Post - @GET /api/v1/account/notificatio
 
 describe('Member Notification - New Feed Post Thumb-Up - @GET /api/v1/account/notifications', function () {
     it('succeeds a member receives the notification when member gave a thumb-up vote', function () {
+        /** @var \Tests\TestCase $this */
         $memberOne = Member::factory()->withAuth()->create();
         $memberOne->load(['user', 'profile', 'user.memberAccessLogs']);
         $memberOneAccess = $memberOne->user->memberAccessLogs()->latest()->first();

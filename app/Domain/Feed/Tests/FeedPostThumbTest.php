@@ -1,7 +1,5 @@
 <?php
 
-/** @var \Tests\TestCase $this */
-
 use App\Domain\Feed\Models\FeedPost;
 use App\Domain\Feed\Models\FeedPostThumb;
 use App\Domain\Member\Models\Member;
@@ -18,6 +16,7 @@ beforeEach(function () {
 
 describe('Feed Post - Thumb Up - @POST /api/v1/feed/posts/{uid}/thumbs/up', function () {
     it('fails a not authenticated can thumb up a feed post', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.feed.posts');
         $response = $this->getJson($route);
         $post = $response->json()['result'][0];
@@ -35,6 +34,7 @@ describe('Feed Post - Thumb Up - @POST /api/v1/feed/posts/{uid}/thumbs/up', func
 
 describe('Feed Post - Thumb Down - @POST /api/v1/feed/posts/{uid}/thumbs/down', function () {
     it('fails a not authenticated can thumb down a feed post', function () {
+        /** @var \Tests\TestCase $this */
         $route = route('api-v1.feed.posts');
         $response = $this->get($route, []);
         $post = $response->json()['result'][0];
@@ -52,6 +52,7 @@ describe('Feed Post - Thumb Down - @POST /api/v1/feed/posts/{uid}/thumbs/down', 
 
 describe('Feed Post - Thumb Up - @POST /api/v1/feed/posts/{uid}/thumbs/up', function () {
     it('succeeds an authenticated user can thumb up a feed post', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -87,6 +88,7 @@ describe('Feed Post - Thumb Up - @POST /api/v1/feed/posts/{uid}/thumbs/up', func
 
 describe('Feed Post - Thumb Up - @POST /api/v1/feed/posts/{uid}/thumbs/up', function () {
     it('succeeds a user can thumb up a feed post and then by listing all post it sees its thumb up vote', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -130,6 +132,7 @@ describe('Feed Post - Thumb Up - @POST /api/v1/feed/posts/{uid}/thumbs/up', func
 
 describe('Feed Post - Thumb Down - @POST /api/v1/feed/posts/{uid}/thumbs/down', function () {
     it('succeeds an authenticated user can thumb down a feed post', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();
@@ -165,6 +168,7 @@ describe('Feed Post - Thumb Down - @POST /api/v1/feed/posts/{uid}/thumbs/down', 
 
 describe('Feed Post - Thumb Down - @POST /api/v1/feed/posts/{uid}/thumbs/down', function () {
     it('succeeds a user can thumb down a feed post and then by listing all post it sees its thumb down vote', function () {
+        /** @var \Tests\TestCase $this */
         $member = Member::factory()->withAuth()->create();
         $member->load(['user', 'user.memberAccessLogs']);
         $accessLog = $member->user->memberAccessLogs()->latest()->first();

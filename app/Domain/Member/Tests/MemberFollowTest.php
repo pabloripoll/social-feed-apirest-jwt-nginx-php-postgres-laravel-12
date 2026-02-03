@@ -13,6 +13,7 @@ beforeEach(function () {
 
 describe('Member Follow - @POST /api/v1/members/{member_uid}/follow', function () {
     it('fails a member user can follow another member account if auth token is invalid', function () {
+        /** @var \Tests\TestCase $this */
         $member_b = Member::factory()->withAuth()->create();
         $member_b->load(['profile']);
         $route = route('api-v1.members.profile-follow', ['member_uid' => $member_b->uid]);
@@ -28,6 +29,7 @@ describe('Member Follow - @POST /api/v1/members/{member_uid}/follow', function (
 
 describe('Member Follow - @POST /api/v1/members/{member_uid}/follow', function () {
     it('fails a member user can follow another member account if uid is invalid', function () {
+        /** @var \Tests\TestCase $this */
         $member_a = Member::factory()->withAuth()->create();
         $member_a->load(['user', 'profile', 'user.memberAccessLogs']);
         $accessLog = $member_a->user->memberAccessLogs()->latest()->first();
@@ -44,6 +46,7 @@ describe('Member Follow - @POST /api/v1/members/{member_uid}/follow', function (
 
 describe('Member Follow - @POST /api/v1/members/{member_uid}/follow', function () {
     it('succeeds a member user can follow another member account', function () {
+        /** @var \Tests\TestCase $this */
         $member_a = Member::factory()->withAuth()->create();
         $member_a->load(['user', 'profile', 'user.memberAccessLogs']);
         $accessLog = $member_a->user->memberAccessLogs()->latest()->first();
@@ -75,6 +78,7 @@ describe('Member Follow - @POST /api/v1/members/{member_uid}/follow', function (
 
 describe('Member Unfollow - @POST /api/v1/members/{member_uid}/unfollow', function () {
     it('succeeds a member user can unfollow already following account', function () {
+        /** @var \Tests\TestCase $this */
         $member_a = Member::factory()->withAuth()->create();
         $member_a->load(['user', 'profile', 'user.memberAccessLogs']);
         $accessLog = $member_a->user->memberAccessLogs()->latest()->first();
@@ -109,6 +113,7 @@ describe('Member Unfollow - @POST /api/v1/members/{member_uid}/unfollow', functi
 
 describe('Member Unfollow - @POST /api/v1/members/{member_uid}/unfollow', function () {
     it('fails a member user is able to unfollow another member account if uid is invalid', function () {
+        /** @var \Tests\TestCase $this */
         $member_a = Member::factory()->withAuth()->create();
         $member_a->load(['user', 'profile', 'user.memberAccessLogs']);
         $accessLog = $member_a->user->memberAccessLogs()->latest()->first();

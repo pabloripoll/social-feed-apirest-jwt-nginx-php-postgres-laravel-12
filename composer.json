@@ -14,6 +14,7 @@
         "vladimir-yuldashev/laravel-queue-rabbitmq": "^14.3"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.6",
         "darkaonline/l5-swagger": "^9.0",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.2",
@@ -63,7 +64,10 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
-        ]
+        ],
+        "phpstan": "php -d memory_limit=512M ./vendor/bin/phpstan analyse",
+        "phpstan:baseline": "php -d memory_limit=512M ./vendor/bin/phpstan analyse --generate-baseline",
+        "phpstan:clear": "php -d memory_limit=512M ./vendor/bin/phpstan clear-result-cache"
     },
     "extra": {
         "laravel": {

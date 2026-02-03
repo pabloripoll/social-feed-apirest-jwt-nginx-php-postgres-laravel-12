@@ -19,9 +19,55 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * @property int $id
+ * @property \App\Domain\User\Models\Role|null $role
+ * @property string $email
+ * @property string $password
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property \Illuminate\Support\Carbon|null $password_changed_at
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Domain\User\Models\UserActivationCode|null $activationCode
+ * @property-read Admin|null $admin
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, AdminAccessLog> $adminAccessLogs
+ * @property-read int|null $admin_access_logs_count
+ * @property-read AdminAvatar|null $adminAvatar
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, AdminAvatar> $adminAvatars
+ * @property-read int|null $admin_avatars_count
+ * @property-read AdminProfile|null $adminProfile
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, FeedMedia> $feedMedia
+ * @property-read int|null $feed_media_count
+ * @property-read AdminAccessLog|null $latestAdminAccessLog
+ * @property-read MemberAccessLog|null $latestMemberAccessLog
+ * @property-read Member|null $member
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, MemberAccessLog> $memberAccessLogs
+ * @property-read int|null $member_access_logs_count
+ * @property-read MemberAvatar|null $memberAvatar
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, MemberAvatar> $memberAvatars
+ * @property-read int|null $member_avatars_count
+ * @property-read MemberProfile|null $memberProfile
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Domain\User\Models\UserNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @method static \App\Domain\User\Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePasswordChangedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRole($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class User extends Authenticatable implements JWTSubject
 {
-    /** @use HasFactory<\App\Domain\User\Models\UserFactory> */
+    /** @use HasFactory<\App\Domain\User\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**

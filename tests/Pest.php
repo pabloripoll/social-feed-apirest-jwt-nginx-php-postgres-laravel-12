@@ -1,7 +1,5 @@
 <?php
 
-/** @var \Tests\TestCase $this */
-
 use App\Domain\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
@@ -65,6 +63,20 @@ afterAll(function () {
 */
 
 /**
+ * Get the current test instance with proper type hinting
+ * Avoids undefined property define, e.g.: $this->something or PEST functions $this->post()
+ * @disregard P1014 P1013 etc
+ * @phpstan-ignore-next-line see: https://github.com/phpstan/phpstan/issues/10302
+ *
+ * @return TestCase
+ */
+function tpest(): TestCase
+{
+    /** @var TestCase $this */
+    return test();
+}
+
+/**
  * Admin Login TestCase instance.
  *
  * email and password params are editables for test cases
@@ -85,7 +97,7 @@ function defAdminLogin(TestCase $test, array $overrides = []): TestResponse
         'password' => '12345678aZ!',
     ], $overrides);
 
-    return $test->post($route, $payload);
+    return test()->post($route, $payload);
 }
 
 /**
@@ -109,7 +121,7 @@ function defMemberLogin(TestCase $test, array $overrides = []): TestResponse
         'password' => '12345678aZ!',
     ], $overrides);
 
-    return $test->post($route, $payload);
+    return test()->post($route, $payload);
 }
 
 /**
@@ -119,5 +131,14 @@ function defMemberLogin(TestCase $test, array $overrides = []): TestResponse
  */
 function fakeJWT(): string
 {
-    return 'xyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNzY1MzY5OTEyLCJleHAiOjE3NjUzNzUzMTIsIm5iZiI6MTc2NTM2OTkxMiwianRpIjoiTEhYZHJadzRYUUxjZVo4QiIsInN1YiI6IjEiLCJwcnYiOiJkZjZjYjdlMDg0NmY3YTZmYjc4OTQ5ZDRhN2I0YzBjYmRjYjE4YTc4Iiwicm9sZSI6IlJPTEVfTUVNQkVSIn0.E2dOATFAzwT1YzeFc9aq24AF_bDogXLUAudeCH7M5Lc';
+    //return 'xyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNzY1MzY5OTEyLCJleHAiOjE3NjUzNzUzMTIsIm5iZiI6MTc2NTM2OTkxMiwianRpIjoiTEhYZHJadzRYUUxjZVo4QiIsInN1YiI6IjEiLCJwcnYiOiJkZjZjYjdlMDg0NmY3YTZmYjc4OTQ5ZDRhN2I0YzBjYmRjYjE4YTc4Iiwicm9sZSI6IlJPTEVfTUVNQkVSIn0.E2dOATFAzwT1YzeFc9aq24AF_bDogXLUAudeCH7M5Lc';
+    $header = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
+    $payload = base64_encode(json_encode([
+        'sub' => fake()->uuid(),
+        'iat' => time(),
+        'exp' => time() + 3600,
+    ]));
+    $signature = base64_encode(fake()->sha256());
+
+    return "{$header}.{$payload}.{$signature}";
 }

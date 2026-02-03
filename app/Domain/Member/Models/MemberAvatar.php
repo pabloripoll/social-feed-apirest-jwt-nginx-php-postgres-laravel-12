@@ -8,6 +8,40 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $uid
+ * @property int $user_id
+ * @property bool $is_selected
+ * @property int $position
+ * @property string $extension
+ * @property string $path
+ * @property string $name
+ * @property string $title
+ * @property string $slug
+ * @property string $url
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Domain\Member\Models\Member $member
+ * @property-read User $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar whereExtension($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar whereIsSelected($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar wherePosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar whereUid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar whereUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|MemberAvatar whereUserId($value)
+ * @mixin \Eloquent
+ */
 class MemberAvatar extends Model
 {
     /** @use HasFactory<\App\Domain\Member\Database\Factories\MemberAvatar> */

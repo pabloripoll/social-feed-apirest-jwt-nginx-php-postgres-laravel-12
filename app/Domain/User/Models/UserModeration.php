@@ -9,9 +9,63 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $uid
+ * @property int $user_id
+ * @property int|null $reporter_user_id
+ * @property int|null $moderator_user_id
+ * @property bool $is_opened
+ * @property bool $in_review
+ * @property \Illuminate\Support\Carbon|null $in_review_since
+ * @property bool $is_resolved
+ * @property string|null $resolved_at
+ * @property bool $is_closed
+ * @property \Illuminate\Support\Carbon|null $closed_at
+ * @property int $category_id
+ * @property int|null $sanction_id
+ * @property bool $has_sanction_active
+ * @property \Illuminate\Support\Carbon|null $sanction_expires_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $feed_post_id
+ * @property-read \App\Domain\User\Models\UserModerationCategory $category
+ * @property-read FeedPost|null $feedPost
+ * @property-read Member $member
+ * @property-read \App\Domain\User\Models\User|null $moderator
+ * @property-read Admin|null $moderatorAdmin
+ * @property-read \App\Domain\User\Models\User|null $reporter
+ * @property-read Member|null $reporterMember
+ * @property-read \App\Domain\User\Models\UserModerationSanction|null $sanction
+ * @property-read \App\Domain\User\Models\User $user
+ * @method static \App\Domain\User\Database\Factories\UserModerationFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereClosedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereFeedPostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereHasSanctionActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereInReview($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereInReviewSince($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereIsClosed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereIsOpened($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereIsResolved($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereModeratorUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereReporterUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereResolvedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereSanctionExpiresAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereSanctionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereUid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserModeration whereUserId($value)
+ * @mixin \Eloquent
+ */
 class UserModeration extends Model
 {
-    /** @use HasFactory<\App\Domain\User\Database\Factories\UserModeration> */
+    /** @use HasFactory<\App\Domain\User\Database\Factories\UserModerationFactory> */
     use HasFactory;
 
     /**

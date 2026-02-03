@@ -6,11 +6,42 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $uid
+ * @property int $type_id
+ * @property int $receiver_id
+ * @property int|null $performer_id
+ * @property int|null $moderation_id
+ * @property int|null $communication_id
+ * @property int $notify_count
+ * @property bool $is_opened
+ * @property \Illuminate\Support\Carbon|null $opened_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed> $payload
+ * @property-read \App\Domain\User\Models\UserNotificationType $type
+ * @property-read \App\Domain\User\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification whereCommunicationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification whereIsOpened($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification whereModerationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification whereNotifyCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification whereOpenedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification wherePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification wherePerformerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification whereReceiverId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification whereTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification whereUid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserNotification whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class UserNotification extends Model
 {
-    /** @use HasFactory<\App\Domain\User\Database\Factories\UserNotification> */
-    use HasFactory;
-
     /**
      * @var string
      */
@@ -30,7 +61,6 @@ class UserNotification extends Model
         'communication_id',
         'notify_count',
         'is_opened',
-        'opened_at',
         'payload',
     ];
 
