@@ -22,6 +22,8 @@ Route::prefix('/api/v1')->name('api-v1.')->group(function () {
             Route::get('/access-logs', [MemberAccessLogController::class, 'listing'])->name('access-logs-listing');
             Route::get('/settings', [MemberAccountSettingController::class, 'read'])->name('settings-read');
             Route::patch('/settings', [MemberAccountSettingController::class, 'update'])->name('settings-update');
+            Route::patch('/settings/password', [MemberAccountSettingController::class, 'updatePassword'])->name('settings-update');
+            Route::patch('/settings/account', [MemberAccountSettingController::class, 'updateAccount'])->name('settings-update');
             Route::get('/profile', [MemberAccountProfileController::class, 'read'])->name('profile-read');
             Route::patch('/profile', [MemberAccountProfileController::class, 'update'])->name('profile-update');
             Route::get('/avatars', [MemberAvatarController::class, 'list'])->name('avatars-list');
