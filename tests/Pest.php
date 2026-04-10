@@ -23,11 +23,11 @@ uses(
 )->in(
     'Feature',
     'Unit',
-    '../app/Domain/Geo/Tests',
-    '../app/Domain/User/Tests',
-    '../app/Domain/Admin/Tests',
-    '../app/Domain/Member/Tests',
-    '../app/Domain/Feed/Tests',
+    '../app/Modules/Geo/Tests',
+    '../app/Modules/User/Tests',
+    '../app/Modules/Admin/Tests',
+    '../app/Modules/Member/Tests',
+    '../app/Modules/Feed/Tests',
 );
 
 /*

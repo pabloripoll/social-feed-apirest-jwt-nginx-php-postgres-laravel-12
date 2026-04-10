@@ -10,11 +10,11 @@
         </testsuite>
         <testsuite name="Feature">
             <directory>./tests/Feature</directory>
-            <directory>/var/www/app/Domain/Geo/Tests</directory>
-            <directory>/var/www/app/Domain/User/Tests</directory>
-            <directory>/var/www/app/Domain/Admin/Tests</directory>
-            <directory>/var/www/app/Domain/Member/Tests</directory>
-            <directory>/var/www/app/Domain/Feed/Tests</directory>
+            <directory>/var/www/app/Modules/Geo/Tests</directory>
+            <directory>/var/www/app/Modules/User/Tests</directory>
+            <directory>/var/www/app/Modules/Admin/Tests</directory>
+            <directory>/var/www/app/Modules/Member/Tests</directory>
+            <directory>/var/www/app/Modules/Feed/Tests</directory>
         </testsuite>
     </testsuites>
     <source>
