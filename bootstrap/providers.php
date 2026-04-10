@@ -6,9 +6,9 @@ return [
     /*
     * Domain Service Providers...
     */
-    App\Domain\Geo\GeoServiceProvider::class,
-    App\Domain\User\UserServiceProvider::class,
-    App\Domain\Feed\FeedServiceProvider::class,
-    App\Domain\Admin\AdminServiceProvider::class,
-    App\Domain\Member\MemberServiceProvider::class,
+    App\Modules\Geo\GeoServiceProvider::class,
+    App\Modules\User\UserServiceProvider::class,
+    App\Modules\Feed\FeedServiceProvider::class,
+    App\Modules\Admin\AdminServiceProvider::class,
+    App\Modules\Member\MemberServiceProvider::class,
 ];

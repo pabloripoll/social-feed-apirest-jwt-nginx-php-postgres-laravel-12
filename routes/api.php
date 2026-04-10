@@ -1,6 +1,6 @@
 <?php
 
-use App\Domain\Member\Controller\MemberAuthController;
+use App\Modules\Member\Controller\MemberAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;

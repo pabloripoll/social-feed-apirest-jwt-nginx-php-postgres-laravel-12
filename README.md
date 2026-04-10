@@ -21,7 +21,7 @@ The API supports a registry of platform "members," enabling users to create post
 - [REST API - Laravel 12](#apirest-setup)
 - [API Authentication with JWT](#apirest-jwt)
 - [Swagger API Documentation](#apirest-swagger)
-- [Domain Driven Design](#apirest-ddd)
+- [Modular Monolith REST API](#apirest-structure-design)
 - [Use this Platform Repository for REST API project](#platform-usage)
 - [API Testing](#apirest-testing)
 <br><br>
@@ -30,7 +30,7 @@ The API supports a registry of platform "members," enabling users to create post
 
 - **RESTful API** — Follows common REST patterns for resource-oriented endpoints.
 - **Stateless API** — Each request is self-contained, adhering to REST principles.
-- **Domain-Driven Design** — Each domain is self-contained in a single directory, except for resources specific to the framework.
+- **Modular Monolith REST API** — Each module is self-contained in a single directory, except for resources specific to the framework.
 - **JWT Role-Based Access** — Authentication and authorization flows support both regular users and administrators, using JWTs with role-based access control.
 - **User Registration and Login** — Secure registration and login for members with JWT-based authentication.
 - **CRUD Operations** — Users can create, update, and delete their own content.
@@ -58,7 +58,7 @@ The API supports a registry of platform "members," enabling users to create post
 
 ## <a id="infrastructure-platform"></a>Infrastructure Platform
 
-You can use your own local infrastructure to clone and run this repository. However, if you use [GNU Make](https://www.gnu.org/software/make/) installed, we recommend using the dedicated Docker repository [**NGINX 1.28, PHP 8.3 - POSTGRES 16.4**](https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-16.4)
+You can use your own local infrastructure to clone and run this repository. However, if you use [GNU Make](https://www.gnu.org/software/make/) installed, we recommend using the dedicated Docker repository [**NGINX 1.28, PHP 8.5 - POSTGRES 18.2**](https://github.com/pabloripoll/platforms-docker-nginx-php-8.5-pgsql-18.2-mailhog-rabbitmq)
 
 With just a few configuration steps, you can quickly set up this project—or any other—with this same required stack.
 
@@ -83,7 +83,7 @@ With just a few configuration steps, you can quickly set up this project—or an
 │   │   │   └── Dockerfile
 │   │   │
 │   │   └── Makefile
-│   └── postgres-16.4
+│   └── postgres-18.2
 │       ├── docker
 │       └── Makefile
 ├── .env
@@ -92,17 +92,17 @@ With just a few configuration steps, you can quickly set up this project—or an
 ```
 
 Follow the documentation to implement it:
-- https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-16.4?tab=readme-ov-file#platform--usage
+- https://github.com/pabloripoll/platforms-docker-nginx-php-8.5-pgsql-18.2-mailhog-rabbitmq
 <br><br>
 
 ## <a id="apirest-setup"></a>REST API - Laravel 12
 
-The following steps assume you are using the recommended [NGINX-PHP with Postgres 16.4 platform repository](https://github.com/pabloripoll/docker-platform-nginx-php-8.3-pgsql-16.4).
+The following steps assume you are using the recommended [NGINX-PHP with Postgres 18.2 platform repository](https://github.com/pabloripoll/platforms-docker-nginx-php-8.5-pgsql-18.2-mailhog-rabbitmq).
 
 Clone the repository
 ```bash
 $ cd ./apirest
-$ git clone https://github.com/pabloripoll/social-feed-apirest-jwt-nginx-php-postgres-laravel-12 .
+$ git clone https://github.com/pabloripoll/social-rest-api-laravel-12-postgres .
 ```
 <br>
 
@@ -123,6 +123,7 @@ Once accessed into the container, you will placed into root proyect directory at
 
 Generate Laravel app key and JWT secret
 ```bash
+# JWT package installed: tymon/jwt-auth
 /var/www $ php artisan key:generate
 /var/www $ php artisan jwt:secret
 ```
@@ -203,25 +204,27 @@ Now you should be able to access the interactive API documentation on your local
 **Tip:** Replace `[selected-port]` with the actual port mapped to your container if it's not the default 80.
 <br><br>
 
-## <a id="apirest-ddd"></a>Domain Driven Design
+## <a id="apirest-structure-design"></a>Modular Monolith REST API
 
-Domain Driven Design (DDD) is a software development approach that emphasizes modeling software to match a business domain as closely as possible. In a DDD project, code is organized around the core business concepts, rules, and processes, rather than technical layers (like "Controllers" or "Models" globally).
+A Modular Monolith is a software architecture approach where the application is deployed as a single unit, but internally organized into well-defined, self-contained modules. In a REST API project, this means the codebase is structured around business capabilities or features rather than only technical layers, while still remaining part of one application.
 
-There are several approaches to structuring a DDD project. In this project, each **Domain** is implemented as a modularized Service Provider within Laravel. This design promotes separation of concerns, encapsulation, and reusability.
+This approach combines the simplicity of a monolith with the maintainability of modular design. Each module owns the code related to its feature, such as controllers, requests, routes, application services, domain objects, repositories, and tests, helping reduce coupling and improve clarity.
 
-### Key Characteristics of this DDD Approach
+This approach is a strong foundation before adopting DDD, Hexagonal Architecture, with or without CQRS, because it encourages clear boundaries, explicit dependencies, and better separation of concerns from the beginning.
 
-- **Domains as Modules:**
-  Each business domain (such as "Admin", "Member", or "Post") is contained within its own directory under `app/Domain`, following a modular structure. This means each domain encapsulates its own controllers, models, requests, routes, services, and tests.
+### Key Characteristics of this Modular Monolith Approach
 
-- **Service Providers:**
-  Each domain registers a Laravel Service Provider (e.g., `MemberServiceProvider.php`), which is responsible for bootstrapping domain-specific bindings, event listeners, and routes. This makes domain logic easy to plug in or remove from the application.
+- **Modules as Functional Boundaries**: Each business area, such as Admin, Member, or Post, is organized into its own module directory, making responsibilities clearer.
 
-- **Encapsulation:**
-  By grouping all logic, data models, and services related to a domain together, each domain remains independent, preventing unintended coupling between features.
+- **Encapsulation by Feature**: Each module contains the logic, validation, and API endpoints needed for that feature, reducing leakage of implementation details across the application.
 
-- **Scalability & Maintainability:**
-  New domains or features can be added with minimal impact on existing code, and cross-domain interactions remain explicit and manageable.
+- **Single Deployable Unit**: Unlike a microservices architecture, the application is built, tested, and deployed as one system, which simplifies operations, local development, and debugging.
+
+- **Clear Internal Contracts**: Modules communicate through explicit interfaces, services, or events, which reduces tight coupling and makes dependencies easier to manage.
+
+- **Scalability and Maintainability**: New functionality can be added by introducing new modules or extending existing ones without heavily impacting unrelated parts of the codebase.
+
+- **Better Team Organization**: Different developers or teams can work on separate modules with reduced overlap, improving ownership and parallel development.
 
 ### Project Structure Example
 
@@ -230,7 +233,7 @@ There are several approaches to structuring a DDD project. In this project, each
 ├── apirest (Laravel)
 │   ├── app
 │   │   ├── Console
-│   │   ├── Domain (Module)
+│   │   ├── Modules
 │   │   │   ├── User
 │   │   │   │   ├── Controller
 │   │   │   │   ├── Database
@@ -279,7 +282,7 @@ $ make apirest-ssh
 
 Also you can run specific tests
 ```bash
-/var/www $ php artisan test ./app/Domain/User/Tests/UserMemberAuthTest.php
+/var/www $ php artisan test ./app/Modules/User/Tests/UserMemberAuthTest.php
 ```
 <br>
 
@@ -287,7 +290,7 @@ Also you can run specific tests
 
 Access to REST API container terminal an run the static analisys test with PHPStan
 ```bash
-/var/www $ composer phpstan ./app/Domain/User/
+/var/www $ composer phpstan ./app/Modules/User/
 ```
 
 ***It's recommended to run static tests on specific locations intead of the whole framework***
@@ -295,7 +298,7 @@ Access to REST API container terminal an run the static analisys test with PHPSt
 
 Also you can run static test on a specific script
 ```bash
-/var/www $ composer phpstan ./app/Domain/User/Tests/UserAdminAuthTest.php
+/var/www $ composer phpstan ./app/Modules/User/Tests/UserAdminAuthTest.php
 ```
 <br>
 

@@ -1,6 +1,6 @@
 <?php
 
-use App\Domain\User\Models\User;
+use App\Modules\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\TestResponse;

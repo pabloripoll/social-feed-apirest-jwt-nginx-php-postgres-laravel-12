@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Domain\Admin\Models\AdminAccessLog;
-use App\Domain\Member\Models\MemberAccessLog;
-use App\Domain\User\Models\Role;
+use App\Modules\Admin\Models\AdminAccessLog;
+use App\Modules\Member\Models\MemberAccessLog;
+use App\Modules\User\Models\Role;
 use Closure;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tymon\JWTAuth\Exceptions\JWTException;

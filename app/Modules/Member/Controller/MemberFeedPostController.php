@@ -1,0 +1,399 @@
+<?php
+
+namespace App\Modules\Member\Controller;
+
+use App\Modules\Feed\Models\FeedCategory;
+use App\Modules\Feed\Models\FeedPost;
+use App\Modules\Feed\Repository\FeedPostRepository;
+use App\Modules\Feed\Requests\FeedPostRequest;
+use App\Modules\Feed\Service\FeedPostService;
+use App\Modules\Member\Models\Member;
+use App\Modules\Member\Requests\MemberFeedPostEditRequest;
+use App\Modules\Member\Resources\MemberFeedPostResource;
+use App\Modules\User\Dto\UserNotificationDto;
+use App\Modules\User\Service\UserNotificationService;
+use App\Http\Services\Storage\Local\StorageService;
+use App\Support\Paginate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+class MemberFeedPostController
+{
+    /**
+     * POST /api/v1/account/feed/posts
+     */
+    public function createPost(): JsonResponse
+    {
+        /** @var \App\Modules\User\Models\User $user */
+        $user = Auth::user();
+        $user->load(['member']);
+
+        $sketchPosts = FeedPost::query()
+            ->with(['media'])
+            ->where('user_id', $user->id)
+            ->where('is_sketch', true)
+            ->get();
+        if ($sketchPosts->isNotEmpty()) {
+            foreach ($sketchPosts as $post) {
+                if ($post->media->isNotEmpty()) {
+                    foreach ($post->media as $media) {
+                        (new StorageService)->delete($media);
+                        $media->delete();
+                    }
+                }
+                $post->delete();
+            }
+        }
+
+        $post = new FeedPost;
+        $post->user_id = $user->id;
+        $post->is_sketch = true;
+        $post->save();
+
+        $response = [
+            'message' => 'post sketch has been succefully created.',
+            'post_uid' => $post->uid,
+            'user_id' => $post->user_id,
+        ];
+
+        return response()->json($response, JsonResponse::HTTP_CREATED);
+    }
+
+    /**
+     * PUT /api/v1/account/feed/posts/{post_uid}
+     */
+    public function editPost(Request $request, int $post_uid): JsonResponse
+    {
+        /** @var \App\Modules\User\Models\User $user */
+        $user = Auth::user();
+        $user->load(['member', 'memberProfile']);
+
+        $post = FeedPost::query()
+            ->with(['media'])
+            ->where('uid', $post_uid)
+            ->where('user_id', $user->id)
+            ->first();
+        if (! $post) {
+            return response()->json([
+                'message' => 'Feed post not found.',
+                'error' => 'post_not_found',
+            ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
+        if (! $post->is_sketch) {
+            return response()->json([
+                'message' => 'Feed post has been already edited.',
+                'error' => 'post_already_edited',
+            ],
+                JsonResponse::HTTP_CONFLICT
+            );
+        }
+
+        $formRequest = new MemberFeedPostEditRequest;
+
+        $validator = Validator::make(
+            $request->all(),
+            $formRequest->rules(),
+            $formRequest->messages()
+        );
+        if ($validator->fails()) {
+            $errors = (array) $validator->errors()->messages();
+            $field = array_key_first($errors);
+
+            return response()->json(['message' => $errors[$field][0], 'error' => $field], JsonResponse::HTTP_NOT_ACCEPTABLE);
+        }
+        $validated = $validator->validated();
+
+        $post->user_id = $user->id;
+        $post->category_id = $validated['category_id'];
+        $post->continent_id = $user->member->continent_id;
+        $post->region_id = $user->member->region_id;
+        $post->is_sketch = false;
+        $post->is_draft = $validated['status'] == 'draft' ? true : false;
+        $post->is_active = $validated['status'] == 'broadcast' ? true : false;
+        $post->is_banned = false;
+        $post->title = $validated['title'];
+        $post->slug = Str::limit(Str::slug($validated['title']), 128);
+        $post->summary = Str::limit(trim(strip_tags($validated['article'])), 128);
+        $post->article = $validated['article'];
+        $post->created_at = now();
+        $post->save();
+
+        // Dependencies
+        $member = Member::where('user_id', $user->id)->first();
+        $member->feed_posts_count = $member->feed_posts_count + 1;
+        $member->save();
+
+        $category = FeedCategory::find($post->category_id);
+        $category->posts_count = $category->posts_count + 1;
+        $category->save();
+
+        $statusText = 'saved as draft.';
+
+        if ($post->is_active === true) {
+            $statusText = 'published.';
+
+            $dto = new UserNotificationDto(
+                performerId: $user->id,
+                performerData: [
+                    'uid' => $user->member->uid,
+                    'nickname' => $user->memberProfile->nickname,
+                    'avatar' => $user->memberAvatar?->url,
+                ],
+            );
+            (new UserNotificationService)->newFeedPost($dto);
+        }
+
+        $response = [
+            'message' => 'Feed post has successfully '.$statusText,
+            'post' => new MemberFeedPostResource($post),
+        ];
+
+        return response()->json($response, JsonResponse::HTTP_ACCEPTED);
+    }
+
+    /**
+     * GET /api/v1/account/feed/posts/{post_uid}
+     */
+    public function readPost(int $post_uid): JsonResponse
+    {
+        /** @var \App\Modules\User\Models\User $user */
+        $user = Auth::user();
+        $user->load(['member']);
+
+        $post = FeedPost::query()
+            ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
+            ->where('uid', $post_uid)
+            ->where('user_id', $user->id)
+            ->first();
+        if (! $post) {
+            return response()->json([
+                'message' => 'Feed post not found.',
+                'error' => 'not_found',
+            ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
+        $statusText = 'Feed post has no status!';
+        $statusText = $post->is_active !== true ? $statusText : 'Feed post set as active and is available for all users.';
+        $statusText = $post->is_draft !== true ? $statusText : 'Feed post is a draft - Only creator can access it.';
+        $statusText = $post->is_banned !== true ? $statusText : 'Feed post set as deactivated because has been banned - Only creator can access it.';
+        $response = [
+            'message' => 'Feed post has successfully read. '.$statusText,
+            'post' => new MemberFeedPostResource($post),
+        ];
+
+        return response()->json($response, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * GET /api/v1/account/feed/posts/sketch
+     */
+    public function readSketchPost(): JsonResponse
+    {
+        /** @var \App\Modules\User\Models\User $user */
+        $user = Auth::user();
+        $user->load(['member']);
+
+        $post = FeedPost::query()
+            ->with(['user', 'member', 'category', 'continent', 'region', 'media'])
+            ->where('user_id', $user->id)
+            ->where('is_sketch', true)
+            ->first();
+        if (! $post) {
+            return response()->json([
+                'message' => 'No feed sketch post found.',
+                'error' => 'not_found',
+            ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
+        $response = [
+            'message' => 'Feed sketch post has successfully read.',
+            'post' => new MemberFeedPostResource($post),
+        ];
+
+        return response()->json($response, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * PATCH /api/v1/account/feed/posts/{post_uid}
+     */
+    public function updatePost(Request $request, int $post_uid): JsonResponse
+    {
+        /** @var \App\Modules\User\Models\User $user */
+        $user = Auth::user();
+        $user->load(['member', 'memberProfile']);
+
+        $post = FeedPost::query()
+            ->with(['media'])
+            ->where('uid', $post_uid)
+            ->where('user_id', $user->id)
+            ->first();
+        if (! $post) {
+            return response()->json([
+                'message' => 'Feed post not found.',
+                'error' => 'not_found',
+            ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
+        if ($post->is_banned) {
+            return response()->json([
+                'message' => 'Feed post cannot be edited.',
+                'error' => 'not_editable',
+            ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $formRequest = new MemberFeedPostEditRequest;
+
+        $validator = Validator::make(
+            $request->all(),
+            $formRequest->rules(),
+            $formRequest->messages()
+        );
+        if ($validator->fails()) {
+            $errors = (array) $validator->errors()->messages();
+            $field = array_key_first($errors);
+
+            return response()->json(['message' => $errors[$field][0], 'error' => $field], JsonResponse::HTTP_NOT_ACCEPTABLE);
+        }
+        $validated = $validator->validated();
+
+        $post->category_id = $validated['category_id'];
+        $post->is_draft = $validated['status'] == 'draft' ? true : false;
+        $post->is_active = $validated['status'] == 'broadcast' ? true : false;
+        $post->title = $validated['title'];
+        $post->slug = Str::limit(Str::slug($validated['title']), 128);
+        $post->summary = Str::limit(trim(strip_tags($validated['article'])), 128);
+        $post->article = $validated['article'];
+        $post->save();
+
+        // Dependencies
+        if ($post->category_id != $validated['category_id']) {
+            $legCategory = FeedCategory::find($post->category_id);
+            $legCategory->posts_count = max(0, $legCategory->posts_count - 1);
+            $legCategory->save();
+
+            $newCategory = FeedCategory::find($validated['category_id']);
+            $newCategory->posts_count = $newCategory->posts_count + 1;
+            $newCategory->save();
+        }
+
+        $statusText = $validated['status'] == 'broadcast' ? 'publish updated.' : 'updated as draft.';
+        $response = [
+            'message' => 'Feed post has successfully '.$statusText,
+            'post' => new MemberFeedPostResource($post),
+        ];
+
+        return response()->json($response, JsonResponse::HTTP_ACCEPTED);
+    }
+
+    /**
+     * DELETE /api/v1/account/feed/posts/{post_uid}
+     */
+    public function deletePost(int $post_uid): JsonResponse
+    {
+        /** @var \App\Modules\User\Models\User $user */
+        $user = Auth::user();
+        $user->load(['member', 'memberProfile']);
+
+        $post = FeedPost::query()
+            ->where('uid', $post_uid)
+            ->where('user_id', $user->id)
+            ->first();
+        if (! $post) {
+            return response()->json([
+                'message' => 'Feed post not found.',
+                'error' => 'not_found',
+            ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+
+        if ($post->is_banned) {
+            return response()->json([
+                'message' => 'Feed post cannot be edited.',
+                'error' => 'not_editable',
+            ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $legacyPost = [
+            'uid' => $post->uid,
+            'user_id' => $post->user_id,
+            'title' => $post->title,
+            'created_at' => $post->created_at->format('Y-m-d H:i:s'),
+        ];
+
+        // Dependencies
+        $member = Member::where('user_id', $user->id)->first();
+        $member->feed_posts_count = max(0, $member->feed_posts_count - 1);
+        $member->save();
+
+        $category = FeedCategory::find($post->category_id);
+        $category->posts_count = max(0, $category->posts_count - 1);
+        $category->save();
+
+        // Delete post
+        $post->delete();
+
+        $response = [
+            'message' => 'post sketch has been succefully deleted.',
+            'post' => $legacyPost,
+        ];
+
+        return response()->json($response, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * GET /api/v1/account/feed/posts
+     */
+    public function posts(Request $request): JsonResponse
+    {
+        /** @var \App\Modules\User\Models\User $user */
+        $user = Auth::user();
+        $user->load(['member', 'memberProfile']);
+
+        $formRequest = new FeedPostRequest;
+        $validator = Validator::make(
+            $request->all(),
+            $formRequest->rules(),
+            $formRequest->messages()
+        );
+        if ($validator->fails()) {
+            $errors = (array) $validator->errors()->messages();
+            $field = array_key_first($errors);
+
+            return response()->json(['message' => $errors[$field][0], 'error' => $field], JsonResponse::HTTP_NOT_ACCEPTABLE);
+        }
+
+        $filters = (object) $validator->validated();
+        $filters->user_id = $user->id;
+
+        $query = FeedPostRepository::listing($filters, $user);
+
+        $listing = Paginate::listing($query->count(), $filters);
+
+        $posts = Paginate::result($query, $listing);
+
+        $response = [
+            'filters' => FeedPostService::filters(),
+            'listing' => $listing,
+            'result' => MemberFeedPostResource::collection($posts),
+        ];
+
+        return response()->json($response, JsonResponse::HTTP_OK);
+    }
+}

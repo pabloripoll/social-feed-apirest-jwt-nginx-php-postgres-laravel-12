@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Modules\User\Service;
+
+use App\Modules\User\Models\UserModerationCategory;
+
+class UserModerationService
+{
+    /**
+     * Moderation Filters
+     */
+    public static function filters(): array
+    {
+        $categories = UserModerationCategory::select(['key', 'title'])
+            ->orderBy('position', 'asc')
+            ->get()
+            ->toArray();
+
+        $sanctions = UserModerationCategory::select(['key', 'title'])
+            ->orderBy('position', 'asc')
+            ->get()
+            ->toArray();
+
+        return [
+            'categories' => $categories,
+            'status' => [
+                'reviewing' => 'Reviewing',
+                'resolved' => 'Resolved',
+                'closed' => 'Closed',
+            ],
+            'sanctions' => $sanctions,
+            'sorting' => [
+                'recent' => 'Recent',
+                'oldest' => 'Oldest',
+            ],
+            'moderator' => [
+                'me' => 'Moderated by me',
+                'all' => 'All moderators',
+            ],
+        ];
+    }
+}

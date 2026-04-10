@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Domain\User\Models\Role;
+use App\Modules\User\Models\Role;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
