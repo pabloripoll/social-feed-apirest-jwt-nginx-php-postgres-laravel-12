@@ -121,10 +121,13 @@ Once accessed into the container, you will placed into root proyect directory at
 ```
 <br>
 
-Generate Laravel app key and JWT secret
+Generate Laravel application key
 ```bash
-# JWT package installed: tymon/jwt-auth
 /var/www $ php artisan key:generate
+```
+
+Generate JWT secret - JWT Docs: https://jwt-auth.readthedocs.io/en/docs/laravel-installation/
+```bash
 /var/www $ php artisan jwt:secret
 ```
 <br>
